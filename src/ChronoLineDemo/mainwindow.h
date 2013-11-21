@@ -1,0 +1,32 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include "../chronoline.h"
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+    
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+    
+protected:
+    void changeEvent(QEvent *e);
+    
+private slots:
+    void on_actionE_xit_activated();
+
+    void on_btnUpdate_clicked();
+
+private:
+    Ui::MainWindow *ui;
+    ChronoLine *chronoLine;
+};
+
+#endif // MAINWINDOW_H

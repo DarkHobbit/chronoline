@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>676</width>
+    <height>354</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="gbTop">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>64</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lbMinDate">
+         <property name="text">
+          <string>Начальная дата</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="lbMaxDate">
+         <property name="text">
+          <string>Конечная дата</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="lbUnit">
+         <property name="text">
+          <string>Единицы времени</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" rowspan="2">
+        <widget class="QPushButton" name="btnUpdate">
+         <property name="text">
+          <string>Обновить</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QDateTimeEdit" name="edMinDate"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDateTimeEdit" name="edMaxDate"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="cbUnit">
+         <item>
+          <property name="text">
+           <string>авто</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>часы</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>дни</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>недели</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>месяцы</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>кварталы</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>годы</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frmChrono">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>96</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="gbBottom">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>64</height>
+       </size>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>676</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionE_xit"/>
+   </widget>
+   <addaction name="menu_File"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionE_xit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
