@@ -22,9 +22,16 @@ protected:
 private slots:
     void on_actionE_xit_activated();
 
-    void on_btnUpdate_clicked();
+    void on_edMinDate_dateTimeChanged(const QDateTime &dateTime);
+
+    void on_edMaxDate_dateTimeChanged(const QDateTime &dateTime);
+
+    void on_cbUnit_currentIndexChanged(const QString &arg1);
 
 private:
+
+    void update_line();
+
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
 };

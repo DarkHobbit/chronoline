@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Initial data
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
     ui->edMaxDate->setDateTime(QDateTime::currentDateTime().addDays(7));
-    ui->cbUnit->setCurrentIndex(2);
-    on_btnUpdate_clicked();
+
+    update_line();
 }
 
 MainWindow::~MainWindow()
@@ -42,10 +42,25 @@ void MainWindow::on_actionE_xit_activated()
     close();
 }
 
-void MainWindow::on_btnUpdate_clicked()
+void MainWindow::update_line()
 {
     chronoLine->setMinDate(ui->edMinDate->dateTime());
     chronoLine->setMaxDate(ui->edMaxDate->dateTime());
     chronoLine->setUnit((ChronoLineUnit)ui->cbUnit->currentIndex());
     chronoLine->updateAll();
+}
+
+void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime &dateTime)
+{
+    update_line();
+}
+
+void MainWindow::on_edMaxDate_dateTimeChanged(const QDateTime &dateTime)
+{
+    update_line();
+}
+
+void MainWindow::on_cbUnit_currentIndexChanged(const QString &arg1)
+{
+    update_line();
 }
