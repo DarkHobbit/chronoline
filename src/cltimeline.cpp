@@ -46,6 +46,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
                 auxDivCount = 3;
             else
                 auxDivCount = 12; // TODO g-code end
+            if (mainDivStep/auxDivCount>2) // prevent merging neighbor divisions
             for (int j=0; j<auxDivCount; j++) {
                 int auxDivStep = j*mainDivStep/auxDivCount;
                 p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
