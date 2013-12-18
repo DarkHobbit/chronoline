@@ -138,7 +138,7 @@ bool CLTimeLine::calcScale(const QRect& r)
     actualUnit();
     leftScaleDate = _minDate; // TODO adjust to nice scale
     if (_actualUnit==cluHour) {
-        mainDivCount = leftScaleDate.secsTo(_maxDate)*3600+1;
+        mainDivCount = leftScaleDate.secsTo(_maxDate)/3600+1;
         dateFormat = "hh:mm";
     }
     else
@@ -166,6 +166,7 @@ bool CLTimeLine::calcScale(const QRect& r)
         mainDivCount = leftScaleDate.daysTo(_maxDate)/365+1;
         dateFormat = "yyyy";
     };
+//std::cout << "mainDivCount 2: " << mainDivCount << std::endl;
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
     changed = false;
