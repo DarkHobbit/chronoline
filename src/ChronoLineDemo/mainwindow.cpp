@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // Initial data
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
     ui->edMaxDate->setDateTime(QDateTime::currentDateTime().addDays(7));
+    // Periods debugging
+    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(2), QDateTime::currentDateTime().addDays(3)); //==>
+    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6)); //==>
 
     update_line();
 }

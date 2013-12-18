@@ -2,7 +2,7 @@
 #include "chronoline.h"
 
 ChronoLine::ChronoLine(QWidget *parent) :
-    QGraphicsView(parent)
+    QGraphicsView(parent), idSequencer(0)
 {
     scene = new QGraphicsScene;
     setScene(scene);
@@ -55,5 +55,14 @@ QDateTime ChronoLine::minDate()
 QDateTime ChronoLine::maxDate()
 {
     return timeLine->maxDate();
+}
+
+long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate)
+{
+    long idPeriod = ++idSequencer; // first ID is 1
+    if (minDate>=maxDate) return 0;
+    periods[idPeriod] = new CLPeriod(minDate, maxDate, timeLine);
+    periods[idPeriod]->setParentItem(timeLine);
+    return idPeriod;
 }
 

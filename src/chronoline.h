@@ -4,7 +4,9 @@
 #include <QDateTime>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QMap>
 #include "cldefs.h"
+#include "clperiod.h"
 #include "cltimeline.h"
 
 class ChronoLine : public QGraphicsView
@@ -22,9 +24,15 @@ public:
     ChronoLineUnit unit();
     QDateTime minDate();
     QDateTime maxDate();
+    // Periods management
+    long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);
+    /*bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate);
+    bool removePeriod(long idPeriod);*/
 protected:
     QGraphicsScene *scene;
     CLTimeLine     *timeLine;
+    long           idSequencer; // generator of ID for periods and flags
+    QMap<long, CLPeriod*> periods;
 signals:
 public slots:
 };

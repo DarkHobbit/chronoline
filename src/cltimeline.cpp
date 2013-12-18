@@ -14,6 +14,7 @@ CLTimeLine::CLTimeLine():
 
 void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
+//std::cout << "CLTimeLine::paint" << std::endl;
     QRect v = p->viewport();
     calcScale(v);
     if (mainDivCount<2) return;
