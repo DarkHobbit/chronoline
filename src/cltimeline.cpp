@@ -99,8 +99,18 @@ void CLTimeLine::setMaxDate(const QDateTime date)
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    // TODO
-    return 0;
+    int x0 = -r.width()/2+LEFT_DIV_MARGIN;
+    float unitsCount = unitsTo(leftScaleDate, date, _actualUnit);
+    /*if (_actualUnit!=cluMonth)*/
+        return x0+mainDivStep*unitsCount;
+    /*else { // because 28, 29,30,31 days in month
+        x0+=mainDivStep*(int)unitsCount;
+        int dimCount = date.date().daysInMonth();
+        int auxDivStep = mainDivStep/dimCount;
+        float daysCount = (unitsCount-(int)unitsCount)*
+        // TODO
+        return x0+
+    };*/
 }
 
 ChronoLineUnit CLTimeLine::unit() { return _unit; }
@@ -138,38 +148,48 @@ bool CLTimeLine::calcScale(const QRect& r)
     if (_minDate>=_maxDate) return false;
     actualUnit();
     leftScaleDate = _minDate; // TODO adjust to nice scale
-    if (_actualUnit==cluHour) {
-        mainDivCount = leftScaleDate.secsTo(_maxDate)/3600+1;
+    mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit);
+    if (_actualUnit==cluHour)
         dateFormat = "hh:mm";
-    }
     else
-    if (_actualUnit==cluDay) {
-        mainDivCount = leftScaleDate.daysTo(_maxDate)+1;
+    if (_actualUnit==cluDay)
         dateFormat = "dd.MM";
-    }
     else
-    if (_actualUnit==cluWeek) {
-        mainDivCount = leftScaleDate.daysTo(_maxDate)/7+1;
+    if (_actualUnit==cluWeek)
         dateFormat = "dd.MM";
-    }
     else
-        // TODO: month and above - variable unit step
-    if (_actualUnit==cluMonth) {
-        mainDivCount = leftScaleDate.daysTo(_maxDate)/30+1;
+    if (_actualUnit==cluMonth)
         dateFormat = "MM"; // TODO словами!
-    }
     else
-    if (_actualUnit==cluQuarter) {
-        mainDivCount = leftScaleDate.daysTo(_maxDate)/90+1;
+    if (_actualUnit==cluQuarter)
         dateFormat = "MM"; // TODO словами!
-    }
-    else {
-        mainDivCount = leftScaleDate.daysTo(_maxDate)/365+1;
+    else
         dateFormat = "yyyy";
-    };
 //std::cout << "mainDivCount 2: " << mainDivCount << std::endl;
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
     changed = false;
     return true;
+}
+
+// D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
+float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit)
+{
+    if (unit==cluHour)
+        return leftScaleDate.secsTo(_maxDate)/3600+1;
+    else
+    if (unit==cluDay)
+        return leftScaleDate.daysTo(_maxDate)+1;
+    else
+    if (unit==cluWeek)
+        return leftScaleDate.daysTo(_maxDate)/7+1;
+    else
+        // TODO: month and above - variable unit step
+    if (unit==cluMonth)
+        return leftScaleDate.daysTo(_maxDate)/30+1;
+    else
+    if (unit==cluQuarter)
+        return leftScaleDate.daysTo(_maxDate)/90+1;
+    else  // cluYear
+        return leftScaleDate.daysTo(_maxDate)/365+1;
 }

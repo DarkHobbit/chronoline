@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>ChronoLine Demo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -110,6 +110,7 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
+      <zorder>gbTop</zorder>
      </widget>
     </item>
     <item>
@@ -133,7 +134,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -142,7 +143,14 @@
     </property>
     <addaction name="actionE_xit"/>
    </widget>
+   <widget class="QMenu" name="menu_Period">
+    <property name="title">
+     <string>&amp;Period</string>
+    </property>
+    <addaction name="action_Add_Period"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Period"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -159,6 +167,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_Add_Period">
+   <property name="text">
+    <string>&amp;Add Period...</string>
    </property>
   </action>
  </widget>

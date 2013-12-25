@@ -35,6 +35,8 @@ protected:
     int            mainDivStep;
     QDateTime      leftScaleDate;
     QString        dateFormat;
+    // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
+    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit);
 };
 
 #endif // CLTIMELINE_H

@@ -20,6 +20,7 @@ protected:
     void changeEvent(QEvent *e);
     
 private slots:
+    void on_action_Add_Period_activated();
     void on_actionE_xit_activated();
 
     void on_edMinDate_dateTimeChanged(const QDateTime &dateTime);
@@ -31,9 +32,9 @@ private slots:
 private:
 
     void update_line();
-
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
+    bool lockUpdate;
 };
 
 #endif // MAINWINDOW_H
