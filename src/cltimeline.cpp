@@ -101,6 +101,7 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
     if (changed) calcScale(r);
     int x0 = -r.width()/2+LEFT_DIV_MARGIN;
     float unitsCount = unitsTo(leftScaleDate, date, _actualUnit);
+//QMessageBox::information(0, "dbgx", QString("lsd=%1 d=%2 count=%3 in %4").arg(leftScaleDate.toString()).arg(date.toString()).arg(unitsCount).arg(_actualUnit));
     /*if (_actualUnit!=cluMonth)*/
         return x0+mainDivStep*unitsCount;
     /*else { // because 28, 29,30,31 days in month
@@ -176,20 +177,20 @@ bool CLTimeLine::calcScale(const QRect& r)
 float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit)
 {
     if (unit==cluHour)
-        return leftScaleDate.secsTo(_maxDate)/3600+1;
+        return baseDate.secsTo(newDate)/3600+1;
     else
     if (unit==cluDay)
-        return leftScaleDate.daysTo(_maxDate)+1;
+        return baseDate.daysTo(newDate)+1;
     else
     if (unit==cluWeek)
-        return leftScaleDate.daysTo(_maxDate)/7+1;
+        return baseDate.daysTo(newDate)/7+1;
     else
         // TODO: month and above - variable unit step
     if (unit==cluMonth)
-        return leftScaleDate.daysTo(_maxDate)/30+1;
+        return baseDate.daysTo(newDate)/30+1;
     else
     if (unit==cluQuarter)
-        return leftScaleDate.daysTo(_maxDate)/90+1;
+        return baseDate.daysTo(newDate)/90+1;
     else  // cluYear
-        return leftScaleDate.daysTo(_maxDate)/365+1;
+        return baseDate.daysTo(newDate)/365+1;
 }
