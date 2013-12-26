@@ -149,7 +149,7 @@ bool CLTimeLine::calcScale(const QRect& r)
     if (_minDate>=_maxDate) return false;
     actualUnit();
     leftScaleDate = _minDate; // TODO adjust to nice scale
-    mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit);
+    mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
     if (_actualUnit==cluHour)
         dateFormat = "hh:mm";
     else
@@ -177,20 +177,20 @@ bool CLTimeLine::calcScale(const QRect& r)
 float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit)
 {
     if (unit==cluHour)
-        return baseDate.secsTo(newDate)/3600+1;
+        return baseDate.secsTo(newDate)/3600;
     else
     if (unit==cluDay)
-        return baseDate.daysTo(newDate)+1;
+        return baseDate.daysTo(newDate);
     else
     if (unit==cluWeek)
-        return baseDate.daysTo(newDate)/7+1;
+        return baseDate.daysTo(newDate)/7;
     else
         // TODO: month and above - variable unit step
     if (unit==cluMonth)
-        return baseDate.daysTo(newDate)/30+1;
+        return baseDate.daysTo(newDate)/30;
     else
     if (unit==cluQuarter)
-        return baseDate.daysTo(newDate)/90+1;
+        return baseDate.daysTo(newDate)/90;
     else  // cluYear
-        return baseDate.daysTo(newDate)/365+1;
+        return baseDate.daysTo(newDate)/365;
 }
