@@ -148,23 +148,29 @@ bool CLTimeLine::calcScale(const QRect& r)
 {
     if (_minDate>=_maxDate) return false;
     actualUnit();
-    leftScaleDate = _minDate; // TODO adjust to nice scale
-    if (_actualUnit==cluHour)
+    if (_actualUnit==cluHour) {
+        leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
         dateFormat = "hh:mm";
-    else
-    if (_actualUnit==cluDay)
+    } else
+    if (_actualUnit==cluDay) {
+        leftScaleDate = QDateTime(_minDate.date());
         dateFormat = "dd.MM";
-    else
-    if (_actualUnit==cluWeek)
+    } else
+    if (_actualUnit==cluWeek) {
+        leftScaleDate = _minDate; // TODO adjust to nice scale
         dateFormat = "dd.MM";
-    else
-    if (_actualUnit==cluMonth)
-        dateFormat = "MM"; // TODO словами!
-    else
-    if (_actualUnit==cluQuarter)
-        dateFormat = "MM"; // TODO словами!
-    else
+    } else
+    if (_actualUnit==cluMonth) {
+        leftScaleDate = QDateTime(QDate(_minDate.date().year(), _minDate.date().month(), 1));
+        dateFormat = "MMM";
+    } else
+    if (_actualUnit==cluQuarter) {
+        leftScaleDate = _minDate; // TODO adjust to nice scale
+        dateFormat = "MMM";
+    } else {
+        leftScaleDate = QDateTime(QDate(_minDate.date().year(), 1, 1));
         dateFormat = "yyyy";
+    };
     mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
 //std::cout << "mainDivCount 2: " << mainDivCount << std::endl;
     if (mainDivCount<2) return false;
