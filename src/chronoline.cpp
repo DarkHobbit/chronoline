@@ -2,7 +2,9 @@
 #include "chronoline.h"
 
 ChronoLine::ChronoLine(QWidget *parent) :
-    QGraphicsView(parent), idSequencer(0)
+    QGraphicsView(parent),
+    _lockAutoUpdate(true),
+    idSequencer(0)
 {
     scene = new QGraphicsScene;
     setScene(scene);
@@ -11,6 +13,7 @@ ChronoLine::ChronoLine(QWidget *parent) :
     timeLine = new CLTimeLine();
 //    timeLine->setPos(QPointF(0, 0 /*height()/2*/));
     scene->addItem(timeLine);
+    _lockAutoUpdate = false;
 }
 
 void ChronoLine::updateAll()
@@ -25,21 +28,41 @@ void ChronoLine::updateAll()
 void ChronoLine::setBackgroundColor(QColor c)
 {
     setBackgroundBrush(QBrush(c, Qt::SolidPattern));
+    if (!_lockAutoUpdate) updateAll();
+}
+
+void ChronoLine::lockAutoUpdate()
+{
+    _lockAutoUpdate = true;
+}
+
+void ChronoLine::unLockAutoUpdate()
+{
+    _lockAutoUpdate = false;
+    updateAll();
+}
+
+bool ChronoLine::isAutoUpdateLocked()
+{
+    return _lockAutoUpdate;
 }
 
 void ChronoLine::setUnit(const ChronoLineUnit& unit)
 {
     timeLine->setUnit(unit);
+    if (!_lockAutoUpdate) updateAll();
 }
 
 void ChronoLine::setMinDate(const QDateTime date)
 {
     timeLine->setMinDate(date);
+    if (!_lockAutoUpdate) updateAll();
 }
 
 void ChronoLine::setMaxDate(const QDateTime date)
 {
     timeLine->setMaxDate(date);
+    if (!_lockAutoUpdate) updateAll();
 }
 
 ChronoLineUnit ChronoLine::unit()
@@ -63,6 +86,7 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate)
     if (minDate>=maxDate) return 0;
     periods[idPeriod] = new CLPeriod(minDate, maxDate, timeLine);
     periods[idPeriod]->setParentItem(timeLine);
+    if (!_lockAutoUpdate) updateAll();
     return idPeriod;
 }
 

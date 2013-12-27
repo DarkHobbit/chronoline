@@ -8,8 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    lockUpdate(false)
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     chronoLine = new ChronoLine(ui->frmChrono);
@@ -17,14 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(chronoLine);
     ui->frmChrono->setLayout(layout);
     // Initial data
-    lockUpdate = true;
+    chronoLine->lockAutoUpdate();
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
     ui->edMaxDate->setDateTime(QDateTime::currentDateTime().addDays(7));
     // Periods debugging
-    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(2), QDateTime::currentDateTime().addDays(3)); //==>
-    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6)); //==>
-    lockUpdate = false;
-    update_line();
+    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2));
+    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
+    chronoLine->unLockAutoUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -49,27 +47,26 @@ void MainWindow::on_actionE_xit_activated()
     close();
 }
 
-void MainWindow::update_line()
+void MainWindow::updateSettings()
 {
     chronoLine->setMinDate(ui->edMinDate->dateTime());
     chronoLine->setMaxDate(ui->edMaxDate->dateTime());
     chronoLine->setUnit((ChronoLineUnit)ui->cbUnit->currentIndex());
-    chronoLine->updateAll();
 }
 
 void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime &dateTime)
 {
-    if (!lockUpdate) update_line();
+     updateSettings();
 }
 
 void MainWindow::on_edMaxDate_dateTimeChanged(const QDateTime &dateTime)
 {
-    if (!lockUpdate) update_line();
+     updateSettings();
 }
 
 void MainWindow::on_cbUnit_currentIndexChanged(const QString &arg1)
 {
-    if (!lockUpdate) update_line();
+     updateSettings();
 }
 
 void MainWindow::on_action_Add_Period_activated()
@@ -83,4 +80,5 @@ void MainWindow::on_action_Add_Period_activated()
         chronoLine->addPeriod(minDate, maxDate);
     }
     delete dlg;
+    chronoLine->updateAll();
 }

@@ -31,10 +31,9 @@ private slots:
 
 private:
 
-    void update_line();
+    void updateSettings();
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
-    bool lockUpdate;
 };
 
 #endif // MAINWINDOW_H

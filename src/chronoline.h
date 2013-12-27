@@ -17,6 +17,9 @@ public:
     void updateAll();
     // Global settings
     void setBackgroundColor(QColor c);
+    void lockAutoUpdate();
+    void unLockAutoUpdate();
+    bool isAutoUpdateLocked();
     // Timeline settings
     void setUnit(const ChronoLineUnit& unit);
     void setMinDate(const QDateTime date);
@@ -30,6 +33,7 @@ public:
     bool removePeriod(long idPeriod);*/
 protected:
     QGraphicsScene *scene;
+    bool           _lockAutoUpdate;
     CLTimeLine     *timeLine;
     long           idSequencer; // generator of ID for periods and flags
     QMap<long, CLPeriod*> periods;
