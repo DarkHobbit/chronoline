@@ -101,7 +101,7 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
     if (changed) calcScale(r);
     int x0 = -r.width()/2+LEFT_DIV_MARGIN;
     float unitsCount = unitsTo(leftScaleDate, date, _actualUnit);
-//QMessageBox::information(0, "dbgx", QString("lsd=%1 d=%2 count=%3 in %4").arg(leftScaleDate.toString()).arg(date.toString()).arg(unitsCount).arg(_actualUnit));
+std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
     /*if (_actualUnit!=cluMonth)*/
         return x0+mainDivStep*unitsCount;
     /*else { // because 28, 29,30,31 days in month
@@ -149,7 +149,6 @@ bool CLTimeLine::calcScale(const QRect& r)
     if (_minDate>=_maxDate) return false;
     actualUnit();
     leftScaleDate = _minDate; // TODO adjust to nice scale
-    mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
     if (_actualUnit==cluHour)
         dateFormat = "hh:mm";
     else
@@ -166,6 +165,7 @@ bool CLTimeLine::calcScale(const QRect& r)
         dateFormat = "MM"; // TODO словами!
     else
         dateFormat = "yyyy";
+    mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
 //std::cout << "mainDivCount 2: " << mainDivCount << std::endl;
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
@@ -177,20 +177,20 @@ bool CLTimeLine::calcScale(const QRect& r)
 float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit)
 {
     if (unit==cluHour)
-        return baseDate.secsTo(newDate)/3600;
+        return (float)baseDate.secsTo(newDate)/3600;
     else
     if (unit==cluDay)
-        return baseDate.daysTo(newDate);
+        return (float)baseDate.secsTo(newDate)/3600/24;
     else
     if (unit==cluWeek)
-        return baseDate.daysTo(newDate)/7;
+        return (float)baseDate.daysTo(newDate)/7;
     else
         // TODO: month and above - variable unit step
     if (unit==cluMonth)
-        return baseDate.daysTo(newDate)/30;
+        return (float)baseDate.daysTo(newDate)/30;
     else
     if (unit==cluQuarter)
-        return baseDate.daysTo(newDate)/90;
+        return (float)baseDate.daysTo(newDate)/90;
     else  // cluYear
-        return baseDate.daysTo(newDate)/365;
+        return (float)baseDate.daysTo(newDate)/365;
 }

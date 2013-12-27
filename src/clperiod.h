@@ -8,7 +8,7 @@
 class CLPeriod : public QGraphicsItem
 {
 public:
-    CLPeriod(const QDateTime& minDate, const QDateTime& maxDate, CLTimeLine* timeLine);
+    CLPeriod(long id, const QDateTime& minDate, const QDateTime& maxDate, CLTimeLine* timeLine);
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
 protected:
@@ -17,6 +17,7 @@ protected:
     // Recalc flag
     bool changed;
     CLTimeLine* _timeLine;
+    long _id;
 };
 
 #endif // CLPERIOD_H

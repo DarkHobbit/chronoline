@@ -84,7 +84,7 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate)
 {
     long idPeriod = ++idSequencer; // first ID is 1
     if (minDate>=maxDate) return 0;
-    periods[idPeriod] = new CLPeriod(minDate, maxDate, timeLine);
+    periods[idPeriod] = new CLPeriod(idPeriod, minDate, maxDate, timeLine);
     periods[idPeriod]->setParentItem(timeLine);
     if (!_lockAutoUpdate) updateAll();
     return idPeriod;
