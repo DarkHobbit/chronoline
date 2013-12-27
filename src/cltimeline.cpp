@@ -101,7 +101,7 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
     if (changed) calcScale(r);
     int x0 = -r.width()/2+LEFT_DIV_MARGIN;
     float unitsCount = unitsTo(leftScaleDate, date, _actualUnit);
-std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
+//std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
     /*if (_actualUnit!=cluMonth)*/
         return x0+mainDivStep*unitsCount;
     /*else { // because 28, 29,30,31 days in month
@@ -172,7 +172,6 @@ bool CLTimeLine::calcScale(const QRect& r)
         dateFormat = "yyyy";
     };
     mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
-//std::cout << "mainDivCount 2: " << mainDivCount << std::endl;
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
     changed = false;
