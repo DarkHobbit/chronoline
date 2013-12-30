@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 #include "cltimeline.h"
 
 class CLFlag : public QGraphicsItem
@@ -20,6 +21,10 @@ protected:
     bool changed;
     CLTimeLine* _timeLine;
     long _id;
+    // Drag-n-drop support
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // CLFLAG_H
