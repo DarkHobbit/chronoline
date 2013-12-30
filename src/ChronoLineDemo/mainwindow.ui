@@ -143,14 +143,15 @@
     </property>
     <addaction name="actionE_xit"/>
    </widget>
-   <widget class="QMenu" name="menu_Period">
+   <widget class="QMenu" name="menu_Edit">
     <property name="title">
-     <string>&amp;Period</string>
+     <string>&amp;Edit</string>
     </property>
     <addaction name="action_Add_Period"/>
+    <addaction name="action_Add_Event_Flag"/>
    </widget>
    <addaction name="menu_File"/>
-   <addaction name="menu_Period"/>
+   <addaction name="menu_Edit"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -172,6 +173,11 @@
   <action name="action_Add_Period">
    <property name="text">
     <string>&amp;Add Period...</string>
+   </property>
+  </action>
+  <action name="action_Add_Event_Flag">
+   <property name="text">
+    <string>&amp;Add Event Flag...</string>
    </property>
   </action>
  </widget>

@@ -11,6 +11,13 @@ enum ChronoLineUnit {
     cluYear
 };
 
+enum ChronoLineFlagType {
+    clftEvent,
+    clftPairBeg,
+    clftPairEnd
+};
+
+
 // Margin (in pixels) of left scale division
 #define LEFT_DIV_MARGIN      10
 // Margin (in pixels) of right scale division (minimal)
@@ -26,5 +33,12 @@ enum ChronoLineUnit {
 #define BASE_PERIOD_HEIGHT   25
 // Shift of height for each next period
 #define PERIOD_HEIGHT_SHIFT   5
+
+// Full height of flag view
+#define FLAG_HEIGHT 50
+// Width of flag view
+#define FLAG_WIDTH 25
+// Height of upper flag view part
+#define FLAG_SUBHEIGHT 20
 
 #endif // CLDEFS_H

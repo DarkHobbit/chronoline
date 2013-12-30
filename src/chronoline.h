@@ -8,6 +8,7 @@
 #include <QMap>
 #include "cldefs.h"
 #include "clperiod.h"
+#include "clflag.h"
 #include "cltimeline.h"
 
 class ChronoLine : public QGraphicsView
@@ -33,12 +34,23 @@ public:
     /*long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);*/
     /*bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate);
     bool removePeriod(long idPeriod);*/
+    // Event flags management
+    long addEventFlag(const QDateTime& date, const QColor& color);
+    /*long addEventFlag(const QDateTime& date);
+    bool editEventFlag(long idFlag, const QDateTime& date);
+    bool removeEventFlag(long idFlag);*/
+    // Flags pairs management
+    /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
+    long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);
+    bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
+    bool removeFlagPair(long idPPair);*/
 protected:
     QGraphicsScene *scene;
     bool           _lockAutoUpdate;
     CLTimeLine     *timeLine;
     long           idSequencer; // generator of ID for periods and flags
     QMap<long, CLPeriod*> periods;
+    QMap<long, CLFlag*>   evFlags;
 signals:
 public slots:
 };

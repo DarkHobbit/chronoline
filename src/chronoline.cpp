@@ -90,3 +90,11 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate, c
     return idPeriod;
 }
 
+long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
+{
+    long idFlag = ++idSequencer; // first ID is 1
+    evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
+    evFlags[idFlag]->setParentItem(timeLine);
+    if (!_lockAutoUpdate) updateAll();
+    return idFlag;
+}

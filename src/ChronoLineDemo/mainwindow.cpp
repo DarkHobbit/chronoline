@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialogaedperiod.h"
+#include "dialogaedevflag.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Periods debugging
     chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
     chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
+    chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3), Qt::red);
     chronoLine->unLockAutoUpdate();
 }
 
@@ -82,3 +84,18 @@ void MainWindow::on_action_Add_Period_activated()
     delete dlg;
     chronoLine->updateAll();
 }
+
+void MainWindow::on_action_Add_Event_Flag_activated()
+{
+    DialogAEDEvFlag* dlg = new DialogAEDEvFlag(0);
+    dlg->setData(QDateTime::currentDateTime().addDays(4));
+    dlg->exec();
+    if (dlg->result()==QDialog::Accepted) {
+        QDateTime date;
+        dlg->getData(date);
+        chronoLine->addEventFlag(date, Qt::yellow);
+    }
+    delete dlg;
+    chronoLine->updateAll();
+}
+
