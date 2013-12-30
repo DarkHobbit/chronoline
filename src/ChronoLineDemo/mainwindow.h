@@ -24,6 +24,7 @@ private slots:
     void on_action_Add_Period_triggered();
     void on_action_Add_Event_Flag_triggered();
     void on_actionE_xit_triggered();
+    void on_action_Manage_Periods_Flags_triggered();
 
     void on_edMinDate_dateTimeChanged(const QDateTime &dateTime);
 

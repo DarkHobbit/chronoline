@@ -7,11 +7,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
     dialogaedperiod.cpp \
-    dialogaedevflag.cpp
+    dialogaedevflag.cpp \
+    dialogmanagepf.cpp
 HEADERS += mainwindow.h \
     dialogaedperiod.h \
-    dialogaedevflag.h
+    dialogaedevflag.h \
+    dialogmanagepf.h
 FORMS += mainwindow.ui \
     dialogaedperiod.ui \
-    dialogaedevflag.ui
+    dialogaedevflag.ui \
+    dialogmanagepf.ui
 

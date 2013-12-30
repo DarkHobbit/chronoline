@@ -6,6 +6,7 @@
 #include "ui_mainwindow.h"
 #include "dialogaedperiod.h"
 #include "dialogaedevflag.h"
+#include "dialogmanagepf.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -108,6 +109,14 @@ void MainWindow::on_action_Add_Event_Flag_triggered()
         dlg->getData(date);
         chronoLine->addEventFlag(date, Qt::yellow);
     }
+    delete dlg;
+    updateView();
+}
+
+void MainWindow::on_action_Manage_Periods_Flags_triggered()
+{
+    DialogManagePF* dlg = new DialogManagePF(0);
+    dlg->exec();
     delete dlg;
     updateView();
 }
