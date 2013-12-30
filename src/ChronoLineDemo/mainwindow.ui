@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>676</width>
-    <height>354</height>
+    <height>383</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,12 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QGroupBox" name="gbTop">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -110,11 +116,16 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <zorder>gbTop</zorder>
      </widget>
     </item>
     <item>
      <widget class="QGroupBox" name="gbBottom">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -149,6 +160,9 @@
     </property>
     <addaction name="action_Add_Period"/>
     <addaction name="action_Add_Event_Flag"/>
+    <addaction name="action_Add_Pair_Of_Flags"/>
+    <addaction name="separator"/>
+    <addaction name="action_Manage_Periods_Flags"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -177,7 +191,17 @@
   </action>
   <action name="action_Add_Event_Flag">
    <property name="text">
-    <string>&amp;Add Event Flag...</string>
+    <string>Add &amp;Event Flag...</string>
+   </property>
+  </action>
+  <action name="action_Add_Pair_Of_Flags">
+   <property name="text">
+    <string>Add &amp;Pair of flags...</string>
+   </property>
+  </action>
+  <action name="action_Manage_Periods_Flags">
+   <property name="text">
+    <string>&amp;Manage Periods/Flags...</string>
    </property>
   </action>
  </widget>
