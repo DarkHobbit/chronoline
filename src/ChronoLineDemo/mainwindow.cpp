@@ -44,7 +44,7 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
-void MainWindow::on_actionE_xit_activated()
+void MainWindow::on_actionE_xit_triggered()
 {
     close();
 }
@@ -71,7 +71,7 @@ void MainWindow::on_cbUnit_currentIndexChanged(const QString &arg1)
      updateSettings();
 }
 
-void MainWindow::on_action_Add_Period_activated()
+void MainWindow::on_action_Add_Period_triggered()
 {
     DialogAEDPeriod* dlg = new DialogAEDPeriod(0);
     dlg->setData(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
@@ -85,7 +85,7 @@ void MainWindow::on_action_Add_Period_activated()
     chronoLine->updateAll();
 }
 
-void MainWindow::on_action_Add_Event_Flag_activated()
+void MainWindow::on_action_Add_Event_Flag_triggered()
 {
     DialogAEDEvFlag* dlg = new DialogAEDEvFlag(0);
     dlg->setData(QDateTime::currentDateTime().addDays(4));
