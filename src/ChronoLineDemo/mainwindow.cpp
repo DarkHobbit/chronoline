@@ -20,11 +20,17 @@ MainWindow::MainWindow(QWidget *parent) :
     chronoLine->lockAutoUpdate();
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
     ui->edMaxDate->setDateTime(QDateTime::currentDateTime().addDays(7));
+    // Status bar
+    sl1 = new QLabel(0);
+    sl2 = new QLabel(0);
+    statusBar()->addWidget(sl1, 1);
+    statusBar()->addWidget(sl2, 2);
     // Periods debugging
     chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
     chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
     chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3), Qt::red);
     chronoLine->unLockAutoUpdate();
+    updateView();
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +62,13 @@ void MainWindow::updateSettings()
     chronoLine->setUnit((ChronoLineUnit)ui->cbUnit->currentIndex());
 }
 
+void MainWindow::updateView()
+{
+    chronoLine->updateAll();
+    sl1->setText(QString("%1 periods").arg(chronoLine->periodCount()));
+    sl2->setText(QString("%1 event flags").arg(chronoLine->eventFlagCount()));
+}
+
 void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime &dateTime)
 {
      updateSettings();
@@ -82,7 +95,7 @@ void MainWindow::on_action_Add_Period_triggered()
         chronoLine->addPeriod(minDate, maxDate, Qt::yellow);
     }
     delete dlg;
-    chronoLine->updateAll();
+    updateView();
 }
 
 void MainWindow::on_action_Add_Event_Flag_triggered()
@@ -96,6 +109,6 @@ void MainWindow::on_action_Add_Event_Flag_triggered()
         chronoLine->addEventFlag(date, Qt::yellow);
     }
     delete dlg;
-    chronoLine->updateAll();
+    updateView();
 }
 

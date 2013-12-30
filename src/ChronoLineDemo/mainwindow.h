@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QLabel>
 #include <QMainWindow>
 #include "../chronoline.h"
 
@@ -33,8 +34,11 @@ private slots:
 private:
 
     void updateSettings();
+    void updateView();
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
+    QLabel* sl1;
+    QLabel* sl2;
 };
 
 #endif // MAINWINDOW_H
