@@ -1,6 +1,7 @@
 #ifndef CHRONOLINE_H
 #define CHRONOLINE_H
 
+#include <QColor>
 #include <QDateTime>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -28,7 +29,8 @@ public:
     QDateTime minDate();
     QDateTime maxDate();
     // Periods management
-    long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);
+    long addPeriod(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
+    /*long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);*/
     /*bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate);
     bool removePeriod(long idPeriod);*/
 protected:

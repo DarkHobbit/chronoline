@@ -80,11 +80,11 @@ QDateTime ChronoLine::maxDate()
     return timeLine->maxDate();
 }
 
-long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate)
+long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color)
 {
     long idPeriod = ++idSequencer; // first ID is 1
     if (minDate>=maxDate) return 0;
-    periods[idPeriod] = new CLPeriod(idPeriod, minDate, maxDate, timeLine);
+    periods[idPeriod] = new CLPeriod(idPeriod, minDate, maxDate, color, timeLine);
     periods[idPeriod]->setParentItem(timeLine);
     if (!_lockAutoUpdate) updateAll();
     return idPeriod;

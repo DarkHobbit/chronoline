@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
     ui->edMaxDate->setDateTime(QDateTime::currentDateTime().addDays(7));
     // Periods debugging
-    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2));
-    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
+    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
+    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
     chronoLine->unLockAutoUpdate();
 }
 
@@ -77,7 +77,7 @@ void MainWindow::on_action_Add_Period_activated()
     if (dlg->result()==QDialog::Accepted) {
         QDateTime minDate, maxDate;
         dlg->getData(minDate, maxDate);
-        chronoLine->addPeriod(minDate, maxDate);
+        chronoLine->addPeriod(minDate, maxDate, Qt::yellow);
     }
     delete dlg;
     chronoLine->updateAll();
