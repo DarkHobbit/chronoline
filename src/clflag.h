@@ -12,9 +12,11 @@ public:
     CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine);
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
-    QDateTime _date;
+    void setDate(const QDateTime date);
+    QDateTime date();
 protected:
     // Input data
+    QDateTime _date;
     ChronoLineFlagType _fType;
     QColor _color;
     // Recalc flag

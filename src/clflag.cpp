@@ -15,19 +15,16 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     dragBase(0)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
-    setAcceptsHoverEvents(true);
+    setAcceptHoverEvents(true);
     setPos(0, 0);
 }
 
 void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
-    QRect v = p->viewport();
-    int x = _timeLine->xForDate(_date, v);
     int height = FLAG_HEIGHT;
     int dX = -FLAG_WIDTH;
     if (_fType==clftPairEnd) dX = -dX;
     p->setPen(_color);
-    setPos(x, 1);
     p->drawLine(0, 1, 0, FLAG_HEIGHT);
     p->drawLine(0, FLAG_HEIGHT, dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2);
     p->drawLine(dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2, 0, FLAG_HEIGHT-FLAG_SUBHEIGHT);
@@ -47,13 +44,27 @@ void CLFlag::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-        _date = _timeLine->dateForX(dragBase+event->pos().x());
-        scene()->update();
-        return;
+    int newX = dragBase+event->pos().x();
+    _date = _timeLine->dateForX(newX);
+    setPos(newX, 1);
+    scene()->update();
+    return;
 }
 
 void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
+    mouseMoveEvent(event);
+}
+
+void CLFlag::setDate(const QDateTime date)
+{
+    _date = date;
     update();
 }
+
+QDateTime CLFlag::date()
+{
+    return _date;
+}
+

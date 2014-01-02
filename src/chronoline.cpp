@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QMessageBox>
 #include "chronoline.h"
 
@@ -11,7 +12,6 @@ ChronoLine::ChronoLine(QWidget *parent) :
     setBackgroundColor(Qt::cyan);
     // Time Line
     timeLine = new CLTimeLine();
-//    timeLine->setPos(QPointF(0, 0 /*height()/2*/));
     scene->addItem(timeLine);
     _lockAutoUpdate = false;
 }
@@ -92,9 +92,24 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate, c
 
 long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
 {
+    QRect r = childrenRect();
+    timeLine->calcScale(r);
     long idFlag = ++idSequencer; // first ID is 1
     evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
     evFlags[idFlag]->setParentItem(timeLine);
+    evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
+
+void ChronoLine::resizeEvent(QResizeEvent* event)
+{
+    QRect r = childrenRect();
+    timeLine->calcScale(r);
+    foreach (const long id, evFlags.keys()) {
+        CLFlag* p = evFlags.value(id);
+        p->setPos(timeLine->xForDate(p->date(), r), 1);
+    }
+    QGraphicsView::resizeEvent(event);
+}
+

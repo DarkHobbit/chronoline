@@ -14,15 +14,14 @@ CLTimeLine::CLTimeLine():
 
 void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
-//std::cout << "CLTimeLine::paint" << std::endl;
     QRect v = p->viewport();
     calcScale(v);
     if (mainDivCount<2) return;
-    int vw = v.width();
-    int vh = v.height();
     // OY for debugging
-    //p->drawLine(0, -vh/2, 0, vh/2+9);
+//    int vh = v.height();
+//    p->drawLine(0, -vh/2, 0, vh/2+9);
     // Central horizontal line
+    int vw = v.width();
     p->drawLine(-vw/2, 0, vw/2+4, 0);
     // Main scale divisions;
     int xPix = x0;

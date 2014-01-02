@@ -53,6 +53,7 @@ protected:
     long           idSequencer; // generator of ID for periods and flags
     QMap<long, CLPeriod*> periods;
     QMap<long, CLFlag*>   evFlags;
+    virtual void resizeEvent(QResizeEvent* event);
 signals:
 public slots:
 };
