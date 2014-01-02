@@ -19,9 +19,9 @@ enum ChronoLineFlagType {
 
 
 // Margin (in pixels) of left scale division
-#define LEFT_DIV_MARGIN      10
+#define LEFT_DIV_MARGIN      25
 // Margin (in pixels) of right scale division (minimal)
-#define RIGHT_DIV_MARGIN     25
+#define RIGHT_DIV_MARGIN     10
 // Height (in pixels) of main scale divisions
 #define MAIN_DIV_HEIGHT      15
 // Height (in pixels) of auxiliary scale divisions

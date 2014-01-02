@@ -25,8 +25,9 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     // Central horizontal line
     p->drawLine(-vw/2, 0, vw/2+4, 0);
     // Main scale divisions;
-    int xPix = -vw/2+LEFT_DIV_MARGIN;
+    int xPix = x0;
     QDateTime xDate = leftScaleDate; // TODO implement dateForX instead this g-code
+qDebug("xPix=%d", xPix);
     for (int i=0; i<mainDivCount; i++) {
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
@@ -55,18 +56,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
         }
         // To next division...
         xPix += mainDivStep;
-        if (_actualUnit==cluHour) // TODO g-code begin
-            xDate = xDate.addSecs(3600);
-        else if (_actualUnit==cluDay)
-            xDate = xDate.addDays(1);
-        else if (_actualUnit==cluWeek)
-            xDate = xDate.addDays(7);
-        else if (_actualUnit==cluMonth) // TODO: month and above - variable unit step
-            xDate = xDate.addDays(30);
-        else if (_actualUnit==cluQuarter)
-            xDate = xDate.addDays(90);
-        else
-            xDate = xDate.addDays(365); // TODO g-code end
+        xDate = addUnits(xDate, 1);
     };
 }
 
@@ -99,7 +89,6 @@ void CLTimeLine::setMaxDate(const QDateTime date)
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    int x0 = -r.width()/2+LEFT_DIV_MARGIN;
     float unitsCount = unitsTo(leftScaleDate, date, _actualUnit);
 //std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
     /*if (_actualUnit!=cluMonth)*/
@@ -112,6 +101,12 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
         // TODO
         return x0+
     };*/
+}
+
+QDateTime CLTimeLine::dateForX(int x)
+{
+    QDateTime d = addUnits(leftScaleDate, ((float)x-x0)/mainDivStep);
+    return d;
 }
 
 ChronoLineUnit CLTimeLine::unit() { return _unit; }
@@ -146,6 +141,7 @@ ChronoLineUnit CLTimeLine::actualUnit()
 // Calculate range, step, etc.
 bool CLTimeLine::calcScale(const QRect& r)
 {
+    rect = r;
     if (_minDate>=_maxDate) return false;
     actualUnit();
     if (_actualUnit==cluHour) {
@@ -174,6 +170,7 @@ bool CLTimeLine::calcScale(const QRect& r)
     mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
+    x0 = -r.width()/2+LEFT_DIV_MARGIN;
     changed = false;
     return true;
 }
@@ -198,4 +195,21 @@ float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, c
         return (float)baseDate.daysTo(newDate)/90;
     else  // cluYear
         return (float)baseDate.daysTo(newDate)/365;
+}
+
+// D/t throw num units
+QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num)
+{
+    if (_actualUnit==cluHour)
+        return baseDate.addSecs(num*3600);
+    else if (_actualUnit==cluDay)
+        return baseDate.addSecs(num*3600*24);
+    else if (_actualUnit==cluWeek)
+        return baseDate.addDays(num*7);
+    else if (_actualUnit==cluMonth) // TODO: month and above - variable unit step
+        return baseDate.addDays(num*30);
+    else if (_actualUnit==cluQuarter)
+        return baseDate.addDays(num*90);
+    else
+        return baseDate.addDays(num*365);
 }

@@ -51,6 +51,11 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
+void MainWindow::resizeEvent(QResizeEvent* e)
+{
+    chronoLine->updateAll(); // TODO dup?
+}
+
 void MainWindow::on_actionE_xit_triggered()
 {
     close();

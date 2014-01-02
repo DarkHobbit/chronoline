@@ -18,8 +18,8 @@ public:
     ~MainWindow();
     
 protected:
-    void changeEvent(QEvent *e);
-    
+    virtual void changeEvent(QEvent *e);
+    virtual void resizeEvent (QResizeEvent* e);
 private slots:
     void on_action_Add_Period_triggered();
     void on_action_Add_Event_Flag_triggered();

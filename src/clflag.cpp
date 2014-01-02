@@ -1,19 +1,22 @@
 #include <iostream>
 #include <QMessageBox>
 #include <QPainter>
+#include <QGraphicsScene>
 #include "cldefs.h"
 #include "clflag.h"
 
 CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine):
     _id(id),
-    changed(false),
     _date(date),
     _fType(fType),
     _color(color),
-    _timeLine(timeLine)
+    _timeLine(timeLine),
+    changed(false),
+    dragBase(0)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptsHoverEvents(true);
+    setPos(0, 0);
 }
 
 void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
@@ -24,49 +27,40 @@ void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *w
     int dX = -FLAG_WIDTH;
     if (_fType==clftPairEnd) dX = -dX;
     p->setPen(_color);
-    p->drawLine(x, 1, x, FLAG_HEIGHT);
-    p->drawLine(x, FLAG_HEIGHT, x+dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2);
-    p->drawLine(x+dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2, x, FLAG_HEIGHT-FLAG_SUBHEIGHT);
-//    std::cout << "CLFlag::paint" << std::endl;
+    setPos(x, 1);
+    p->drawLine(0, 1, 0, FLAG_HEIGHT);
+    p->drawLine(0, FLAG_HEIGHT, dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2);
+    p->drawLine(dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2, 0, FLAG_HEIGHT-FLAG_SUBHEIGHT);
 }
 
 QRectF CLFlag::boundingRect() const
 {
-    return QRectF(-1, 1, FLAG_WIDTH, FLAG_HEIGHT);
+    return QRectF(-FLAG_WIDTH+1, 2/*FLAG_HEIGHT-FLAG_SUBHEIGHT*/, FLAG_WIDTH, FLAG_HEIGHT);
 }
 
 void CLFlag::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);
     update();
+//    std::cout << "Item " << this->pos().x() << " press " << event->pos().x() << std::endl;
+    dragBase = this->pos().x() - event->pos().x();
 }
 
 void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-/*    if (event->buttons() & Qt::LeftButton) {
-        moveBy(event->pos().x(), 0);
-        parentItem()->update();
-        update();
-        event->accept();
-    }
-    else
-        event->ignore();*/
-std::cout << event->pos().x() << std::endl;
-
-    if (event->modifiers() & Qt::ShiftModifier) {
-        update();
+//    if (event->modifiers() & Qt::ShiftModifier) {
+        _date = _timeLine->dateForX(dragBase+event->pos().x());
+//qDebug(_date.toString("dd.MM hh:mm").toLocal8Bit().data());
+//        setPos(dragBase+event->pos().x(), 1); // TODO calc date instead this!!!
+        scene()->update();
         return;
-    }
-    QGraphicsItem::mouseMoveEvent(event);
+//    }
+//    QGraphicsItem::mouseMoveEvent(event);
+//    std::cout << "move " << event->pos().x() << std::endl;
 }
 
 void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-/*    QGraphicsItem::mouseReleaseEvent(event);
-    update();*/
-/*        parentItem()->update();
-        update();
-        event->accept();*/
     QGraphicsItem::mouseReleaseEvent(event);
     update();
 }

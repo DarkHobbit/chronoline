@@ -16,6 +16,7 @@ public:
     void setMaxDate(const QDateTime date);
     // Date/time coordinate (viewport x) for date
     int  xForDate(const QDateTime date, const QRect& r);
+    QDateTime dateForX(int x);
     // Meazurement unit
     ChronoLineUnit unit();
     // if unit=auto, adjust real unit. Otherwise =unit
@@ -30,13 +31,17 @@ protected:
     QDateTime      _minDate, _maxDate;
     // Recalc flag
     bool changed;
+    QRect rect;
     // Scale division parameters (calculated by CalcStep)
     int            mainDivCount;
     int            mainDivStep;
+    int            x0;
     QDateTime      leftScaleDate;
     QString        dateFormat;
     // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
     float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit);
+    // D/t throw num units
+    QDateTime addUnits(const QDateTime& baseDate, float num);
 };
 
 #endif // CLTIMELINE_H

@@ -21,7 +21,10 @@ void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
     int xEnd = _timeLine->xForDate(_maxDate, v);
     int level = _id-1; // TODO need optimize level (don't keep id wholes, one level for some non-crossing period, etc)
     int height = BASE_PERIOD_HEIGHT +level*PERIOD_HEIGHT_SHIFT;
-    p->setPen(_color);
+    QPen _pen;
+    _pen.setColor(_color);
+    _pen.setWidth(2);
+    p->setPen(_pen);
     p->drawLine(xBeg, 0, xBeg, -height);
     p->drawLine(xBeg, -height, xEnd, -height);
     p->drawLine(xEnd, -height, xEnd, 0);
