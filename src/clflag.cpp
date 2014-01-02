@@ -35,28 +35,21 @@ void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *w
 
 QRectF CLFlag::boundingRect() const
 {
-    return QRectF(-FLAG_WIDTH+1, 2/*FLAG_HEIGHT-FLAG_SUBHEIGHT*/, FLAG_WIDTH, FLAG_HEIGHT);
+    return QRectF(-FLAG_WIDTH+1, 2, FLAG_WIDTH, FLAG_HEIGHT);
 }
 
 void CLFlag::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);
     update();
-//    std::cout << "Item " << this->pos().x() << " press " << event->pos().x() << std::endl;
     dragBase = this->pos().x() - event->pos().x();
 }
 
 void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-//    if (event->modifiers() & Qt::ShiftModifier) {
         _date = _timeLine->dateForX(dragBase+event->pos().x());
-//qDebug(_date.toString("dd.MM hh:mm").toLocal8Bit().data());
-//        setPos(dragBase+event->pos().x(), 1); // TODO calc date instead this!!!
         scene()->update();
         return;
-//    }
-//    QGraphicsItem::mouseMoveEvent(event);
-//    std::cout << "move " << event->pos().x() << std::endl;
 }
 
 void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

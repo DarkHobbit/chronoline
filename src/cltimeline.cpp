@@ -27,7 +27,6 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     // Main scale divisions;
     int xPix = x0;
     QDateTime xDate = leftScaleDate; // TODO implement dateForX instead this g-code
-qDebug("xPix=%d", xPix);
     for (int i=0; i<mainDivCount; i++) {
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
