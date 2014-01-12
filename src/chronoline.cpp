@@ -90,6 +90,15 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate, c
     return idPeriod;
 }
 
+bool ChronoLine::readPeriod(long idPeriod, QDateTime& minDate, QDateTime& maxDate)
+{
+    CLPeriod* p = periods[idPeriod];
+    if (!p) return false;
+    minDate = p->minDate();
+    maxDate = p->maxDate();
+    return true;
+}
+
 long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
 {
     QRect r = childrenRect();
@@ -100,6 +109,14 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
+}
+
+bool ChronoLine::readEventFlag(long idFlag, QDateTime& date)
+{
+    CLFlag* f = evFlags[idFlag];
+    if (!f) return false;
+    date = f->date();
+    return true;
 }
 
 void ChronoLine::resizeEvent(QResizeEvent* event)

@@ -2,6 +2,9 @@
 #define DIALOGMANAGEPF_H
 
 #include <QDialog>
+#include <QItemDelegate>
+#include <QVector>
+#include "chronoline.h"
 
 namespace Ui {
     class DialogManagePF;
@@ -10,14 +13,33 @@ namespace Ui {
 class DialogManagePF : public QDialog {
     Q_OBJECT
 public:
-    DialogManagePF(QWidget *parent = 0);
+    DialogManagePF(QWidget *parent, ChronoLine* cl, QVector<long>* periods, QVector<long>* evFlags);
     ~DialogManagePF();
 
 protected:
-    void changeEvent(QEvent *e);
+    virtual void changeEvent(QEvent *e);
+    virtual void resizeEvent(QResizeEvent* event);
 
 private:
     Ui::DialogManagePF *ui;
+    ChronoLine* _cl;
+    QVector<long>* _periods;
+    QVector<long>* _evFlags;
+};
+
+// This bicycle-delegate allows disable editing for ALL items in table widget,
+// instead toggling editable flag for EACH new item! Delegates is power!
+// Thanx to Axis - http://axis.bplaced.net/news/460
+class NonEditTableColumnDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    NonEditTableColumnDelegate(QObject * parent = 0) : QItemDelegate(parent) {}
+    virtual QWidget * createEditor ( QWidget *, const QStyleOptionViewItem &,
+                                     const QModelIndex &) const
+    {
+        return 0;
+    }
 };
 
 #endif // DIALOGMANAGEPF_H

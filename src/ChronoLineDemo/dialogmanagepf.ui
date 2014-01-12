@@ -21,7 +21,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QTableWidget" name="tableWidget">
+       <widget class="QTableWidget" name="twPeriods">
         <column>
          <property name="text">
           <string>ID</string>
@@ -49,7 +49,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QTableWidget" name="tableWidget_2">
+       <widget class="QTableWidget" name="twEvFlags">
         <column>
          <property name="text">
           <string>ID</string>

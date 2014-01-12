@@ -35,12 +35,14 @@ public:
     /*bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate);
     bool removePeriod(long idPeriod);*/
     inline int periodCount() { return periods.count(); }
+    bool readPeriod(long idPeriod, QDateTime& minDate, QDateTime& maxDate);
     // Event flags management
     long addEventFlag(const QDateTime& date, const QColor& color);
     /*long addEventFlag(const QDateTime& date);
     bool editEventFlag(long idFlag, const QDateTime& date);
     bool removeEventFlag(long idFlag);*/
     inline int eventFlagCount() { return evFlags.count(); }
+    bool readEventFlag(long idFlag, QDateTime& date);
     // Flags pairs management
     /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);

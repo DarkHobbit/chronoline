@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QMainWindow>
+#include <QVector>
 #include "../chronoline.h"
 
 namespace Ui {
@@ -33,13 +34,14 @@ private slots:
     void on_cbUnit_currentIndexChanged(const QString &arg1);
 
 private:
-
     void updateSettings();
     void updateView();
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
     QLabel* sl1;
     QLabel* sl2;
+    QVector<long> periods;
+    QVector<long> evFlags;
 };
 
 #endif // MAINWINDOW_H

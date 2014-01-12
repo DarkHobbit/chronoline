@@ -1,3 +1,4 @@
+#include <iostream>
 #include <QtCore/QDateTime>
 #include <QtGui/QMessageBox>
 #include <QtGui/QVBoxLayout>
@@ -27,9 +28,12 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->addWidget(sl1, 1);
     statusBar()->addWidget(sl2, 2);
     // Periods debugging
-    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
-    chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
-    chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3), Qt::red);
+    long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
+    if (idP) periods.push_back(idP);
+    idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
+    if (idP) periods.push_back(idP);
+    long idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3), Qt::red);
+    if (idF) evFlags.push_back(idF);
     chronoLine->unLockAutoUpdate();
     updateView();
 }
@@ -98,7 +102,8 @@ void MainWindow::on_action_Add_Period_triggered()
     if (dlg->result()==QDialog::Accepted) {
         QDateTime minDate, maxDate;
         dlg->getData(minDate, maxDate);
-        chronoLine->addPeriod(minDate, maxDate, Qt::yellow);
+        long idP = chronoLine->addPeriod(minDate, maxDate, Qt::yellow);
+        if (idP) periods.push_back(idP);
     }
     delete dlg;
     updateView();
@@ -112,7 +117,8 @@ void MainWindow::on_action_Add_Event_Flag_triggered()
     if (dlg->result()==QDialog::Accepted) {
         QDateTime date;
         dlg->getData(date);
-        chronoLine->addEventFlag(date, Qt::yellow);
+        long idF = chronoLine->addEventFlag(date, Qt::yellow);
+        if (idF) evFlags.push_back(idF);
     }
     delete dlg;
     updateView();
@@ -120,7 +126,7 @@ void MainWindow::on_action_Add_Event_Flag_triggered()
 
 void MainWindow::on_action_Manage_Periods_Flags_triggered()
 {
-    DialogManagePF* dlg = new DialogManagePF(0);
+    DialogManagePF* dlg = new DialogManagePF(0, chronoLine, &periods, &evFlags);
     dlg->exec();
     delete dlg;
     updateView();
