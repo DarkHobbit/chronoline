@@ -1,7 +1,10 @@
 #include <iostream>
 #include <QDateTime>
+#include <QMessageBox>
 #include "dialogmanagepf.h"
 #include "ui_dialogmanagepf.h"
+#include "dialogaedperiod.h"
+#include "dialogaedevflag.h"
 
 DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QVector<long>* periods, QVector<long>* evFlags):
     QDialog(parent),
@@ -72,3 +75,67 @@ void DialogManagePF::resizeEvent(QResizeEvent* event)
     ui->twEvFlags->setColumnWidth(1, w/2);
 }
 
+
+void DialogManagePF::on_pbClose_clicked()
+{
+    close();
+}
+
+void DialogManagePF::on_pbEditPeriod_clicked()
+{
+    if (ui->twPeriods->selectedItems().size()==0) return;
+    long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
+    QDateTime minDate = QDateTime::fromString(ui->twPeriods->selectedItems()[1]->text(), "dd.MM.yyyy hh:mm");
+    QDateTime maxDate = QDateTime::fromString(ui->twPeriods->selectedItems()[2]->text(), "dd.MM.yyyy hh:mm");
+    DialogAEDPeriod* dlg = new DialogAEDPeriod(0);
+    dlg->setEditMode(true);
+    dlg->setData(minDate, maxDate);
+    dlg->exec();
+    if (dlg->result()==QDialog::Accepted) {
+        dlg->getData(minDate, maxDate);
+        _cl->editPeriod(idP, minDate, maxDate);
+        ui->twPeriods->selectedItems()[1]->setText(minDate.toString("dd.MM.yyyy hh:mm"));
+        ui->twPeriods->selectedItems()[2]->setText(maxDate.toString("dd.MM.yyyy hh:mm"));
+    }
+    delete dlg;
+}
+
+void DialogManagePF::on_pbRemovePeriod_clicked()
+{
+    if (ui->twPeriods->selectedItems().size()==0) return;
+    long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
+    if (QMessageBox::question(0,
+            QString::fromUtf8("Подтверждение"),
+            QString::fromUtf8("Вы действительно хотите удалить период?"),
+            QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+        _cl->removePeriod(idP);
+}
+
+void DialogManagePF::on_pbEditEvFlag_clicked()
+{
+    if (ui->twEvFlags->selectedItems().size()==0) return;
+    long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
+    QDateTime date = QDateTime::fromString(ui->twEvFlags->selectedItems()[1]->text(), "dd.MM.yyyy hh:mm");
+    DialogAEDEvFlag* dlg = new DialogAEDEvFlag(0);
+    dlg->setEditMode(true);
+    dlg->setData(date);
+    dlg->exec();
+    if (dlg->result()==QDialog::Accepted) {
+        dlg->getData(date);
+        _cl->editEventFlag(idF, date);
+        ui->twEvFlags->selectedItems()[1]->setText(date.toString("dd.MM.yyyy hh:mm"));
+    }
+    delete dlg;
+
+}
+
+void DialogManagePF::on_pbRemoveEvFlag_clicked()
+{
+    if (ui->twEvFlags->selectedItems().size()==0) return;
+    long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
+    if (QMessageBox::question(0,
+            QString::fromUtf8("Подтверждение"),
+            QString::fromUtf8("Вы действительно хотите удалить флаг?"),
+            QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+        _cl->removeEventFlag(idF);
+}

@@ -13,6 +13,14 @@ DialogAEDEvFlag::~DialogAEDEvFlag()
     delete ui;
 }
 
+void DialogAEDEvFlag::setEditMode(bool forEdit)
+{
+    if (forEdit)
+        setWindowTitle(tr("Edit Event Flag"));
+    else
+        setWindowTitle(tr("Add Event Flag"));
+}
+
 bool DialogAEDEvFlag::setData(const QDateTime& date)
 {
     ui->edDate->setDateTime(date);

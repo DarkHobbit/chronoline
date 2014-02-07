@@ -37,4 +37,6 @@ QRectF CLPeriod::boundingRect() const
 
 QDateTime CLPeriod::minDate() { return _minDate; }
 QDateTime CLPeriod::maxDate() { return _maxDate; }
+void CLPeriod::setMinDate(const QDateTime& minDate) { _minDate = minDate; }
+void CLPeriod::setMaxDate(const QDateTime& maxDate) { _maxDate = maxDate; }
 

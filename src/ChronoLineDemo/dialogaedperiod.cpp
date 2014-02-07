@@ -13,6 +13,14 @@ DialogAEDPeriod::~DialogAEDPeriod()
     delete ui;
 }
 
+void DialogAEDPeriod::setEditMode(bool forEdit)
+{
+    if (forEdit)
+        setWindowTitle(tr("Edit Period"));
+    else
+        setWindowTitle(tr("Add Period"));
+}
+
 bool DialogAEDPeriod::setData(const QDateTime& minDate, const QDateTime& maxDate)
 {
     if (minDate>=maxDate) return false;

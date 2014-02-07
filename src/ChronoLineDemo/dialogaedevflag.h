@@ -13,6 +13,7 @@ class DialogAEDEvFlag : public QDialog {
 public:
     DialogAEDEvFlag(QWidget *parent = 0);
     ~DialogAEDEvFlag();
+    void setEditMode(bool forEdit);
     bool setData(const QDateTime& date);
     void getData(QDateTime& date);
 protected:

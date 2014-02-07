@@ -20,6 +20,17 @@ protected:
     virtual void changeEvent(QEvent *e);
     virtual void resizeEvent(QResizeEvent* event);
 
+private slots:
+    void on_pbClose_clicked();
+
+    void on_pbEditPeriod_clicked();
+
+    void on_pbRemovePeriod_clicked();
+
+    void on_pbEditEvFlag_clicked();
+
+    void on_pbRemoveEvFlag_clicked();
+
 private:
     Ui::DialogManagePF *ui;
     ChronoLine* _cl;

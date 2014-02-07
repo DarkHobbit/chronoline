@@ -13,6 +13,8 @@ public:
     virtual QRectF boundingRect() const;
     QDateTime minDate();
     QDateTime maxDate();
+    void setMinDate(const QDateTime& minDate);
+    void setMaxDate(const QDateTime& maxDate);
 protected:
     // Input data
     QDateTime      _minDate, _maxDate;

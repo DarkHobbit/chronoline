@@ -90,6 +90,25 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate, c
     return idPeriod;
 }
 
+bool ChronoLine::editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate)
+{
+    if (minDate>=maxDate) return false;
+    CLPeriod* p = periods[idPeriod];
+    if (!p) return false;
+    p->setMinDate(minDate);
+    p->setMaxDate(maxDate);
+    return true;
+}
+
+bool ChronoLine::removePeriod(long idPeriod)
+{
+    CLPeriod* p = periods[idPeriod];
+    if (!p) return false;
+    periods.remove(idPeriod);
+    delete p;
+    return true;
+}
+
 bool ChronoLine::readPeriod(long idPeriod, QDateTime& minDate, QDateTime& maxDate)
 {
     CLPeriod* p = periods[idPeriod];
@@ -109,6 +128,23 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
+}
+
+bool ChronoLine::editEventFlag(long idFlag, const QDateTime& date)
+{
+    CLFlag* f = evFlags[idFlag];
+    if (!f) return false;
+    f->setDate(date);
+    return true;
+}
+
+bool ChronoLine::removeEventFlag(long idFlag)
+{
+    CLFlag* f = evFlags[idFlag];
+    if (!f) return false;
+    evFlags.remove(idFlag);
+    delete f;
+    return true;
 }
 
 bool ChronoLine::readEventFlag(long idFlag, QDateTime& date)

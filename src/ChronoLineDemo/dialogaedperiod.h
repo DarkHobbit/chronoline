@@ -13,6 +13,7 @@ class DialogAEDPeriod : public QDialog {
 public:
     DialogAEDPeriod(QWidget *parent = 0);
     ~DialogAEDPeriod();
+    void setEditMode(bool forEdit);
     bool setData(const QDateTime& minDate, const QDateTime& maxDate);
     void getData(QDateTime& minDate, QDateTime& maxDate);
 protected:
