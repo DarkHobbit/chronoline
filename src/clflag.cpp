@@ -11,8 +11,7 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     _fType(fType),
     _color(color),
     _timeLine(timeLine),
-    changed(false),
-    dragBase(0)
+    changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
@@ -39,12 +38,12 @@ void CLFlag::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);
     update();
-    dragBase = this->pos().x() - event->pos().x();
 }
 
 void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    int newX = dragBase+event->pos().x();
+    // Set new position
+    int newX = event->scenePos().x(); // dragBase + pos().x() works wrong
     _date = _timeLine->dateForX(newX);
     setPos(newX, 1);
     scene()->update();

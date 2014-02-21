@@ -23,7 +23,6 @@ protected:
     bool changed;
     CLTimeLine* _timeLine;
     long _id;
-    int  dragBase; // position of cursor at start of drag
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

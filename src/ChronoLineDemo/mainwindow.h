@@ -38,8 +38,7 @@ private:
     void updateView();
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
-    QLabel* sl1;
-    QLabel* sl2;
+    QLabel *sl1, *sl2, *sl3;
     QVector<long> periods;
     QVector<long> evFlags;
 };

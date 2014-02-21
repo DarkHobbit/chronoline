@@ -17,12 +17,14 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     QRect v = p->viewport();
     calcScale(v);
     if (mainDivCount<2) return;
-    // OY for debugging
-//    int vh = v.height();
-//    p->drawLine(0, -vh/2, 0, vh/2+9);
+    /* // OY for debugging
+    int vh = v.height();
+    p->drawLine(0, -vh/2, 0, vh/2+9);*/
     // Central horizontal line
     int vw = v.width();
     p->drawLine(-vw/2, 0, vw/2+4, 0);
+    /* // X coord value for debugging
+    for (int i=-vw/2/100; i<vw/2/100; i++) p->drawText(i*100, TEXT_Y+20, QString::number(i*100)); */
     // Main scale divisions;
     int xPix = x0;
     QDateTime xDate = leftScaleDate; // TODO implement dateForX instead this g-code

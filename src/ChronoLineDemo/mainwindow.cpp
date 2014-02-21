@@ -9,6 +9,8 @@
 #include "dialogaedevflag.h"
 #include "dialogmanagepf.h"
 
+QLabel* lbDebug = 0;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -25,8 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // Status bar
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
+    sl3 = new QLabel(0);
     statusBar()->addWidget(sl1, 1);
-    statusBar()->addWidget(sl2, 2);
+    statusBar()->addWidget(sl2, 1);
+    statusBar()->addWidget(sl3, 2);
+    lbDebug = sl3;
     // Periods debugging
     long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
     if (idP) periods.push_back(idP);
