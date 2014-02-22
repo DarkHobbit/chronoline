@@ -5,6 +5,9 @@
 #include "cldefs.h"
 #include "clflag.h"
 
+#include <QLabel>
+extern QLabel* lbDebug;
+
 CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine):
     _id(id),
     _date(date),
@@ -45,6 +48,9 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     // Set new position
     int newX = event->scenePos().x(); // dragBase + pos().x() works wrong
     _date = _timeLine->dateForX(newX);
+    // Debug coord output
+    /*lbDebug->setText(QString("%1 %2 %3").arg(scenePos().x()).arg(event->scenePos().x()).arg(_date.toString()));*/
+    // Move flag
     setPos(newX, 1);
     scene()->update();
     return;

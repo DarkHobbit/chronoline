@@ -18,3 +18,9 @@ FORMS += mainwindow.ui \
     dialogaedevflag.ui \
     dialogmanagepf.ui
 
+unix {
+ UI_DIR = .ui
+ MOC_DIR = .moc
+ OBJECTS_DIR = .obj
+}
+

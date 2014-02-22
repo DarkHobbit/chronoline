@@ -1,7 +1,7 @@
 #include <iostream>
 #include <QtCore/QDateTime>
-#include <QtGui/QMessageBox>
-#include <QtGui/QVBoxLayout>
+#include <QMessageBox>
+#include <QVBoxLayout>
 #include "../cldefs.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sl3 = new QLabel(0);
     statusBar()->addWidget(sl1, 1);
     statusBar()->addWidget(sl2, 1);
-    statusBar()->addWidget(sl3, 2);
+    statusBar()->addWidget(sl3, 4);
     lbDebug = sl3;
     // Periods debugging
     long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
