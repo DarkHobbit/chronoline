@@ -10,6 +10,8 @@ ChronoLine::ChronoLine(QWidget *parent) :
     scene = new QGraphicsScene;
     setScene(scene);
     setBackgroundColor(Qt::cyan);
+    // Workaround for preventing scene drift while drag-n-drop (magic but works)
+    scene->setSceneRect(-width()/2, -height()/2, width(), height());
     // Time Line
     timeLine = new CLTimeLine();
     scene->addItem(timeLine);

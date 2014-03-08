@@ -18,7 +18,7 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
-    setPos(0, 0);
+    setPos(0, 1);
 }
 
 void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
