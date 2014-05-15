@@ -128,6 +128,7 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
     evFlags[idFlag]->setParentItem(timeLine);
     evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
+    connect(evFlags[idFlag], SIGNAL(draggedOutside(CLFlag::DragDirection, int, const QDateTime&)), this, SLOT(flagDraggedOutside(CLFlag::DragDirection, int, const QDateTime&)));
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
@@ -168,3 +169,7 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
     QGraphicsView::resizeEvent(event);
 }
 
+void ChronoLine::flagDraggedOutside(CLFlag::DragDirection direction, int newX, const QDateTime& newDate)
+{
+    QMessageBox::information(0, "drag", QString::number(newX));
+}

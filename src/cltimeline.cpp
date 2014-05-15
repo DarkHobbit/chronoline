@@ -28,7 +28,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     // Debug block end
     // Main scale divisions;
     int xPix = x0;
-    QDateTime xDate = leftScaleDate; // TODO implement dateForX instead this g-code
+    QDateTime xDate = _leftScaleDate; // TODO implement dateForX instead this g-code
     for (int i=0; i<mainDivCount; i++) {
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
@@ -90,7 +90,7 @@ void CLTimeLine::setMaxDate(const QDateTime date)
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    float unitsCount = unitsTo(leftScaleDate, date, _actualUnit);
+    float unitsCount = unitsTo(_leftScaleDate, date, _actualUnit);
 //std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
     /*if (_actualUnit!=cluMonth)*/
         return x0+mainDivStep*unitsCount;
@@ -106,13 +106,14 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 
 QDateTime CLTimeLine::dateForX(int x)
 {
-    QDateTime d = addUnits(leftScaleDate, ((float)x-x0)/mainDivStep);
+    QDateTime d = addUnits(_leftScaleDate, ((float)x-x0)/mainDivStep);
     return d;
 }
 
 ChronoLineUnit CLTimeLine::unit() { return _unit; }
 QDateTime CLTimeLine::minDate() { return _minDate; }
 QDateTime CLTimeLine::maxDate() { return _maxDate; }
+QDateTime CLTimeLine::leftScaleDate() { return _leftScaleDate; }
 
 ChronoLineUnit CLTimeLine::actualUnit()
 {
@@ -146,29 +147,29 @@ bool CLTimeLine::calcScale(const QRect& r)
     if (_minDate>=_maxDate) return false;
     actualUnit();
     if (_actualUnit==cluHour) {
-        leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
+        _leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
         dateFormat = "hh:mm";
     } else
     if (_actualUnit==cluDay) {
-        leftScaleDate = QDateTime(_minDate.date());
+        _leftScaleDate = QDateTime(_minDate.date());
         dateFormat = "dd.MM";
     } else
     if (_actualUnit==cluWeek) {
-        leftScaleDate = _minDate; // TODO adjust to nice scale
+        _leftScaleDate = _minDate; // TODO adjust to nice scale
         dateFormat = "dd.MM";
     } else
     if (_actualUnit==cluMonth) {
-        leftScaleDate = QDateTime(QDate(_minDate.date().year(), _minDate.date().month(), 1));
+        _leftScaleDate = QDateTime(QDate(_minDate.date().year(), _minDate.date().month(), 1));
         dateFormat = "MMM";
     } else
     if (_actualUnit==cluQuarter) {
-        leftScaleDate = _minDate; // TODO adjust to nice scale
+        _leftScaleDate = _minDate; // TODO adjust to nice scale
         dateFormat = "MMM";
     } else {
-        leftScaleDate = QDateTime(QDate(_minDate.date().year(), 1, 1));
+        _leftScaleDate = QDateTime(QDate(_minDate.date().year(), 1, 1));
         dateFormat = "yyyy";
     };
-    mainDivCount = (int)unitsTo(leftScaleDate, _maxDate, _actualUnit)+1;
+    mainDivCount = (int)unitsTo(_leftScaleDate, _maxDate, _actualUnit)+1;
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
     x0 = -r.width()/2+LEFT_DIV_MARGIN;

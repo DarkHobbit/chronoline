@@ -4,11 +4,14 @@
 #include <QDateTime>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QObject>
 #include "cltimeline.h"
 
-class CLFlag : public QGraphicsItem
+class CLFlag : public QGraphicsObject
 {
+    Q_OBJECT
 public:
+    enum DragDirection {fdLeft, fdRight};
     CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine);
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
@@ -26,6 +29,8 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+signals:
+    void draggedOutside(DragDirection direction, int newX, const QDateTime& newDate);
 };
 
 #endif // CLFLAG_H
