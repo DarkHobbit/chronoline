@@ -58,7 +58,7 @@ protected:
     virtual void resizeEvent(QResizeEvent* event);
 signals:
 public slots:
-    void flagDraggedOutside(CLFlag::DragDirection direction, int newX, const QDateTime& newDate);
+    void flagDraggedOutside(FlagDragDirection direction, int newX, const QDateTime& newDate);
 };
 
 #endif // CHRONOLINE_H

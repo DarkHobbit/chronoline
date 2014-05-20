@@ -128,7 +128,9 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
     evFlags[idFlag]->setParentItem(timeLine);
     evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
-    connect(evFlags[idFlag], SIGNAL(draggedOutside(CLFlag::DragDirection, int, const QDateTime&)), this, SLOT(flagDraggedOutside(CLFlag::DragDirection, int, const QDateTime&)));
+    bool res = connect(evFlags[idFlag],
+        SIGNAL(draggedOutside(FlagDragDirection, int, const QDateTime&)),
+        this, SLOT(flagDraggedOutside(FlagDragDirection, int, const QDateTime&)));
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
@@ -169,7 +171,17 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
     QGraphicsView::resizeEvent(event);
 }
 
-void ChronoLine::flagDraggedOutside(CLFlag::DragDirection direction, int newX, const QDateTime& newDate)
+void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX, const QDateTime& newDate)
 {
-    QMessageBox::information(0, "drag", QString::number(newX));
+//    QMessageBox::information(0, "drag", QString::number(newX));
+    static long slower = 0;
+    slower++;
+    if (slower==10/* TODO read about mousemove sending frequency */) {
+        slower=0;
+        lockAutoUpdate();
+        long delta = newDate.secsTo(timeLine->leftScaleDate());
+        setMinDate(newDate);
+        setMaxDate(maxDate().addSecs(delta));
+        updateAll();
+    };
 }
