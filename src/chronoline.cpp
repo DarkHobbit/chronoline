@@ -178,10 +178,10 @@ void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX, const
     slower++;
     if (slower==10/* TODO read about mousemove sending frequency */) {
         slower=0;
-        lockAutoUpdate();
-        long delta = newDate.secsTo(timeLine->leftScaleDate());
+        QDateTime oldLeftScaleDate = timeLine->leftScaleDate();
         setMinDate(newDate);
-        setMaxDate(maxDate().addSecs(delta));
+        long delta = timeLine->leftScaleDate().secsTo(oldLeftScaleDate);
+        setMaxDate(maxDate().addSecs(-delta));
         updateAll();
     };
 }
