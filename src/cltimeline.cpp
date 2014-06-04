@@ -20,14 +20,14 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     // Central horizontal line
     int vw = v.width();
     p->drawLine(-vw/2, 0, vw/2+4, 0);
-    // Debug block: OY, X coord value and points for debugging
-    /*int vh = v.height();
-    p->drawLine(0, -vh/2, 0, vh/2+9);
-    for (int i=-vw/2/100; i<vw/2/100; i++) p->drawText(i*100, TEXT_Y+20, QString::number(i*100));
-    for (int i=-vw/2/10; i<vw/2/10; i++) p->drawLine(i*10, TEXT_Y+25, i*10, TEXT_Y+35);*/
-    // Debug block end
+    // Bounds of paint area
+    /*p->setPen(Qt::blue);
+    int vh = v.height();
+    p->drawLine(-vw/2+LEFT_DIV_MARGIN, -vh/2, -vw/2+LEFT_DIV_MARGIN, vh/2+9);
+    p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);*/
+    p->setPen(Qt::black);
     // Main scale divisions;
-    int xPix = x0;
+    int xPix = xForDate(_leftScaleDate, v);
     QDateTime xDate = _leftScaleDate; // TODO implement dateForX instead this g-code
     for (int i=0; i<mainDivCount; i++) {
         // Division mark
@@ -35,25 +35,23 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
         // Division text
         p->drawText(xPix, TEXT_Y, xDate.toString(dateFormat));
         // aux divisions (calc each time because 28, 29,30,31 days in month)
-        if (i<mainDivCount-1) {
-            int auxDivCount;
-            if (_actualUnit==cluHour)
-                auxDivCount = 6;
-            else if (_actualUnit==cluDay)
-                auxDivCount = 24;
-            else if (_actualUnit==cluWeek)
-                auxDivCount = 7;
-            else if (_actualUnit==cluMonth)
-                auxDivCount = xDate.date().daysInMonth();
-            else if (_actualUnit==cluQuarter)
-                auxDivCount = 3;
-            else
-                auxDivCount = 12; // TODO g-code end
-            if (mainDivStep/auxDivCount>2) // prevent merging neighbor divisions
-            for (int j=0; j<auxDivCount; j++) {
-                int auxDivStep = j*mainDivStep/auxDivCount;
-                p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
-            }
+        int auxDivCount;
+        if (_actualUnit==cluHour)
+            auxDivCount = 6;
+        else if (_actualUnit==cluDay)
+            auxDivCount = 24;
+        else if (_actualUnit==cluWeek)
+            auxDivCount = 7;
+        else if (_actualUnit==cluMonth)
+            auxDivCount = xDate.date().daysInMonth();
+        else if (_actualUnit==cluQuarter)
+            auxDivCount = 3;
+        else
+            auxDivCount = 12; // TODO g-code end
+        if (mainDivStep/auxDivCount>2) // prevent merging neighbor divisions
+        for (int j=0; j<auxDivCount; j++) {
+            int auxDivStep = j*mainDivStep/auxDivCount;
+            p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
         }
         // To next division...
         xPix += mainDivStep;
@@ -90,7 +88,7 @@ void CLTimeLine::setMaxDate(const QDateTime date)
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    float unitsCount = unitsTo(_leftScaleDate, date, _actualUnit);
+    float unitsCount = unitsTo(_minDate, date, _actualUnit);
 //std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
     /*if (_actualUnit!=cluMonth)*/
         return x0+mainDivStep*unitsCount;
@@ -106,7 +104,7 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 
 QDateTime CLTimeLine::dateForX(int x)
 {
-    QDateTime d = addUnits(_leftScaleDate, ((float)x-x0)/mainDivStep);
+    QDateTime d = addUnits(_minDate, ((float)x-x0)/mainDivStep);
     return d;
 }
 

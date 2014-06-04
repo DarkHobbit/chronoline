@@ -49,10 +49,12 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     int newX = event->scenePos().x(); // dragBase + pos().x() works wrong
     QDateTime newDate = _timeLine->dateForX(newX);
     // Debug coord output
-    /*lbDebug->setText(QString("%1 %2 %3").arg(scenePos().x()).arg(event->scenePos().x()).arg(_date.toString()));*/
+    //lbDebug->setText(QString("%1 %2 %3").arg(scenePos().x()).arg(event->scenePos().x()).arg(_date.toString()));
     // Check either flag dragged left outside scale
-    if (newDate<_timeLine->leftScaleDate())
+    if (newDate<_timeLine->minDate())
         emit draggedOutside(fdLeft, newX, newDate);
+    else if (newDate>_timeLine->maxDate())
+        emit draggedOutside(fdRight, newX, newDate);
     // Move flag
     else {
         _date = newDate;

@@ -176,12 +176,20 @@ void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX, const
 //    QMessageBox::information(0, "drag", QString::number(newX));
     static long slower = 0;
     slower++;
-    if (slower==10/* TODO read about mousemove sending frequency */) {
+    if (slower==1/* 10 TODO read about mousemove sending frequency */) {
         slower=0;
-        QDateTime oldLeftScaleDate = timeLine->leftScaleDate();
-        setMinDate(newDate);
-        long delta = timeLine->leftScaleDate().secsTo(oldLeftScaleDate);
-        setMaxDate(maxDate().addSecs(-delta));
+        if (direction==fdLeft) {
+            QDateTime oldMinDate = timeLine->minDate();
+            setMinDate(newDate);
+            long delta = minDate().secsTo(oldMinDate);
+            setMaxDate(maxDate().addSecs(-delta));
+        }
+        else {
+            QDateTime oldMaxDate = timeLine->maxDate();
+            setMaxDate(newDate);
+            long delta = maxDate().secsTo(oldMaxDate);
+            setMinDate(minDate().addSecs(-delta));
+        }
         updateAll();
     };
 }
