@@ -52,9 +52,10 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     //lbDebug->setText(QString("%1 %2 %3").arg(scenePos().x()).arg(event->scenePos().x()).arg(_date.toString()));
     // Check either flag dragged left outside scale
     if (newDate<_timeLine->minDate())
-        emit draggedOutside(fdLeft, newX, newDate);
+        emit draggedOutside(fdLeft, newX);
+    // Check either flag dragged right outside scale
     else if (newDate>_timeLine->maxDate())
-        emit draggedOutside(fdRight, newX, newDate);
+        emit draggedOutside(fdRight, newX);
     // Move flag
     else {
         _date = newDate;

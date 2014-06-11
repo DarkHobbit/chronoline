@@ -31,7 +31,7 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 signals:
-    void draggedOutside(FlagDragDirection direction, int newX, const QDateTime& newDate);
+    void draggedOutside(FlagDragDirection direction, int newX);
 };
 
 #endif // CLFLAG_H

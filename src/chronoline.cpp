@@ -129,8 +129,8 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     evFlags[idFlag]->setParentItem(timeLine);
     evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
     bool res = connect(evFlags[idFlag],
-        SIGNAL(draggedOutside(FlagDragDirection, int, const QDateTime&)),
-        this, SLOT(flagDraggedOutside(FlagDragDirection, int, const QDateTime&)));
+        SIGNAL(draggedOutside(FlagDragDirection, int)),
+        this, SLOT(flagDraggedOutside(FlagDragDirection, int)));
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
@@ -171,13 +171,13 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
     QGraphicsView::resizeEvent(event);
 }
 
-void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX, const QDateTime& newDate)
+void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
 {
-//    QMessageBox::information(0, "drag", QString::number(newX));
     static long slower = 0;
     slower++;
     if (slower==1/* 10 TODO read about mousemove sending frequency */) {
         slower=0;
+        QDateTime newDate = timeLine->dateForX(newX);
         if (direction==fdLeft) {
             QDateTime oldMinDate = timeLine->minDate();
             setMinDate(newDate);
