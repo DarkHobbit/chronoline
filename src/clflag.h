@@ -32,6 +32,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 signals:
     void draggedOutside(FlagDragDirection direction, int newX);
+    void dragOutsideStop();
 };
 
 #endif // CLFLAG_H

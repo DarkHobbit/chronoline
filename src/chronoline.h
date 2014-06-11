@@ -6,6 +6,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMap>
+#include <QTimer>
 #include "cldefs.h"
 #include "clperiod.h"
 #include "clflag.h"
@@ -51,14 +52,21 @@ public:
 protected:
     QGraphicsScene *scene;
     bool           _lockAutoUpdate;
+    // Items
     CLTimeLine     *timeLine;
-    long           idSequencer; // generator of ID for periods and flags
     QMap<long, CLPeriod*> periods;
     QMap<long, CLFlag*>   evFlags;
+    long           idSequencer; // generator of ID for periods and flags
     virtual void resizeEvent(QResizeEvent* event);
+    // Scale shift while some flag dragged outside scale
+    QTimer tmDragger;
+    CLFlag* draggingFlag;
+    float dragStep;
 signals:
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
+    void flagDragOutsideStop();
+    void oneDragShiftStep();
 };
 
 #endif // CHRONOLINE_H

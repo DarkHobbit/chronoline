@@ -24,10 +24,16 @@ public:
     ChronoLineUnit actualUnit();
     QDateTime minDate();
     QDateTime maxDate();
+    int xMin();
+    int xMax();
     // Rounded minDate for best view (read-only, calculated based on minDate)
     QDateTime leftScaleDate();
     // Calculate range, step, etc.
     bool calcScale(const QRect& r);
+    // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
+    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit);
+    // D/t throw num units
+    QDateTime addUnits(const QDateTime& baseDate, float num);
 protected:
     // Input data
     ChronoLineUnit _unit, _actualUnit;
@@ -39,12 +45,9 @@ protected:
     int            mainDivCount;
     int            mainDivStep;
     int            x0;
+    int            xN;
     QDateTime      _leftScaleDate;
     QString        dateFormat;
-    // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
-    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit);
-    // D/t throw num units
-    QDateTime addUnits(const QDateTime& baseDate, float num);
 };
 
 #endif // CLTIMELINE_H

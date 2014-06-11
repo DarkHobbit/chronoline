@@ -41,4 +41,12 @@ enum ChronoLineFlagType {
 // Height of upper flag view part
 #define FLAG_SUBHEIGHT 20
 
+// Datetime shift (in main units) while flag dragging outside scale
+// Minimal units
+#define MIN_FLAGDRAG_DATE_SHIFT 0.02
+// Maximal units
+#define MAX_FLAGDRAG_DATE_SHIFT 0.1
+// Shift period, msec
+#define FLAGDRAG_DATE_SHIFT_PERIOD 50
+
 #endif // CLDEFS_H

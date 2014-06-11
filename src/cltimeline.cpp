@@ -112,6 +112,8 @@ ChronoLineUnit CLTimeLine::unit() { return _unit; }
 QDateTime CLTimeLine::minDate() { return _minDate; }
 QDateTime CLTimeLine::maxDate() { return _maxDate; }
 QDateTime CLTimeLine::leftScaleDate() { return _leftScaleDate; }
+int CLTimeLine::xMin() { return x0; }
+int CLTimeLine::xMax() { return xN; }
 
 ChronoLineUnit CLTimeLine::actualUnit()
 {
@@ -171,6 +173,7 @@ bool CLTimeLine::calcScale(const QRect& r)
     if (mainDivCount<2) return false;
     mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
     x0 = -r.width()/2+LEFT_DIV_MARGIN;
+    xN = r.width()/2-RIGHT_DIV_MARGIN;
     changed = false;
     return true;
 }

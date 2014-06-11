@@ -2,6 +2,9 @@
 #include <QMessageBox>
 #include "chronoline.h"
 
+#include <QLabel>
+extern QLabel* lbDebug;
+
 ChronoLine::ChronoLine(QWidget *parent) :
     QGraphicsView(parent),
     _lockAutoUpdate(true),
@@ -16,6 +19,11 @@ ChronoLine::ChronoLine(QWidget *parent) :
     timeLine = new CLTimeLine();
     scene->addItem(timeLine);
     _lockAutoUpdate = false;
+    // Scale shift while some flag dragged outside scale
+    tmDragger.setInterval(FLAGDRAG_DATE_SHIFT_PERIOD);
+    connect(&tmDragger, SIGNAL(timeout()), this, SLOT(oneDragShiftStep()));
+    draggingFlag = 0;
+    dragStep = 0;
 }
 
 void ChronoLine::updateAll()
@@ -128,9 +136,10 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
     evFlags[idFlag]->setParentItem(timeLine);
     evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
-    bool res = connect(evFlags[idFlag],
+    connect(evFlags[idFlag],
         SIGNAL(draggedOutside(FlagDragDirection, int)),
         this, SLOT(flagDraggedOutside(FlagDragDirection, int)));
+    connect(evFlags[idFlag], SIGNAL(dragOutsideStop()), this, SLOT(flagDragOutsideStop()));
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
@@ -173,23 +182,36 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
 
 void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
 {
-    static long slower = 0;
-    slower++;
-    if (slower==1/* 10 TODO read about mousemove sending frequency */) {
-        slower=0;
-        QDateTime newDate = timeLine->dateForX(newX);
-        if (direction==fdLeft) {
-            QDateTime oldMinDate = timeLine->minDate();
-            setMinDate(newDate);
-            long delta = minDate().secsTo(oldMinDate);
-            setMaxDate(maxDate().addSecs(-delta));
-        }
-        else {
-            QDateTime oldMaxDate = timeLine->maxDate();
-            setMaxDate(newDate);
-            long delta = maxDate().secsTo(oldMaxDate);
-            setMinDate(minDate().addSecs(-delta));
-        }
+    draggingFlag = dynamic_cast<CLFlag*>(sender());
+    float dX = 0;
+    if (direction==fdLeft) {
+        dX = (float)(newX-timeLine->xMin())/LEFT_DIV_MARGIN;
+        dragStep = -MIN_FLAGDRAG_DATE_SHIFT+(MAX_FLAGDRAG_DATE_SHIFT-MIN_FLAGDRAG_DATE_SHIFT)*dX;
+    }
+    else {
+        dX = (float)(newX-timeLine->xMax())/RIGHT_DIV_MARGIN;
+        dragStep = MIN_FLAGDRAG_DATE_SHIFT+(MAX_FLAGDRAG_DATE_SHIFT-MIN_FLAGDRAG_DATE_SHIFT)*dX;
+    }
+    //lbDebug->setText(QString("%1 %2 %3 %4").arg(newX).arg(timeLine->xMin()).arg(dX).arg(dragStep));
+    tmDragger.start();
+}
+
+void ChronoLine::flagDragOutsideStop()
+{
+    if (sender()==draggingFlag) {
+        tmDragger.stop();
+        draggingFlag = 0;
+        dragStep = 0;
+        //lbDebug->setText("");
+    }
+}
+
+void ChronoLine::oneDragShiftStep()
+{
+    if (draggingFlag) {
+        setMinDate(timeLine->addUnits(minDate(), dragStep));
+        setMaxDate(timeLine->addUnits(maxDate(), dragStep));
+        draggingFlag->setDate((dragStep<0) ? minDate() : maxDate());
         updateAll();
-    };
+    }
 }
