@@ -140,6 +140,9 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
         SIGNAL(draggedOutside(FlagDragDirection, int)),
         this, SLOT(flagDraggedOutside(FlagDragDirection, int)));
     connect(evFlags[idFlag], SIGNAL(dragOutsideStop()), this, SLOT(flagDragOutsideStop()));
+    connect(evFlags[idFlag],
+        SIGNAL(dateChanged(long, const QDateTime&)),
+        this, SLOT(transferFlagDateChanged(long, const QDateTime&)));
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
@@ -211,7 +214,15 @@ void ChronoLine::oneDragShiftStep()
     if (draggingFlag) {
         setMinDate(timeLine->addUnits(minDate(), dragStep));
         setMaxDate(timeLine->addUnits(maxDate(), dragStep));
-        draggingFlag->setDate((dragStep<0) ? minDate() : maxDate());
+        QDateTime newDate = (dragStep<0) ? minDate() : maxDate();
+        draggingFlag->setDate(newDate);
+        emit flagDateChanged(draggingFlag->id(), newDate);
         updateAll();
     }
 }
+
+void ChronoLine::transferFlagDateChanged(long idFlag, const QDateTime& newDate)
+{
+    emit flagDateChanged(idFlag, newDate);
+}
+

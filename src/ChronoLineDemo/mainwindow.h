@@ -32,7 +32,8 @@ private slots:
     void on_edMaxDate_dateTimeChanged(const QDateTime &dateTime);
 
     void on_cbUnit_currentIndexChanged(const QString &arg1);
-
+public slots:
+    void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
 private:
     void updateSettings();
     void updateView();

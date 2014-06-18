@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(chronoLine);
     ui->frmChrono->setLayout(layout);
+    connect(
+        chronoLine, SIGNAL(flagDateChanged(long, const QDateTime&)),
+                this, SLOT(anyFlagDateChanged(long, const QDateTime&)));
     // Initial data
     chronoLine->lockAutoUpdate();
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
@@ -137,3 +140,7 @@ void MainWindow::on_action_Manage_Periods_Flags_triggered()
     updateView();
 }
 
+void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)
+{
+    lbDebug->setText(QString("Flag %1 set to  %2").arg(idFlag).arg(newDate.toString()));
+}

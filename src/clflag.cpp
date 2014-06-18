@@ -61,6 +61,7 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         emit dragOutsideStop();
         _date = newDate;
         setPos(newX, 1);
+        emit dateChanged(_id, newDate);
         scene()->update();
     }
     return;
@@ -81,5 +82,10 @@ void CLFlag::setDate(const QDateTime date)
 QDateTime CLFlag::date()
 {
     return _date;
+}
+
+long CLFlag::id()
+{
+    return _id;
 }
 

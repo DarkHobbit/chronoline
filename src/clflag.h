@@ -18,6 +18,7 @@ public:
     virtual QRectF boundingRect() const;
     void setDate(const QDateTime date);
     QDateTime date();
+    long id();
 protected:
     // Input data
     QDateTime _date;
@@ -33,6 +34,7 @@ protected:
 signals:
     void draggedOutside(FlagDragDirection direction, int newX);
     void dragOutsideStop();
+    void dateChanged(long idFlag, const QDateTime& newDate);
 };
 
 #endif // CLFLAG_H

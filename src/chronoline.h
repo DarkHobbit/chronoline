@@ -63,10 +63,12 @@ protected:
     CLFlag* draggingFlag;
     float dragStep;
 signals:
+    void flagDateChanged(long idFlag, const QDateTime& newDate);
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();
     void oneDragShiftStep();
+    void transferFlagDateChanged(long idFlag, const QDateTime& newDate);
 };
 
 #endif // CHRONOLINE_H
