@@ -32,6 +32,8 @@ private slots:
     void on_edMaxDate_dateTimeChanged(const QDateTime &dateTime);
 
     void on_cbUnit_currentIndexChanged(const QString &arg1);
+    void on_action_Fit_objects_on_scene_triggered();
+
 public slots:
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
 private:

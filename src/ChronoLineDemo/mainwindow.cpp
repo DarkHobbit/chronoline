@@ -142,5 +142,10 @@ void MainWindow::on_action_Manage_Periods_Flags_triggered()
 
 void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)
 {
-    lbDebug->setText(QString("Flag %1 set to  %2").arg(idFlag).arg(newDate.toString()));
+    lbDebug->setText(QString("Flag %1 set to %2").arg(idFlag).arg(newDate.toString()));
+}
+
+void MainWindow::on_action_Fit_objects_on_scene_triggered()
+{
+    chronoLine->fitObjectsOnScene(true);
 }

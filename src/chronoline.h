@@ -49,6 +49,8 @@ public:
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);
     bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
     bool removeFlagPair(long idPPair);*/
+    // Set range to fit all flags/periods on scene
+    bool fitObjectsOnScene(bool shrinkIfNeeded);
 protected:
     QGraphicsScene *scene;
     bool           _lockAutoUpdate;

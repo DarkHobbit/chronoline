@@ -144,8 +144,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>676</width>
-     <height>25</height>
+     <width>800</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -164,7 +164,14 @@
     <addaction name="separator"/>
     <addaction name="action_Manage_Periods_Flags"/>
    </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="action_Fit_objects_on_scene"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_View"/>
    <addaction name="menu_Edit"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -208,6 +215,14 @@
    </property>
    <property name="text">
     <string>&amp;Manage Periods/Flags...</string>
+   </property>
+  </action>
+  <action name="action_Fit_objects_on_scene">
+   <property name="text">
+    <string>&amp;Fit objects on scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

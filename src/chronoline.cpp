@@ -172,6 +172,52 @@ bool ChronoLine::readEventFlag(long idFlag, QDateTime& date)
     return true;
 }
 
+bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
+{
+    if (!evFlags.count() && !periods.count() /*&& !flagPairs.count()*/)
+        return false; // can't fit if no objects
+    QDateTime minD, maxD;
+    if (shrinkIfNeeded)
+    {
+        if (evFlags.count()>0) {
+
+            minD = evFlags.begin().value()->date();
+            maxD = evFlags.begin().value()->date();
+        }
+        else
+        if (periods.count()>0) {
+            minD = periods.begin().value()->minDate();
+            maxD = periods.begin().value()->maxDate();
+        }
+        /*else TODO
+        if (flagPairs.count()>0) {
+            minD = flagPairs.begin().value()->minDate();
+            maxD = flagPairs.begin().value()->maxDate();
+        } */
+    }
+    else {
+        minD = minDate();
+        maxD = maxDate();
+    }
+    for (QMap<long, CLFlag*>::iterator i=evFlags.begin(); i!=evFlags.end(); i++) {
+        if (i.value()->date()<minD) minD = i.value()->date();
+        if (i.value()->date()>maxD) maxD = i.value()->date();
+    }
+    for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++) {
+        if (i.value()->minDate()<minD) minD = i.value()->minDate();
+        if (i.value()->maxDate()>maxD) maxD = i.value()->maxDate();
+    }
+    /*for (QMap<long, CLFlagPair*>::iterator i=flagPairs.begin(); i!=flagPairs.end(); i++) {
+        if (i.value()->minDate()<minD) minD = i.value()->minDate();
+        if (i.value()->maxDate()>maxD) maxD = i.value()->maxDate();
+    }*/
+    minD = timeLine->addUnits(minD, -1);
+    maxD = timeLine->addUnits(maxD, 1);
+    setMinDate(minD);
+    setMaxDate(maxD);
+    return true;
+}
+
 void ChronoLine::resizeEvent(QResizeEvent* event)
 {
     QRect r = childrenRect();
