@@ -6,15 +6,15 @@ TARGET = ChronoLineDemo
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
-    dialogaedperiod.cpp \
+    dialogaeddaterange.cpp \
     dialogaedevflag.cpp \
     dialogmanagepf.cpp
 HEADERS += mainwindow.h \
-    dialogaedperiod.h \
+    dialogaeddaterange.h \
     dialogaedevflag.h \
     dialogmanagepf.h
 FORMS += mainwindow.ui \
-    dialogaedperiod.ui \
+    dialogaeddaterange.ui \
     dialogaedevflag.ui \
     dialogmanagepf.ui
 

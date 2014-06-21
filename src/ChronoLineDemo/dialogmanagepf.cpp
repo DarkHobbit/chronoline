@@ -3,7 +3,7 @@
 #include <QMessageBox>
 #include "dialogmanagepf.h"
 #include "ui_dialogmanagepf.h"
-#include "dialogaedperiod.h"
+#include "dialogaeddaterange.h"
 #include "dialogaedevflag.h"
 
 DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QVector<long>* periods, QVector<long>* evFlags):
@@ -87,8 +87,8 @@ void DialogManagePF::on_pbEditPeriod_clicked()
     long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
     QDateTime minDate = QDateTime::fromString(ui->twPeriods->selectedItems()[1]->text(), "dd.MM.yyyy hh:mm");
     QDateTime maxDate = QDateTime::fromString(ui->twPeriods->selectedItems()[2]->text(), "dd.MM.yyyy hh:mm");
-    DialogAEDPeriod* dlg = new DialogAEDPeriod(0);
-    dlg->setEditMode(true);
+    DialogAEDDateRange* dlg = new DialogAEDDateRange(0);
+    dlg->setWindowTitle(tr("Edit Period"));
     dlg->setData(minDate, maxDate);
     dlg->exec();
     if (dlg->result()==QDialog::Accepted) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogAEDPeriod</class>
- <widget class="QDialog" name="DialogAEDPeriod">
+ <class>DialogAEDDateRange</class>
+ <widget class="QDialog" name="DialogAEDDateRange">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -55,7 +55,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogAEDPeriod</receiver>
+   <receiver>DialogAEDDateRange</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -71,7 +71,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogAEDPeriod</receiver>
+   <receiver>DialogAEDDateRange</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -5,7 +5,7 @@
 #include "../cldefs.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "dialogaedperiod.h"
+#include "dialogaeddaterange.h"
 #include "dialogaedevflag.h"
 #include "dialogmanagepf.h"
 
@@ -104,7 +104,8 @@ void MainWindow::on_cbUnit_currentIndexChanged(const QString &arg1)
 
 void MainWindow::on_action_Add_Period_triggered()
 {
-    DialogAEDPeriod* dlg = new DialogAEDPeriod(0);
+    DialogAEDDateRange* dlg = new DialogAEDDateRange(0);
+    dlg->setWindowTitle(tr("Add Period"));
     dlg->setData(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
     dlg->exec();
     if (dlg->result()==QDialog::Accepted) {
