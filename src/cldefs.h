@@ -28,6 +28,8 @@ enum ChronoLineFlagType {
 #define AUX_DIV_HEIGHT        8
 // Y coordinate for text output
 #define TEXT_Y               15
+// Step for scale zoom in and zoom out (relatively to full scale range)
+#define ZOOM_STEP 0.2
 
 // Base height of period view
 #define BASE_PERIOD_HEIGHT   25

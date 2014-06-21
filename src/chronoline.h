@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QMap>
 #include <QTimer>
+#include <QWheelEvent>
 #include "cldefs.h"
 #include "clperiod.h"
 #include "clflag.h"
@@ -30,6 +31,8 @@ public:
     ChronoLineUnit unit();
     QDateTime minDate();
     QDateTime maxDate();
+    void zoomIn(float centerRate);
+    void zoomOut(float centerRate);
     // Periods management
     long addPeriod(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     /*long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);*/
@@ -64,6 +67,7 @@ protected:
     QTimer tmDragger;
     CLFlag* draggingFlag;
     float dragStep;
+    void wheelEvent(QWheelEvent* event);
 signals:
     void flagDateChanged(long idFlag, const QDateTime& newDate);
 public slots:

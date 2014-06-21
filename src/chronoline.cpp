@@ -75,6 +75,18 @@ void ChronoLine::setMaxDate(const QDateTime date)
     if (!_lockAutoUpdate) updateAll();
 }
 
+void ChronoLine::zoomIn(float centerRate)
+{
+    timeLine->zoomIn(centerRate);
+    if (!_lockAutoUpdate) updateAll();
+}
+
+void ChronoLine::zoomOut(float centerRate)
+{
+    timeLine->zoomOut(centerRate);
+    if (!_lockAutoUpdate) updateAll();
+}
+
 ChronoLineUnit ChronoLine::unit()
 {
     return timeLine->unit();
@@ -270,5 +282,18 @@ void ChronoLine::oneDragShiftStep()
 void ChronoLine::transferFlagDateChanged(long idFlag, const QDateTime& newDate)
 {
     emit flagDateChanged(idFlag, newDate);
+}
+
+// Scale range changing by mouse wheel
+void ChronoLine::wheelEvent(QWheelEvent* event)
+{
+    int centerX = event->pos().x();
+    float centerRate = (float)centerX/width();
+//    std::cout << "wheel " << event->pos().x() << " " << width() << " " << event->delta() <<  std::endl;
+    if (event->delta()>0)
+        zoomIn(centerRate);
+    else
+        zoomOut(centerRate);
+    event->accept();
 }
 

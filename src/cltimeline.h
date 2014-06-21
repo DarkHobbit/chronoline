@@ -15,6 +15,8 @@ public:
     void setUnit(const ChronoLineUnit& unit);
     void setMinDate(const QDateTime date);
     void setMaxDate(const QDateTime date);
+    void zoomIn(float centerRate);
+    void zoomOut(float centerRate);
     // Date/time coordinate (viewport x) for date
     int  xForDate(const QDateTime date, const QRect& r);
     QDateTime dateForX(int x);
