@@ -150,3 +150,19 @@ void MainWindow::on_action_Fit_objects_on_scene_triggered()
 {
     chronoLine->fitObjectsOnScene(true);
 }
+
+void MainWindow::on_action_Set_scale_Range_triggered()
+{
+    DialogAEDDateRange* dlg = new DialogAEDDateRange(0);
+    dlg->setWindowTitle(tr("Set scale range"));
+    dlg->setData(chronoLine->minDate(), chronoLine->maxDate());
+    dlg->exec();
+    if (dlg->result()==QDialog::Accepted) {
+        QDateTime minDate, maxDate;
+        dlg->getData(minDate, maxDate);
+        chronoLine->setMinDate(minDate);
+        chronoLine->setMaxDate(maxDate);
+    }
+    delete dlg;
+    updateView();
+}

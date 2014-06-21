@@ -168,6 +168,7 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <addaction name="action_Set_scale_Range"/>
     <addaction name="action_Fit_objects_on_scene"/>
    </widget>
    <addaction name="menu_File"/>
@@ -223,6 +224,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="action_Set_scale_Range">
+   <property name="text">
+    <string>&amp;Set scale Range...</string>
    </property>
   </action>
  </widget>

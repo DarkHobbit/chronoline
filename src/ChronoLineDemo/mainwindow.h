@@ -34,6 +34,8 @@ private slots:
     void on_cbUnit_currentIndexChanged(const QString &arg1);
     void on_action_Fit_objects_on_scene_triggered();
 
+    void on_action_Set_scale_Range_triggered();
+
 public slots:
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
 private:
