@@ -36,6 +36,10 @@ private slots:
 
     void on_action_Set_scale_Range_triggered();
 
+    void on_action_Zoom_In_triggered();
+
+    void on_actionZoom_Out_triggered();
+
 public slots:
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
 private:

@@ -170,6 +170,8 @@
     </property>
     <addaction name="action_Set_scale_Range"/>
     <addaction name="action_Fit_objects_on_scene"/>
+    <addaction name="action_Zoom_In"/>
+    <addaction name="actionZoom_Out"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -229,6 +231,22 @@
   <action name="action_Set_scale_Range">
    <property name="text">
     <string>&amp;Set scale Range...</string>
+   </property>
+  </action>
+  <action name="action_Zoom_In">
+   <property name="text">
+    <string>&amp;Zoom In</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionZoom_Out">
+   <property name="text">
+    <string>Zoom &amp;Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
  </widget>

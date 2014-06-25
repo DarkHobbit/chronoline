@@ -166,3 +166,14 @@ void MainWindow::on_action_Set_scale_Range_triggered()
     delete dlg;
     updateView();
 }
+
+void MainWindow::on_action_Zoom_In_triggered()
+{
+    chronoLine->zoomIn(0.5);
+}
+
+
+void MainWindow::on_actionZoom_Out_triggered()
+{
+    chronoLine->zoomOut(0.5);
+}
