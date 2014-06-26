@@ -26,6 +26,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     /*p->setPen(Qt::blue);
     int vh = v.height();
     p->drawLine(-vw/2+LEFT_DIV_MARGIN, -vh/2, -vw/2+LEFT_DIV_MARGIN, vh/2+9);
+    p->drawLine(0, -vh/2, 0, vh/2+9);
     p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);*/
     p->setPen(Qt::black);
     // Main scale divisions;

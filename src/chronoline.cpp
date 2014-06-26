@@ -28,8 +28,11 @@ ChronoLine::ChronoLine(QWidget *parent) :
 
 void ChronoLine::updateAll()
 {
-    if (timeLine->calcScale(childrenRect()))
+    if (timeLine->calcScale(childrenRect())) {
         scene->update();
+        resize(width()+1, height()+1); // Magic pass for flags redraw
+        resize(width()-1, height()-1);
+    }
     else
         QMessageBox::critical(0, QString::fromUtf8("Ошибка"),
             QString::fromUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
