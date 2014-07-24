@@ -220,18 +220,16 @@ QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num)
         return baseDate.addDays(num*365);
 }
 
+QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
+
 void CLTimeLine::zoomIn(float centerRate)
 {
-    float dateDelta = unitsTo(_minDate, _maxDate, _actualUnit);
-//    std::cout << "In dateDelta " << dateDelta << " centerRate " << centerRate <<  std::endl;
-    setMinDate(addUnits(minDate(), centerRate*ZOOM_STEP*dateDelta));
-    setMaxDate(addUnits(maxDate(), -(1-centerRate)*ZOOM_STEP*dateDelta));
+    setMinDate(addUnits(minDate(), centerRate*ZOOM_STEP));
+    setMaxDate(addUnits(maxDate(), -(1-centerRate)*ZOOM_STEP));
 }
 
 void CLTimeLine::zoomOut(float centerRate)
 {
-    float dateDelta = unitsTo(_minDate, _maxDate, _actualUnit);
-//    std::cout << "Out dateDelta " << dateDelta << " centerRate " << centerRate <<  std::endl;
-    setMinDate(addUnits(minDate(), -centerRate*ZOOM_STEP*dateDelta));
-    setMaxDate(addUnits(maxDate(), (1-centerRate)*ZOOM_STEP*dateDelta));
+    setMinDate(addUnits(minDate(), -centerRate*ZOOM_STEP));
+    setMaxDate(addUnits(maxDate(), (1-centerRate)*ZOOM_STEP));
 }
