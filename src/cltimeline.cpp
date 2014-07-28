@@ -32,7 +32,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     // Main scale divisions;
     int xPix = xForDate(_leftScaleDate, v) - mainDivStep;
     QDateTime xDate = _leftScaleDate; // TODO implement dateForX instead this g-code
-    for (int i=0; i<=mainDivCount; i++) {
+    for (int i=0; i<(mainDivCount+2); i++) {
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
         // Division text
