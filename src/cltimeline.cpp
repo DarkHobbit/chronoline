@@ -12,6 +12,8 @@ CLTimeLine::CLTimeLine():
     _minDate(QDateTime::currentDateTime()),
     _maxDate(QDateTime::currentDateTime().addDays(7))
 {
+    setFlags(ItemIsSelectable | ItemIsMovable);
+    setAcceptHoverEvents(true);
 }
 
 void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
@@ -64,8 +66,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
 
 QRectF CLTimeLine::boundingRect() const
 {
-    //return QRectF(0, -10, 110, 70);
-    return QRectF(0, 0, 10, 20);
+    return QRectF(-scene()->width()/2, -scene()->height()/2, scene()->width(), scene()->height());
 }
 
 // Timeline settings
@@ -233,3 +234,26 @@ void CLTimeLine::zoomOut(float centerRate)
     setMinDate(addUnits(minDate(), -centerRate*ZOOM_STEP));
     setMaxDate(addUnits(maxDate(), (1-centerRate)*ZOOM_STEP));
 }
+
+void CLTimeLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsItem::mousePressEvent(event);
+    oldDragX = event->scenePos().x();
+//QMessageBox::information(0, "debug", QString::number(oldDragX));
+    update();
+}
+
+void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    // Set new position
+    int newDragX = event->scenePos().x();
+    // ...
+    oldDragX = newDragX;
+}
+
+void CLTimeLine::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsItem::mouseReleaseEvent(event);
+    update();
+}
+

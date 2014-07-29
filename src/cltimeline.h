@@ -50,6 +50,11 @@ protected:
     int            xN;
     QDateTime      _leftScaleDate;
     QString        dateFormat;
+    // Drag data
+    int oldDragX;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // CLTIMELINE_H
