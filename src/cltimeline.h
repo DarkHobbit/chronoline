@@ -28,7 +28,7 @@ public:
     QDateTime maxDate();
     int xMin();
     int xMax();
-    // Rounded minDate for best view (read-only, calculated based on minDate)
+   // Rounded minDate for best view (read-only, calculated based on minDate)
     QDateTime leftScaleDate();
     // Calculate range, step, etc.
     bool calcScale(const QRect& r);

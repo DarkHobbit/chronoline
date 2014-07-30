@@ -1,6 +1,7 @@
 #include <iostream>
 #include <QGraphicsScene>
 #include <QGraphicsSceneWheelEvent>
+#include <QGraphicsWidget>
 #include <QMessageBox>
 #include <QPainter>
 #include "cldefs.h"
@@ -66,7 +67,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
 
 QRectF CLTimeLine::boundingRect() const
 {
-    return QRectF(-scene()->width()/2, -scene()->height()/2, scene()->width(), scene()->height());
+    return QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
 }
 
 // Timeline settings
@@ -240,6 +241,7 @@ void CLTimeLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
     oldDragX = event->scenePos().x();
 //QMessageBox::information(0, "debug", QString::number(oldDragX));
+    prepareGeometryChange(); // ?
     update();
 }
 
@@ -247,8 +249,12 @@ void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     // Set new position
     int newDragX = event->scenePos().x();
-    // ...
+    // Recalc dates
+    setMinDate(addUnits(minDate(), (float)(oldDragX-newDragX)/mainDivStep));
+    setMaxDate(addUnits(maxDate(), (float)(oldDragX-newDragX)/mainDivStep));
+    // preparing for next move
     oldDragX = newDragX;
+    update();
 }
 
 void CLTimeLine::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
