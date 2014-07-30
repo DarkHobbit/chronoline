@@ -75,6 +75,7 @@ public slots:
     void flagDragOutsideStop();
     void oneDragShiftStep();
     void transferFlagDateChanged(long idFlag, const QDateTime& newDate);
+    void doUpdateAll();
 };
 
 #endif // CHRONOLINE_H

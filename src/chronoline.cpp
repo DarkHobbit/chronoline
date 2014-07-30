@@ -19,6 +19,7 @@ ChronoLine::ChronoLine(QWidget *parent) :
     timeLine = new CLTimeLine();
     scene->addItem(timeLine);
     _lockAutoUpdate = false;
+    connect(timeLine, SIGNAL(needUpdateAll()), this, SLOT(doUpdateAll()));
     // Scale shift while some flag dragged outside scale
     tmDragger.setInterval(FLAGDRAG_DATE_SHIFT_PERIOD);
     connect(&tmDragger, SIGNAL(timeout()), this, SLOT(oneDragShiftStep()));
@@ -300,3 +301,7 @@ void ChronoLine::wheelEvent(QWheelEvent* event)
     event->accept();
 }
 
+void ChronoLine::doUpdateAll()
+{
+    updateAll();
+}

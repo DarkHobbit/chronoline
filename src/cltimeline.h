@@ -2,11 +2,13 @@
 #define CLTIMELINE_H
 
 #include <QDateTime>
-#include <QGraphicsItem>
+#include <QGraphicsObject>
+#include <QObject>
 #include "cldefs.h"
 
-class CLTimeLine : public QGraphicsItem
+class CLTimeLine : public QGraphicsObject
 {
+    Q_OBJECT
 public:
     CLTimeLine();
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
@@ -55,6 +57,8 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+signals:
+    void needUpdateAll();
 };
 
 #endif // CLTIMELINE_H

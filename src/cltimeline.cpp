@@ -34,8 +34,8 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     p->setPen(Qt::black);
     // Main scale divisions;
     int xPix = xForDate(_leftScaleDate, v) - mainDivStep;
-    QDateTime xDate = _leftScaleDate; // TODO implement dateForX instead this g-code
     for (int i=0; i<(mainDivCount+2); i++) {
+        QDateTime xDate = dateForX(xPix);
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
         // Division text
@@ -61,7 +61,6 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
         }
         // To next division...
         xPix += mainDivStep;
-        xDate = addUnits(xDate, 1);
     };
 }
 
@@ -240,9 +239,7 @@ void CLTimeLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mousePressEvent(event);
     oldDragX = event->scenePos().x();
-//QMessageBox::information(0, "debug", QString::number(oldDragX));
-    prepareGeometryChange(); // ?
-    update();
+    scene()->update();
 }
 
 void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -254,7 +251,7 @@ void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     setMaxDate(addUnits(maxDate(), (float)(oldDragX-newDragX)/mainDivStep));
     // preparing for next move
     oldDragX = newDragX;
-    update();
+    emit needUpdateAll();
 }
 
 void CLTimeLine::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
