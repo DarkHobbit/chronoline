@@ -26,11 +26,13 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     int vw = v.width();
     p->drawLine(-vw/2, 0, vw/2+4, 0);
     // Bounds of paint area
-    /*p->setPen(Qt::blue);
+    QPen linePen(Qt::blue);
+    linePen.setStyle(Qt::DotLine);
+    p->setPen(linePen);
     int vh = v.height();
     p->drawLine(-vw/2+LEFT_DIV_MARGIN, -vh/2, -vw/2+LEFT_DIV_MARGIN, vh/2+9);
-    p->drawLine(0, -vh/2, 0, vh/2+9);
-    p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);*/
+    /*p->drawLine(0, -vh/2, 0, vh/2+9);*/
+    p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);
     p->setPen(Qt::black);
     // Main scale divisions;
     int xPix = xForDate(_leftScaleDate, v) - mainDivStep;
