@@ -188,6 +188,18 @@ bool ChronoLine::readEventFlag(long idFlag, QDateTime& date)
     return true;
 }
 
+long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color)
+{
+    long idPair = ++idSequencer; // first ID is 1
+    idSequencer +=2; // 3 ids needed: for pair and for both its flags
+    if (minDate>=maxDate) return 0;
+    flagPairs[idPair] = new CLFlagPair(idPair, minDate, maxDate, color, timeLine);
+    flagPairs[idPair]->setParentItem(timeLine);
+    if (!_lockAutoUpdate) updateAll();
+    return idPair;
+
+}
+
 bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
 {
     if (!evFlags.count() && !periods.count() /*&& !flagPairs.count()*/)

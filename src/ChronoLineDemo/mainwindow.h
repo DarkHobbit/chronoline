@@ -40,6 +40,8 @@ private slots:
 
     void on_actionZoom_Out_triggered();
 
+    void on_action_Add_Pair_Of_Flags_triggered();
+
 public slots:
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
 private:
@@ -50,6 +52,7 @@ private:
     QLabel *sl1, *sl2, *sl3;
     QVector<long> periods;
     QVector<long> evFlags;
+    QVector<long> flagPairs;
 };
 
 #endif // MAINWINDOW_H

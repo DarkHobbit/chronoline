@@ -177,3 +177,20 @@ void MainWindow::on_actionZoom_Out_triggered()
 {
     chronoLine->zoomOut(0.5);
 }
+
+void MainWindow::on_action_Add_Pair_Of_Flags_triggered()
+{
+    DialogAEDDateRange* dlg = new DialogAEDDateRange(0);
+    dlg->setWindowTitle(tr("Add Pair of Flags"));
+    dlg->setData(QDateTime::currentDateTime().addDays(3), QDateTime::currentDateTime().addDays(4));
+    dlg->exec();
+    if (dlg->result()==QDialog::Accepted) {
+        QDateTime minDate, maxDate;
+        dlg->getData(minDate, maxDate);
+        long idP = chronoLine->addFlagPair(minDate, maxDate, Qt::magenta);
+        if (idP) flagPairs.push_back(idP);
+    }
+    delete dlg;
+    updateView();
+
+}

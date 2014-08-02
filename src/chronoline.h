@@ -11,6 +11,7 @@
 #include "cldefs.h"
 #include "clperiod.h"
 #include "clflag.h"
+#include "clflagpair.h"
 #include "cltimeline.h"
 
 class ChronoLine : public QGraphicsView
@@ -48,8 +49,8 @@ public:
     inline int eventFlagCount() { return evFlags.count(); }
     bool readEventFlag(long idFlag, QDateTime& date);
     // Flags pairs management
-    /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
-    long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);
+    long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
+    /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);
     bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
     bool removeFlagPair(long idPPair);*/
     // Set range to fit all flags/periods on scene
@@ -61,6 +62,7 @@ protected:
     CLTimeLine     *timeLine;
     QMap<long, CLPeriod*> periods;
     QMap<long, CLFlag*>   evFlags;
+    QMap<long, CLFlagPair*>   flagPairs;
     long           idSequencer; // generator of ID for periods and flags
     virtual void resizeEvent(QResizeEvent* event);
     // Scale shift while some flag dragged outside scale

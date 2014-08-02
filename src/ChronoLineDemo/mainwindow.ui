@@ -206,7 +206,7 @@
   </action>
   <action name="action_Add_Pair_Of_Flags">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Add &amp;Pair of flags...</string>
