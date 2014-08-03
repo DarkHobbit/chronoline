@@ -8,17 +8,26 @@
 #include <QLabel>
 extern QLabel* lbDebug;
 
-CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine):
-    _id(id),
+CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
+               CLTimeLine* timeLine, QObject* eventReceiver):
     _date(date),
     _fType(fType),
     _color(color),
     _timeLine(timeLine),
+    _id(id),
     changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
     setPos(0, 1);
+    // Signal handling
+    connect(this,
+        SIGNAL(draggedOutside(FlagDragDirection, int)),
+        eventReceiver, SLOT(flagDraggedOutside(FlagDragDirection, int)));
+    connect(this, SIGNAL(dragOutsideStop()), eventReceiver, SLOT(flagDragOutsideStop()));
+    connect(this,
+        SIGNAL(dateChanged(long, const QDateTime&)),
+        eventReceiver, SLOT(transferFlagDateChanged(long, const QDateTime&)));
     // Direction of flag for painting and bounding (depend of its type)
     flagHeight = FLAG_HEIGHT;
     flagSubheight = FLAG_SUBHEIGHT;
@@ -30,7 +39,7 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     if (_fType==clftPairEnd) flagWidth = -flagWidth;
 }
 
-CLFlag* CLFlag::setPairFlag(CLFlag* pairFlag)
+void CLFlag::setPairFlag(CLFlag* pairFlag)
 {
     _pairFlag = pairFlag;
 }
@@ -95,10 +104,15 @@ void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     emit dragOutsideStop();
 }
 
-void CLFlag::setDate(const QDateTime& date)
+bool CLFlag::setDate(const QDateTime& date, bool checkForPairDate)
 {
+    if (checkForPairDate&&(_pairFlag!=0)) {
+        if ((_fType==clftPairBeg)&&(date>=_pairFlag->date())) return false;
+        if ((_fType==clftPairEnd)&&(date<=_pairFlag->date())) return false;
+    }
     _date = date;
     update();
+    return true;
 }
 
 void CLFlag::setPosByDate(const QRect& r)

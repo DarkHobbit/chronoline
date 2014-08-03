@@ -68,7 +68,7 @@ protected:
     // Scale shift while some flag dragged outside scale
     QTimer tmDragger;
     CLFlag* draggingFlag;
-    float dragStep;
+    float dragDateStep;
     void wheelEvent(QWheelEvent* event);
 signals:
     void flagDateChanged(long idFlag, const QDateTime& newDate);

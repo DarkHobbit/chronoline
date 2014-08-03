@@ -19,9 +19,9 @@ protected:
     // Input data
     QDateTime      _minDate, _maxDate;
     QColor _color;
+    CLTimeLine* _timeLine;
     // Recalc flag
     bool changed;
-    CLTimeLine* _timeLine;
     long _id;
 };
 

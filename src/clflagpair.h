@@ -8,7 +8,8 @@
 class CLFlagPair : public QGraphicsItemGroup
 {
 public:
-    CLFlagPair(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color, CLTimeLine* timeLine);
+    CLFlagPair(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color,
+               CLTimeLine* timeLine, QObject* eventReceiver);
     void setPosByDates(const QRect& r);
     QDateTime minDate();
     QDateTime maxDate();

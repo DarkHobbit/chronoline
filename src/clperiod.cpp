@@ -5,12 +5,12 @@
 #include "clperiod.h"
 
 CLPeriod::CLPeriod(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color, CLTimeLine* timeLine):
-    _id(id),
-    changed(false),
     _minDate(minDate),
     _maxDate(maxDate),
     _color(color),
-    _timeLine(timeLine)
+    _timeLine(timeLine),
+    changed(false),
+    _id(id)
 {
 }
 
@@ -33,6 +33,7 @@ void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
 
 QRectF CLPeriod::boundingRect() const
 {
+    return QRectF(0, 0, 1, 1);
 }
 
 QDateTime CLPeriod::minDate() { return _minDate; }

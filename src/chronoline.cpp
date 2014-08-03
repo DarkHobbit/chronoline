@@ -24,7 +24,7 @@ ChronoLine::ChronoLine(QWidget *parent) :
     tmDragger.setInterval(FLAGDRAG_DATE_SHIFT_PERIOD);
     connect(&tmDragger, SIGNAL(timeout()), this, SLOT(oneDragShiftStep()));
     draggingFlag = 0;
-    dragStep = 0;
+    dragDateStep = 0;
 }
 
 void ChronoLine::updateAll()
@@ -149,16 +149,9 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     QRect r = childrenRect();
     timeLine->calcScale(r);
     long idFlag = ++idSequencer; // first ID is 1
-    evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
+    evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine, this);
     evFlags[idFlag]->setParentItem(timeLine);
     evFlags[idFlag]->setPosByDate(r);
-    connect(evFlags[idFlag],
-        SIGNAL(draggedOutside(FlagDragDirection, int)),
-        this, SLOT(flagDraggedOutside(FlagDragDirection, int)));
-    connect(evFlags[idFlag], SIGNAL(dragOutsideStop()), this, SLOT(flagDragOutsideStop()));
-    connect(evFlags[idFlag],
-        SIGNAL(dateChanged(long, const QDateTime&)),
-        this, SLOT(transferFlagDateChanged(long, const QDateTime&)));
     if (!_lockAutoUpdate) updateAll();
     return idFlag;
 }
@@ -195,7 +188,7 @@ long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate,
     long idPair = ++idSequencer; // first ID is 1
     idSequencer +=2; // 3 IDs needed: for pair and for both its flags
     if (minDate>=maxDate) return 0;
-    flagPairs[idPair] = new CLFlagPair(idPair, minDate, maxDate, color, timeLine);
+    flagPairs[idPair] = new CLFlagPair(idPair, minDate, maxDate, color, timeLine, this);
     flagPairs[idPair]->setParentItem(timeLine);
     flagPairs[idPair]->setPosByDates(r);
     if (!_lockAutoUpdate) updateAll();
@@ -271,11 +264,11 @@ void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
     float dX = 0;
     if (direction==fdLeft) {
         dX = (float)(newX-timeLine->xMin())/LEFT_DIV_MARGIN;
-        dragStep = -MIN_FLAGDRAG_DATE_SHIFT+(MAX_FLAGDRAG_DATE_SHIFT-MIN_FLAGDRAG_DATE_SHIFT)*dX;
+        dragDateStep = -MIN_FLAGDRAG_DATE_SHIFT+(MAX_FLAGDRAG_DATE_SHIFT-MIN_FLAGDRAG_DATE_SHIFT)*dX;
     }
     else {
         dX = (float)(newX-timeLine->xMax())/RIGHT_DIV_MARGIN;
-        dragStep = MIN_FLAGDRAG_DATE_SHIFT+(MAX_FLAGDRAG_DATE_SHIFT-MIN_FLAGDRAG_DATE_SHIFT)*dX;
+        dragDateStep = MIN_FLAGDRAG_DATE_SHIFT+(MAX_FLAGDRAG_DATE_SHIFT-MIN_FLAGDRAG_DATE_SHIFT)*dX;
     }
     //lbDebug->setText(QString("%1 %2 %3 %4").arg(newX).arg(timeLine->xMin()).arg(dX).arg(dragStep));
     tmDragger.start();
@@ -283,22 +276,21 @@ void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
 
 void ChronoLine::flagDragOutsideStop()
 {
-    if (sender()==draggingFlag) {
-        tmDragger.stop();
-        draggingFlag = 0;
-        dragStep = 0;
-        //lbDebug->setText("");
-    }
+    tmDragger.stop();
+    draggingFlag = 0;
+    dragDateStep = 0;
 }
 
 void ChronoLine::oneDragShiftStep()
 {
     if (draggingFlag) {
-        setMinDate(timeLine->addUnits(minDate(), dragStep));
-        setMaxDate(timeLine->addUnits(maxDate(), dragStep));
-        QDateTime newDate = (dragStep<0) ? minDate() : maxDate();
-        draggingFlag->setDate(newDate);
-        emit flagDateChanged(draggingFlag->id(), newDate);
+        setMinDate(timeLine->addUnits(minDate(), dragDateStep));
+        setMaxDate(timeLine->addUnits(maxDate(), dragDateStep));
+        QDateTime newDate = (dragDateStep<0) ? minDate() : maxDate();
+        if (draggingFlag->setDate(newDate))
+            emit flagDateChanged(draggingFlag->id(), newDate);
+        else
+            flagDragOutsideStop();
         updateAll();
     }
 }

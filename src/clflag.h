@@ -13,9 +13,10 @@ class CLFlag : public QGraphicsObject
 {
     Q_OBJECT
 public:
-    CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine);
-    CLFlag* setPairFlag(CLFlag* pairFlag);
-    void setDate(const QDateTime& date);
+    CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
+          CLTimeLine* timeLine, QObject* eventReceiver);
+    void setPairFlag(CLFlag* pairFlag);
+    bool setDate(const QDateTime& date, bool checkForPairDate = true);
     void setPosByDate(const QRect& r);
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
@@ -27,10 +28,10 @@ protected:
     ChronoLineFlagType _fType;
     QColor _color;
     CLFlag* _pairFlag;
-    // Recalc flag
-    bool changed;
     CLTimeLine* _timeLine;
     long _id;
+    // Recalc flag
+    bool changed;
     // Direction of flag for painting and bounding (depend of its type)
     int flagHeight, flagSubheight, flagWidth;
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

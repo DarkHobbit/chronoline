@@ -8,10 +8,10 @@
 #include "cltimeline.h"
 
 CLTimeLine::CLTimeLine():
-    changed(false),
     _unit(cluDay),
     _minDate(QDateTime::currentDateTime()),
-    _maxDate(QDateTime::currentDateTime().addDays(7))
+    _maxDate(QDateTime::currentDateTime().addDays(7)),
+    changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
