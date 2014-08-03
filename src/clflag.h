@@ -16,7 +16,8 @@ public:
     CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color, CLTimeLine* timeLine);
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
-    void setDate(const QDateTime date);
+    void setDate(const QDateTime& date);
+    void setPosByDate(const QRect& r);
     QDateTime date();
     long id();
 protected:

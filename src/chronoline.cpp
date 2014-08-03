@@ -151,7 +151,7 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     long idFlag = ++idSequencer; // first ID is 1
     evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine);
     evFlags[idFlag]->setParentItem(timeLine);
-    evFlags[idFlag]->setPos(timeLine->xForDate(date, r), 1);
+    evFlags[idFlag]->setPosByDate(r);
     connect(evFlags[idFlag],
         SIGNAL(draggedOutside(FlagDragDirection, int)),
         this, SLOT(flagDraggedOutside(FlagDragDirection, int)));
@@ -190,11 +190,14 @@ bool ChronoLine::readEventFlag(long idFlag, QDateTime& date)
 
 long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color)
 {
+    QRect r = childrenRect();
+    timeLine->calcScale(r);
     long idPair = ++idSequencer; // first ID is 1
-    idSequencer +=2; // 3 ids needed: for pair and for both its flags
+    idSequencer +=2; // 3 IDs needed: for pair and for both its flags
     if (minDate>=maxDate) return 0;
     flagPairs[idPair] = new CLFlagPair(idPair, minDate, maxDate, color, timeLine);
     flagPairs[idPair]->setParentItem(timeLine);
+    flagPairs[idPair]->setPosByDates(r);
     if (!_lockAutoUpdate) updateAll();
     return idPair;
 
@@ -217,11 +220,11 @@ bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
             minD = periods.begin().value()->minDate();
             maxD = periods.begin().value()->maxDate();
         }
-        /*else TODO
+        else
         if (flagPairs.count()>0) {
             minD = flagPairs.begin().value()->minDate();
             maxD = flagPairs.begin().value()->maxDate();
-        } */
+        }
     }
     else {
         minD = minDate();
@@ -235,10 +238,10 @@ bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
         if (i.value()->minDate()<minD) minD = i.value()->minDate();
         if (i.value()->maxDate()>maxD) maxD = i.value()->maxDate();
     }
-    /*for (QMap<long, CLFlagPair*>::iterator i=flagPairs.begin(); i!=flagPairs.end(); i++) {
+    for (QMap<long, CLFlagPair*>::iterator i=flagPairs.begin(); i!=flagPairs.end(); i++) {
         if (i.value()->minDate()<minD) minD = i.value()->minDate();
         if (i.value()->maxDate()>maxD) maxD = i.value()->maxDate();
-    }*/
+    }
     minD = timeLine->addUnits(minD, -1);
     maxD = timeLine->addUnits(maxD, 1);
     setMinDate(minD);
@@ -252,8 +255,13 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
     timeLine->calcScale(r);
     foreach (const long id, evFlags.keys()) {
         CLFlag* p = evFlags.value(id);
-        p->setPos(timeLine->xForDate(p->date(), r), 1);
+        p->setPosByDate(r);
     }
+    foreach (const long id, flagPairs.keys()) {
+        CLFlagPair* p = flagPairs.value(id);
+        p->setPosByDates(r);
+    }
+    // TODO pairs
     QGraphicsView::resizeEvent(event);
 }
 

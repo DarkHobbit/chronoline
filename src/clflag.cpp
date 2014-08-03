@@ -23,13 +23,20 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
 
 void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
+    // Direction of flag (depend of its type)
     int height = FLAG_HEIGHT;
+    int subheight = FLAG_SUBHEIGHT;
+    if (_fType!=clftEvent) {
+        height = -height;
+        subheight = -subheight;
+    }
     int dX = -FLAG_WIDTH;
     if (_fType==clftPairEnd) dX = -dX;
+    // Paint!
     p->setPen(_color);
-    p->drawLine(0, 1, 0, FLAG_HEIGHT);
-    p->drawLine(0, FLAG_HEIGHT, dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2);
-    p->drawLine(dX, FLAG_HEIGHT-FLAG_SUBHEIGHT/2, 0, FLAG_HEIGHT-FLAG_SUBHEIGHT);
+    p->drawLine(0, -1, 0, height);
+    p->drawLine(0, height, dX, height-subheight/2);
+    p->drawLine(dX, height-subheight/2, 0, height-subheight);
 }
 
 QRectF CLFlag::boundingRect() const
@@ -73,10 +80,15 @@ void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     emit dragOutsideStop();
 }
 
-void CLFlag::setDate(const QDateTime date)
+void CLFlag::setDate(const QDateTime& date)
 {
     _date = date;
     update();
+}
+
+void CLFlag::setPosByDate(const QRect& r)
+{
+    setPos(_timeLine->xForDate(_date, r), 1);
 }
 
 QDateTime CLFlag::date()
