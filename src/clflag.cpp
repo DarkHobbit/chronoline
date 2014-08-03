@@ -19,29 +19,39 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
     setPos(0, 1);
+    // Direction of flag for painting and bounding (depend of its type)
+    flagHeight = FLAG_HEIGHT;
+    flagSubheight = FLAG_SUBHEIGHT;
+    if (_fType!=clftEvent) {
+        flagHeight = -flagHeight;
+        flagSubheight = -flagSubheight;
+    }
+    flagWidth = -FLAG_WIDTH;
+    if (_fType==clftPairEnd) flagWidth = -flagWidth;
+}
+
+CLFlag* CLFlag::setPairFlag(CLFlag* pairFlag)
+{
+    _pairFlag = pairFlag;
 }
 
 void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
-    // Direction of flag (depend of its type)
-    int height = FLAG_HEIGHT;
-    int subheight = FLAG_SUBHEIGHT;
-    if (_fType!=clftEvent) {
-        height = -height;
-        subheight = -subheight;
-    }
-    int dX = -FLAG_WIDTH;
-    if (_fType==clftPairEnd) dX = -dX;
-    // Paint!
     p->setPen(_color);
-    p->drawLine(0, -1, 0, height);
-    p->drawLine(0, height, dX, height-subheight/2);
-    p->drawLine(dX, height-subheight/2, 0, height-subheight);
+    p->drawLine(0, -1, 0, flagHeight);
+    p->drawLine(0, flagHeight, flagWidth, flagHeight-flagSubheight/2);
+    p->drawLine(flagWidth, flagHeight-flagSubheight/2, 0, flagHeight-flagSubheight);
 }
 
 QRectF CLFlag::boundingRect() const
 {
-    return QRectF(-FLAG_WIDTH+1, 2, FLAG_WIDTH, FLAG_HEIGHT);
+    int x0 = flagWidth+1;
+    int y0 = 2;
+    if (_fType!=clftEvent) {
+        if (_fType==clftPairEnd) x0 = 0;
+        y0 = -FLAG_HEIGHT;
+    }
+    return QRectF(x0, y0, FLAG_WIDTH, FLAG_HEIGHT);
 }
 
 void CLFlag::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -57,6 +67,11 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QDateTime newDate = _timeLine->dateForX(newX);
     // Debug coord output
     //lbDebug->setText(QString("%1 %2 %3").arg(scenePos().x()).arg(event->scenePos().x()).arg(_date.toString()));
+    // Check either flag dragged throw pair flag
+    if (_fType!=clftEvent) {
+        if ((_fType==clftPairBeg)&&(newX>=_pairFlag->pos().x())) return;
+        if ((_fType==clftPairEnd)&&(newX<=_pairFlag->pos().x())) return;
+    }
     // Check either flag dragged left outside scale
     if (newDate<_timeLine->minDate())
         emit draggedOutside(fdLeft, newX);
