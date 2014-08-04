@@ -22,13 +22,7 @@ protected:
 
 private slots:
     void on_pbClose_clicked();
-
-    void on_pbEditPeriod_clicked();
-
-    void on_pbRemovePeriod_clicked();
-
     void on_pbEditEvFlag_clicked();
-
     void on_pbRemoveEvFlag_clicked();
 
 private:
