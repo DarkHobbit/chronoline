@@ -14,39 +14,52 @@ DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QVector<long>* p
     _evFlags(evFlags)
 {
     ui->setupUi(this);
-    long id;
-    int i;
-    QDateTime d1, d2;
+    readPeriods();
+    readEvFlags();
+}
+
+DialogManagePF::~DialogManagePF()
+{
+    delete ui;
+}
+
+void DialogManagePF::readPeriods()
+{
     // Fill period list
-    ui->twPeriods->setRowCount(periods->count());
+    ui->twPeriods->clear();
+    ui->twPeriods->setRowCount(_periods->count());
     ui->twPeriods->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->twPeriods->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->twPeriods->setItemDelegate(new NonEditTableColumnDelegate());
-    i=0;
-    foreach (id, *periods) {
+    long id;
+    int i=0;
+    QDateTime d1, d2;
+    foreach (id, *_periods) {
         _cl->readPeriod(id, d1, d2);
         ui->twPeriods->setItem(i, 0, new QTableWidgetItem(QString::number(id)));
         ui->twPeriods->setItem(i, 1, new QTableWidgetItem(d1.toString("dd.MM.yyyy hh:mm")));
         ui->twPeriods->setItem(i, 2, new QTableWidgetItem(d2.toString("dd.MM.yyyy hh:mm")));
         i++;
     };
+}
+
+void DialogManagePF::readEvFlags()
+{
     // Fill event flag list
-    ui->twEvFlags->setRowCount(evFlags->count());
+    ui->twEvFlags->clear();
+    ui->twEvFlags->setRowCount(_evFlags->count());
     ui->twEvFlags->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->twEvFlags->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->twEvFlags->setItemDelegate(new NonEditTableColumnDelegate());
-    i=0;
-    foreach (id, *evFlags) {
-        _cl->readEventFlag(id, d1);
+    long id;
+    int i=0;
+    QDateTime d;
+    foreach (id, *_evFlags) {
+        _cl->readEventFlag(id, d);
         ui->twEvFlags->setItem(i, 0, new QTableWidgetItem(QString::number(id)));
-        ui->twEvFlags->setItem(i, 1, new QTableWidgetItem(d1.toString("dd.MM.yyyy hh:mm")));
+        ui->twEvFlags->setItem(i, 1, new QTableWidgetItem(d.toString("dd.MM.yyyy hh:mm")));
         i++;
     };
-}
-
-DialogManagePF::~DialogManagePF()
-{
-    delete ui;
 }
 
 void DialogManagePF::changeEvent(QEvent *e)
@@ -137,7 +150,10 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
                 QString::fromUtf8("Подтверждение"),
                 QString::fromUtf8("Вы действительно хотите удалить период?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+        {
             _cl->removePeriod(idP);
+            readPeriods();
+        }
     }
     else if (ui->tabber->currentWidget()->objectName()=="tabEvFlags") {
         if (!chkSel(ui->twEvFlags)) return;
@@ -146,6 +162,9 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
                 QString::fromUtf8("Подтверждение"),
                 QString::fromUtf8("Вы действительно хотите удалить флаг?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+        {
             _cl->removeEventFlag(idF);
+            readEvFlags();
+        }
     }
 }

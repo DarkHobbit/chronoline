@@ -18,6 +18,8 @@ public:
     ~DialogManagePF();
 
 protected:
+    void readPeriods();
+    void readEvFlags();
     bool chkSel(QTableWidget* t); // check if any row selected
     virtual void changeEvent(QEvent *e);
     virtual void resizeEvent(QResizeEvent* event);
