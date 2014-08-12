@@ -61,6 +61,17 @@ void DialogManagePF::changeEvent(QEvent *e)
     }
 }
 
+bool DialogManagePF::chkSel(QTableWidget* t)
+{
+    if (t->selectedItems().size()==0) {
+        QMessageBox::critical(0, tr("Error"), tr("No rows selected"));
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 void DialogManagePF::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);
@@ -84,7 +95,7 @@ void DialogManagePF::on_pbClose_clicked()
 void DialogManagePF::on_pbEditEvFlag_clicked()
 {
     if (ui->tabber->currentWidget()->objectName()=="tabPeriods") {
-        if (ui->twPeriods->selectedItems().size()==0) return;
+        if (!chkSel(ui->twPeriods)) return;
         long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
         QDateTime minDate = QDateTime::fromString(ui->twPeriods->selectedItems()[1]->text(), "dd.MM.yyyy hh:mm");
         QDateTime maxDate = QDateTime::fromString(ui->twPeriods->selectedItems()[2]->text(), "dd.MM.yyyy hh:mm");
@@ -101,7 +112,7 @@ void DialogManagePF::on_pbEditEvFlag_clicked()
         delete dlg;
     }
     else if (ui->tabber->currentWidget()->objectName()=="tabEvFlags") {
-        if (ui->twEvFlags->selectedItems().size()==0) return;
+        if (!chkSel(ui->twEvFlags)) return;
         long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
         QDateTime date = QDateTime::fromString(ui->twEvFlags->selectedItems()[1]->text(), "dd.MM.yyyy hh:mm");
         DialogAEDEvFlag* dlg = new DialogAEDEvFlag(0);
@@ -120,7 +131,7 @@ void DialogManagePF::on_pbEditEvFlag_clicked()
 void DialogManagePF::on_pbRemoveEvFlag_clicked()
 {
     if (ui->tabber->currentWidget()->objectName()=="tabPeriods") {
-        if (ui->twPeriods->selectedItems().size()==0) return;
+        if (!chkSel(ui->twPeriods)) return;
         long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
                 QString::fromUtf8("Подтверждение"),
@@ -129,7 +140,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
             _cl->removePeriod(idP);
     }
     else if (ui->tabber->currentWidget()->objectName()=="tabEvFlags") {
-        if (ui->twEvFlags->selectedItems().size()==0) return;
+        if (!chkSel(ui->twEvFlags)) return;
         long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
                 QString::fromUtf8("Подтверждение"),

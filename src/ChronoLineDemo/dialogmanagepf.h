@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QItemDelegate>
+#include <QTableWidget>
 #include <QVector>
 #include "chronoline.h"
 
@@ -17,6 +18,7 @@ public:
     ~DialogManagePF();
 
 protected:
+    bool chkSel(QTableWidget* t); // check if any row selected
     virtual void changeEvent(QEvent *e);
     virtual void resizeEvent(QResizeEvent* event);
 
