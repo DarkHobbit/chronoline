@@ -3,7 +3,7 @@
 
 #include <QLabel>
 #include <QMainWindow>
-#include <QVector>
+#include <QList>
 #include "../chronoline.h"
 
 namespace Ui {
@@ -50,9 +50,9 @@ private:
     Ui::MainWindow *ui;
     ChronoLine *chronoLine;
     QLabel *sl1, *sl2, *sl3;
-    QVector<long> periods;
-    QVector<long> evFlags;
-    QVector<long> flagPairs;
+    QList<long> periods;
+    QList<long> evFlags;
+    QList<long> flagPairs;
 };
 
 #endif // MAINWINDOW_H

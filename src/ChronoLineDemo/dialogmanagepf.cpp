@@ -6,7 +6,7 @@
 #include "dialogaeddaterange.h"
 #include "dialogaedevflag.h"
 
-DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QVector<long>* periods, QVector<long>* evFlags):
+DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* periods, QList<long>* evFlags):
     QDialog(parent),
     ui(new Ui::DialogManagePF),
     _cl(cl),
@@ -152,6 +152,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removePeriod(idP);
+            _periods->removeOne(idP);
             readPeriods();
         }
     }
@@ -164,6 +165,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removeEventFlag(idF);
+            _evFlags->removeOne(idF);
             readEvFlags();
         }
     }

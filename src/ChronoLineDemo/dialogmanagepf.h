@@ -3,8 +3,8 @@
 
 #include <QDialog>
 #include <QItemDelegate>
+#include <QList>
 #include <QTableWidget>
-#include <QVector>
 #include "chronoline.h"
 
 namespace Ui {
@@ -14,7 +14,7 @@ namespace Ui {
 class DialogManagePF : public QDialog {
     Q_OBJECT
 public:
-    DialogManagePF(QWidget *parent, ChronoLine* cl, QVector<long>* periods, QVector<long>* evFlags);
+    DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* periods, QList<long>* evFlags);
     ~DialogManagePF();
 
 protected:
@@ -32,8 +32,8 @@ private slots:
 private:
     Ui::DialogManagePF *ui;
     ChronoLine* _cl;
-    QVector<long>* _periods;
-    QVector<long>* _evFlags;
+    QList<long>* _periods;
+    QList<long>* _evFlags;
 };
 
 // This bicycle-delegate allows disable editing for ALL items in table widget,
