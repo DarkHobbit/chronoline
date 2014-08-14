@@ -51,8 +51,8 @@ public:
     // Flags pairs management
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);*/
-    /*bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
-    bool removeFlagPair(long idPPair);*/
+    bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
+    /*bool removeFlagPair(long idPPair);*/
     bool readFlagPair(long idFlagPair, QDateTime& minDate, QDateTime& maxDate);
     // Set range to fit all flags/periods on scene
     bool fitObjectsOnScene(bool shrinkIfNeeded);

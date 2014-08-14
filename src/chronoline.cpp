@@ -196,6 +196,16 @@ long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate,
 
 }
 
+bool ChronoLine::editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate)
+{
+    if (minDate>=maxDate) return false;
+    CLFlagPair* p = flagPairs[idPair];
+    if (!p) return false;
+    p->setMinDate(minDate);
+    p->setMaxDate(maxDate);
+    return true;
+}
+
 bool ChronoLine::readFlagPair(long idPair, QDateTime& minDate, QDateTime& maxDate)
 {
     CLFlagPair* p = flagPairs[idPair];

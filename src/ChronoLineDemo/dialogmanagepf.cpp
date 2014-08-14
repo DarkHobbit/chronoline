@@ -165,6 +165,24 @@ void DialogManagePF::on_pbEditEvFlag_clicked()
         }
         delete dlg;
     }
+    else if (ui->tabber->currentWidget()->objectName()=="tabFlagPairs") {
+        if (!chkSel(ui->twFlagPairs)) return;
+        long idP = ui->twFlagPairs->selectedItems()[0]->text().toLong();
+        QDateTime minDate = QDateTime::fromString(ui->twFlagPairs->selectedItems()[1]->text(), "dd.MM.yyyy hh:mm");
+        QDateTime maxDate = QDateTime::fromString(ui->twFlagPairs->selectedItems()[2]->text(), "dd.MM.yyyy hh:mm");
+        DialogAEDDateRange* dlg = new DialogAEDDateRange(0);
+        dlg->setWindowTitle(tr("Edit Period"));
+        dlg->setData(minDate, maxDate);
+        dlg->exec();
+        if (dlg->result()==QDialog::Accepted) {
+            dlg->getData(minDate, maxDate);
+            _cl->editFlagPair(idP, minDate, maxDate);
+            ui->twFlagPairs->selectedItems()[1]->setText(minDate.toString("dd.MM.yyyy hh:mm"));
+            ui->twFlagPairs->selectedItems()[2]->setText(maxDate.toString("dd.MM.yyyy hh:mm"));
+        }
+        delete dlg;
+    }
+    else QMessageBox::critical(0, tr("Error"), tr("Internal error!"));
 }
 
 void DialogManagePF::on_pbRemoveEvFlag_clicked()
@@ -195,4 +213,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
             readEvFlags();
         }
     }
+    else if (ui->tabber->currentWidget()->objectName()=="tabFlagPairs") {
+    }
+    else QMessageBox::critical(0, tr("Error"), tr("Internal error!"));
 }

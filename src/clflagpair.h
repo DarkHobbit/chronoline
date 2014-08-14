@@ -13,6 +13,8 @@ public:
     void setPosByDates(const QRect& r);
     QDateTime minDate();
     QDateTime maxDate();
+    void setMinDate(const QDateTime& minDate);
+    void setMaxDate(const QDateTime& maxDate);
 protected:
     CLFlag *begFlag, *endFlag;
     long _id;

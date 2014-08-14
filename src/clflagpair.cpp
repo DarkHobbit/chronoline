@@ -22,3 +22,5 @@ void CLFlagPair::setPosByDates(const QRect& r)
 
 QDateTime CLFlagPair::minDate() { return begFlag->date(); }
 QDateTime CLFlagPair::maxDate() { return endFlag->date(); }
+void CLFlagPair::setMinDate(const QDateTime& minDate) { begFlag->setDate(minDate); }
+void CLFlagPair::setMaxDate(const QDateTime& maxDate) { endFlag->setDate(maxDate); }
