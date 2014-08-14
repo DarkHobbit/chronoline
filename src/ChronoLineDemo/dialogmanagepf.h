@@ -14,12 +14,13 @@ namespace Ui {
 class DialogManagePF : public QDialog {
     Q_OBJECT
 public:
-    DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* periods, QList<long>* evFlags);
+    DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* periods, QList<long>* evFlags, QList<long>* flagPairs);
     ~DialogManagePF();
 
 protected:
     void readPeriods();
     void readEvFlags();
+    void readFlagPairs();
     bool chkSel(QTableWidget* t); // check if any row selected
     virtual void changeEvent(QEvent *e);
     virtual void resizeEvent(QResizeEvent* event);
@@ -34,6 +35,7 @@ private:
     ChronoLine* _cl;
     QList<long>* _periods;
     QList<long>* _evFlags;
+    QList<long>* _flagPairs;
 };
 
 // This bicycle-delegate allows disable editing for ALL items in table widget,

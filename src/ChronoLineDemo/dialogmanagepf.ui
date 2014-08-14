@@ -66,6 +66,32 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabFlagPairs">
+      <attribute name="title">
+       <string>FlagPairs</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QTableWidget" name="twFlagPairs">
+         <column>
+          <property name="text">
+           <string>ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Begin date/time</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>End Date/time</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>

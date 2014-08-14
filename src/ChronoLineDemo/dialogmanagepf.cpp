@@ -6,16 +6,18 @@
 #include "dialogaeddaterange.h"
 #include "dialogaedevflag.h"
 
-DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* periods, QList<long>* evFlags):
+DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* periods, QList<long>* evFlags, QList<long>* flagPairs):
     QDialog(parent),
     ui(new Ui::DialogManagePF),
     _cl(cl),
     _periods(periods),
-    _evFlags(evFlags)
+    _evFlags(evFlags),
+    _flagPairs(flagPairs)
 {
     ui->setupUi(this);
     readPeriods();
     readEvFlags();
+    readFlagPairs();
 }
 
 DialogManagePF::~DialogManagePF()
@@ -26,7 +28,7 @@ DialogManagePF::~DialogManagePF()
 void DialogManagePF::readPeriods()
 {
     // Fill period list
-    ui->twPeriods->clear();
+    ui->twPeriods->setRowCount(0);
     ui->twPeriods->setRowCount(_periods->count());
     ui->twPeriods->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->twPeriods->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -46,7 +48,7 @@ void DialogManagePF::readPeriods()
 void DialogManagePF::readEvFlags()
 {
     // Fill event flag list
-    ui->twEvFlags->clear();
+    ui->twEvFlags->setRowCount(_evFlags->count());
     ui->twEvFlags->setRowCount(_evFlags->count());
     ui->twEvFlags->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->twEvFlags->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -58,6 +60,26 @@ void DialogManagePF::readEvFlags()
         _cl->readEventFlag(id, d);
         ui->twEvFlags->setItem(i, 0, new QTableWidgetItem(QString::number(id)));
         ui->twEvFlags->setItem(i, 1, new QTableWidgetItem(d.toString("dd.MM.yyyy hh:mm")));
+        i++;
+    };
+}
+
+void DialogManagePF::readFlagPairs()
+{
+    // Fill period list
+    ui->twFlagPairs->setRowCount(0);
+    ui->twFlagPairs->setRowCount(_flagPairs->count());
+    ui->twFlagPairs->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->twFlagPairs->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->twFlagPairs->setItemDelegate(new NonEditTableColumnDelegate());
+    long id;
+    int i=0;
+    QDateTime d1, d2;
+    foreach (id, *_flagPairs) {
+        _cl->readFlagPair(id, d1, d2);
+        ui->twFlagPairs->setItem(i, 0, new QTableWidgetItem(QString::number(id)));
+        ui->twFlagPairs->setItem(i, 1, new QTableWidgetItem(d1.toString("dd.MM.yyyy hh:mm")));
+        ui->twFlagPairs->setItem(i, 2, new QTableWidgetItem(d2.toString("dd.MM.yyyy hh:mm")));
         i++;
     };
 }
@@ -97,6 +119,10 @@ void DialogManagePF::resizeEvent(QResizeEvent* event)
     // Resize event flag list
     ui->twEvFlags->setColumnWidth(0, w/4);
     ui->twEvFlags->setColumnWidth(1, w/2);
+    // Resize flag pair list
+    ui->twFlagPairs->setColumnWidth(0, w/6);
+    ui->twFlagPairs->setColumnWidth(1, w/3);
+    ui->twFlagPairs->setColumnWidth(2, w/3);
 }
 
 

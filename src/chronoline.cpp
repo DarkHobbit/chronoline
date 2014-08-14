@@ -196,9 +196,18 @@ long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate,
 
 }
 
+bool ChronoLine::readFlagPair(long idPair, QDateTime& minDate, QDateTime& maxDate)
+{
+    CLFlagPair* p = flagPairs[idPair];
+    if (!p) return false;
+    minDate = p->minDate();
+    maxDate = p->maxDate();
+    return true;
+}
+
 bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
 {
-    if (!evFlags.count() && !periods.count() /*&& !flagPairs.count()*/)
+    if (!evFlags.count() && !periods.count() && !flagPairs.count())
         return false; // can't fit if no objects
     QDateTime minD, maxD;
     if (shrinkIfNeeded)

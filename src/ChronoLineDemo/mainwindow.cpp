@@ -135,7 +135,7 @@ void MainWindow::on_action_Add_Event_Flag_triggered()
 
 void MainWindow::on_action_Manage_Periods_Flags_triggered()
 {
-    DialogManagePF* dlg = new DialogManagePF(0, chronoLine, &periods, &evFlags);
+    DialogManagePF* dlg = new DialogManagePF(0, chronoLine, &periods, &evFlags, &flagPairs);
     dlg->exec();
     delete dlg;
     updateView();
