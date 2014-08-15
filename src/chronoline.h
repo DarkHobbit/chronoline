@@ -52,7 +52,7 @@ public:
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);*/
     bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
-    /*bool removeFlagPair(long idPPair);*/
+    bool removeFlagPair(long idPair);
     bool readFlagPair(long idFlagPair, QDateTime& minDate, QDateTime& maxDate);
     // Set range to fit all flags/periods on scene
     bool fitObjectsOnScene(bool shrinkIfNeeded);

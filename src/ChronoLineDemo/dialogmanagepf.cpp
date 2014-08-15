@@ -205,7 +205,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
                 QString::fromUtf8("Подтверждение"),
-                QString::fromUtf8("Вы действительно хотите удалить флаг?"),
+                QString::fromUtf8("Вы действительно хотите удалить флаг события?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removeEventFlag(idF);
@@ -214,6 +214,17 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         }
     }
     else if (ui->tabber->currentWidget()->objectName()=="tabFlagPairs") {
+        if (!chkSel(ui->twFlagPairs)) return;
+        long idP = ui->twFlagPairs->selectedItems()[0]->text().toLong();
+        if (QMessageBox::question(0,
+                QString::fromUtf8("Подтверждение"),
+                QString::fromUtf8("Вы действительно хотите удалить пару флагов?"),
+                QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
+        {
+            _cl->removeFlagPair(idP);
+            _flagPairs->removeOne(idP);
+            readFlagPairs();
+        }
     }
     else QMessageBox::critical(0, tr("Error"), tr("Internal error!"));
 }

@@ -206,6 +206,15 @@ bool ChronoLine::editFlagPair(long idPair, const QDateTime& minDate, const QDate
     return true;
 }
 
+bool ChronoLine::removeFlagPair(long idPair)
+{
+    CLFlagPair* p = flagPairs[idPair];
+    if (!p) return false;
+    flagPairs.remove(idPair);
+    delete p;
+    return true;
+}
+
 bool ChronoLine::readFlagPair(long idPair, QDateTime& minDate, QDateTime& maxDate)
 {
     CLFlagPair* p = flagPairs[idPair];
