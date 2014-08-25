@@ -14,6 +14,12 @@ _id(id)
     endFlag->setPairFlag(begFlag);
 }
 
+CLFlagPair::~CLFlagPair()
+{
+    delete begFlag;
+    delete endFlag;
+}
+
 void CLFlagPair::setPosByDates(const QRect& r)
 {
     begFlag->setPosByDate(r);
