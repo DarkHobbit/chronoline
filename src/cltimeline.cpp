@@ -7,6 +7,28 @@
 #include "cldefs.h"
 #include "cltimeline.h"
 
+ChronoLineUnit parentUnit[cluNone] = {
+    cluNone, // n/a
+    cluDay,  // from hours
+    cluMonth,// from days
+    cluMonth,// from weeks
+    cluYear, // from months
+    cluYear, // from quarters
+    cluNone  // from years
+};
+
+QString dateFormatString[cluNone+1] = {
+    "", // n/a
+    "hh:mm", // hours
+    "dd.MM", // days
+    "dd.MM", // weeks
+    "MMMM", // months
+    "MMMM", // quarters
+    "yyyy", // years
+    "" // n/a
+};
+
+
 CLTimeLine::CLTimeLine():
     _unit(cluDay),
     _minDate(QDateTime::currentDateTime()),
@@ -55,12 +77,16 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
         else if (_actualUnit==cluQuarter)
             auxDivCount = 3;
         else
-            auxDivCount = 12; // TODO g-code end
+            auxDivCount = 12;
+        // Children division marks
         if (mainDivStep/auxDivCount>2) // prevent merging neighbor divisions
         for (int j=0; j<auxDivCount; j++) {
             int auxDivStep = j*mainDivStep/auxDivCount;
             p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
         }
+        // Parent unit text
+        if (parentTextNeeded(xDate)&&(xDate>_leftScaleDate))
+            p->drawText(xPix, 2*TEXT_Y, xDate.toString(parentDateFormat));
         // To next division...
         xPix += mainDivStep;
     };
@@ -152,28 +178,25 @@ bool CLTimeLine::calcScale(const QRect& r)
     rect = r;
     if (_minDate>=_maxDate) return false;
     actualUnit();
+    _parentUnit = parentUnit[_actualUnit];
+    dateFormat = dateFormatString[_actualUnit];
+    parentDateFormat = dateFormatString[_parentUnit];
     if (_actualUnit==cluHour) {
         _leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
-        dateFormat = "hh:mm";
     } else
     if (_actualUnit==cluDay) {
         _leftScaleDate = QDateTime(_minDate.date());
-        dateFormat = "dd.MM";
     } else
     if (_actualUnit==cluWeek) {
         _leftScaleDate = _minDate; // TODO adjust to nice scale
-        dateFormat = "dd.MM";
     } else
     if (_actualUnit==cluMonth) {
         _leftScaleDate = QDateTime(QDate(_minDate.date().year(), _minDate.date().month(), 1));
-        dateFormat = "MMM";
     } else
     if (_actualUnit==cluQuarter) {
         _leftScaleDate = _minDate; // TODO adjust to nice scale
-        dateFormat = "MMM";
     } else {
         _leftScaleDate = QDateTime(QDate(_minDate.date().year(), 1, 1));
-        dateFormat = "yyyy";
     };
     mainDivCount = (int)unitsTo(_leftScaleDate, _maxDate, _actualUnit)+1;
     if (mainDivCount<2) return false;
@@ -235,6 +258,20 @@ void CLTimeLine::zoomOut(float centerRate)
 {
     setMinDate(addUnits(minDate(), -centerRate*ZOOM_STEP));
     setMaxDate(addUnits(maxDate(), (1-centerRate)*ZOOM_STEP));
+}
+
+// check if parent unit text draw needed
+bool CLTimeLine::parentTextNeeded(const QDateTime& d)
+{
+    if (_parentUnit==cluHour)
+        return d.time().minute()==0;
+    else if (_parentUnit==cluDay)
+        return d.time().hour()==0;
+    else if (_parentUnit==cluMonth)
+        return d.date().day()==1;
+    else if (_parentUnit==cluYear)
+        return d.date().month()==1;
+    else return false;
 }
 
 void CLTimeLine::mousePressEvent(QGraphicsSceneMouseEvent *event)

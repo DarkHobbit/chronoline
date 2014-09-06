@@ -8,7 +8,8 @@ enum ChronoLineUnit {
     cluWeek,
     cluMonth,
     cluQuarter,
-    cluYear
+    cluYear,
+    cluNone // not using
 };
 
 enum ChronoLineFlagType {
@@ -16,7 +17,6 @@ enum ChronoLineFlagType {
     clftPairBeg,
     clftPairEnd
 };
-
 
 // Margin (in pixels) of left scale division
 #define LEFT_DIV_MARGIN      25
