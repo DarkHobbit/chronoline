@@ -51,9 +51,10 @@ protected:
     int            x0;
     int            xN;
     QDateTime      _leftScaleDate;
-    QString        dateFormat, parentDateFormat;
     // Drag data
     int oldDragX;
+    // draw date text
+    void drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit unit);
     // check if parent unit text draw needed
     bool parentTextNeeded(const QDateTime& d);
     // mouse handling

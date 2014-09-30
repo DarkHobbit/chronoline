@@ -20,6 +20,7 @@ ChronoLineUnit parentUnit[cluNone] = {
 QString dateFormatString[cluNone+1] = {
     "", // n/a
     "hh:mm", // hours
+/*    "dd", // days */
     "dd.MM", // days
     "dd.MM", // weeks
     "MMMM", // months
@@ -62,8 +63,6 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
         QDateTime xDate = dateForX(xPix);
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
-        // Division text
-        p->drawText(xPix, TEXT_Y, xDate.toString(dateFormat));
         // aux divisions (calc each time because 28, 29,30,31 days in month)
         int auxDivCount;
         if (_actualUnit==cluHour)
@@ -84,9 +83,8 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
             int auxDivStep = j*mainDivStep/auxDivCount;
             p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
         }
-        // Parent unit text
-        if (parentTextNeeded(xDate)&&(xDate>_leftScaleDate))
-            p->drawText(xPix, 2*TEXT_Y, xDate.toString(parentDateFormat));
+        // Division text
+        drawDate(p, xPix, xDate, 1, _actualUnit);
         // To next division...
         xPix += mainDivStep;
     };
@@ -95,6 +93,15 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
 QRectF CLTimeLine::boundingRect() const
 {
     return QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
+}
+
+void CLTimeLine::drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit nextUnit)
+{
+    p->drawText(x, level*TEXT_Y, date.toString(dateFormatString[nextUnit]));
+    // Parent unit text
+    if (parentTextNeeded(date)&&(date>_leftScaleDate)) // TODO в parentTextNeeded нужен аргумент - единица, иначе не сработает
+        p->drawText(x, (level+1)*TEXT_Y, date.toString(dateFormatString[parentUnit[nextUnit]]));
+        //drawDate(p, x, date, level+1, parentUnit[nextUnit]);
 }
 
 // Timeline settings
@@ -179,8 +186,6 @@ bool CLTimeLine::calcScale(const QRect& r)
     if (_minDate>=_maxDate) return false;
     actualUnit();
     _parentUnit = parentUnit[_actualUnit];
-    dateFormat = dateFormatString[_actualUnit];
-    parentDateFormat = dateFormatString[_parentUnit];
     if (_actualUnit==cluHour) {
         _leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
     } else
