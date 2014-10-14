@@ -56,7 +56,7 @@ protected:
     // draw date text
     void drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit unit);
     // check if parent unit text draw needed
-    bool parentTextNeeded(const QDateTime& d);
+    bool parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit);
     // mouse handling
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

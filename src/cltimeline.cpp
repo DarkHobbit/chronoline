@@ -20,8 +20,8 @@ ChronoLineUnit parentUnit[cluNone] = {
 QString dateFormatString[cluNone+1] = {
     "", // n/a
     "hh:mm", // hours
-/*    "dd", // days */
-    "dd.MM", // days
+    "dd", // days
+/*    "dd.MM", // days */
     "dd.MM", // weeks
     "MMMM", // months
     "MMMM", // quarters
@@ -99,9 +99,9 @@ void CLTimeLine::drawDate(QPainter *p, int x, const QDateTime& date, short level
 {
     p->drawText(x, level*TEXT_Y, date.toString(dateFormatString[nextUnit]));
     // Parent unit text
-    if (parentTextNeeded(date)&&(date>_leftScaleDate)) // TODO в parentTextNeeded нужен аргумент - единица, иначе не сработает
-        p->drawText(x, (level+1)*TEXT_Y, date.toString(dateFormatString[parentUnit[nextUnit]]));
-        //drawDate(p, x, date, level+1, parentUnit[nextUnit]);
+    if (parentTextNeeded(date, parentUnit[nextUnit])&&(date>_leftScaleDate))
+        //p->drawText(x, (level+1)*TEXT_Y, date.toString(dateFormatString[parentUnit[nextUnit]]));
+        drawDate(p, x, date, level+1, parentUnit[nextUnit]);
 }
 
 // Timeline settings
@@ -266,15 +266,15 @@ void CLTimeLine::zoomOut(float centerRate)
 }
 
 // check if parent unit text draw needed
-bool CLTimeLine::parentTextNeeded(const QDateTime& d)
+bool CLTimeLine::parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit)
 {
-    if (_parentUnit==cluHour)
+    if (nextUnit==cluHour)
         return d.time().minute()==0;
-    else if (_parentUnit==cluDay)
+    else if (nextUnit==cluDay)
         return d.time().hour()==0;
-    else if (_parentUnit==cluMonth)
+    else if (nextUnit==cluMonth)
         return d.date().day()==1;
-    else if (_parentUnit==cluYear)
+    else if (nextUnit==cluYear)
         return d.date().month()==1;
     else return false;
 }
