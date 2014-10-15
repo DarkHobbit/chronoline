@@ -84,10 +84,13 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
             p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
         }
         // Division text
-        drawDate(p, xPix, xDate, 1, _actualUnit);
+        drawDate(p, xPix, xDate, 1, _actualUnit, false);
         // To next division...
         xPix += mainDivStep;
     };
+    // Left (full) division text
+    xPix = xForDate(_leftScaleDate, v) + mainDivStep;
+    drawDate(p, xPix, dateForX(xPix), 1, _actualUnit, true);
 }
 
 QRectF CLTimeLine::boundingRect() const
@@ -95,13 +98,12 @@ QRectF CLTimeLine::boundingRect() const
     return QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
 }
 
-void CLTimeLine::drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit nextUnit)
+void CLTimeLine::drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit nextUnit, bool forceDrawParent)
 {
     p->drawText(x, level*TEXT_Y, date.toString(dateFormatString[nextUnit]));
     // Parent unit text
-    if (parentTextNeeded(date, parentUnit[nextUnit])&&(date>_leftScaleDate))
-        //p->drawText(x, (level+1)*TEXT_Y, date.toString(dateFormatString[parentUnit[nextUnit]]));
-        drawDate(p, x, date, level+1, parentUnit[nextUnit]);
+    if (parentTextNeeded(date, parentUnit[nextUnit])||(forceDrawParent&&(nextUnit<cluYear)))
+        drawDate(p, x, date, level+1, parentUnit[nextUnit], forceDrawParent);
 }
 
 // Timeline settings
@@ -185,7 +187,6 @@ bool CLTimeLine::calcScale(const QRect& r)
     rect = r;
     if (_minDate>=_maxDate) return false;
     actualUnit();
-    _parentUnit = parentUnit[_actualUnit];
     if (_actualUnit==cluHour) {
         _leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
     } else

@@ -40,7 +40,7 @@ public:
     QDateTime addUnits(const QDateTime& baseDate, float num);
 protected:
     // Input data
-    ChronoLineUnit _unit, _actualUnit, _parentUnit;
+    ChronoLineUnit _unit, _actualUnit;
     QDateTime      _minDate, _maxDate;
     // Recalc flag
     bool changed;
@@ -54,7 +54,7 @@ protected:
     // Drag data
     int oldDragX;
     // draw date text
-    void drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit unit);
+    void drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit unit, bool forceDrawParent);
     // check if parent unit text draw needed
     bool parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit);
     // mouse handling
