@@ -91,6 +91,9 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     // Left (full) division text
     xPix = xForDate(_leftScaleDate, v) + mainDivStep;
     drawDate(p, xPix, dateForX(xPix), 1, _actualUnit, true);
+    // Right (full) division text
+    xPix += mainDivStep*(mainDivCount-2);
+    drawDate(p, xPix, dateForX(xPix), 1, _actualUnit, true);
 }
 
 QRectF CLTimeLine::boundingRect() const
