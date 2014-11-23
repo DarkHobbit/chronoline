@@ -10,7 +10,7 @@ class CLFlagPair : public QGraphicsItemGroup
 public:
     CLFlagPair(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color,
                CLTimeLine* timeLine, QObject* eventReceiver);
-    ~CLFlagPair();
+    virtual ~CLFlagPair();
     void setPosByDates(const QRect& r);
     QDateTime minDate();
     QDateTime maxDate();
@@ -19,6 +19,7 @@ public:
 protected:
     CLFlag *begFlag, *endFlag;
     long _id;
+    CLTimeLine* _timeLine;
 };
 
 #endif // CLFLAGPAIR_H

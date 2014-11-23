@@ -38,6 +38,8 @@ public:
     float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit);
     // D/t throw num units
     QDateTime addUnits(const QDateTime& baseDate, float num);
+    // Object (flag, period) selection hadling
+    QGraphicsItem* selectedObject;
 protected:
     // Input data
     ChronoLineUnit _unit, _actualUnit;

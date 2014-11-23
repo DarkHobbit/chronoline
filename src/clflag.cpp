@@ -39,6 +39,12 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     if (_fType==clftPairEnd) flagWidth = -flagWidth;
 }
 
+CLFlag::~CLFlag()
+{
+    if (_timeLine->selectedObject==this)
+        _timeLine->selectedObject = 0;
+}
+
 void CLFlag::setPairFlag(CLFlag* pairFlag)
 {
     _pairFlag = pairFlag;

@@ -15,6 +15,7 @@ class CLFlag : public QGraphicsObject
 public:
     CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
           CLTimeLine* timeLine, QObject* eventReceiver);
+    virtual ~CLFlag();
     void setPairFlag(CLFlag* pairFlag);
     bool setDate(const QDateTime& date, bool checkForPairDate = true);
     void setPosByDate(const QRect& r);

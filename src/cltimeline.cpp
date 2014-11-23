@@ -34,7 +34,8 @@ CLTimeLine::CLTimeLine():
     _unit(cluDay),
     _minDate(QDateTime::currentDateTime()),
     _maxDate(QDateTime::currentDateTime().addDays(7)),
-    changed(false)
+    changed(false),
+    selectedObject(0)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);

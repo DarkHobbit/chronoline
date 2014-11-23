@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(
         chronoLine, SIGNAL(flagDateChanged(long, const QDateTime&)),
                 this, SLOT(anyFlagDateChanged(long, const QDateTime&)));
+    connect(chronoLine, SIGNAL(periodSelected(long)), this, SLOT(anyPeriodSelected(long)));
     // Initial data
     chronoLine->lockAutoUpdate();
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
@@ -142,6 +143,13 @@ void MainWindow::on_action_Manage_Periods_Flags_triggered()
     dlg->exec();
     delete dlg;
     updateView();
+}
+
+void MainWindow::anyPeriodSelected(long idPeriod)
+{
+    QDateTime minDate, maxDate;
+    chronoLine->readPeriod(idPeriod, minDate, maxDate);
+    lbDebug->setText(QString("Period %1: %2/%3").arg(idPeriod).arg(minDate.toString()).arg(maxDate.toString()));
 }
 
 void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)

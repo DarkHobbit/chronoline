@@ -14,6 +14,12 @@ CLPeriod::CLPeriod(long id, const QDateTime& minDate, const QDateTime& maxDate, 
 {
 }
 
+CLPeriod::~CLPeriod()
+{
+    if (_timeLine->selectedObject==this)
+        _timeLine->selectedObject = 0;
+}
+
 void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
     QRect v = p->viewport();
@@ -23,7 +29,10 @@ void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
     int height = BASE_PERIOD_HEIGHT +level*PERIOD_HEIGHT_SHIFT;
     QPen _pen;
     _pen.setColor(_color);
-    _pen.setWidth(2);
+    if (_timeLine->selectedObject==this)
+        _pen.setWidth(2);
+    else
+        _pen.setWidth(1);
     p->setPen(_pen);
     p->drawLine(xBeg, 0, xBeg, -height);
     p->drawLine(xBeg, -height, xEnd, -height);
@@ -40,4 +49,6 @@ QDateTime CLPeriod::minDate() { return _minDate; }
 QDateTime CLPeriod::maxDate() { return _maxDate; }
 void CLPeriod::setMinDate(const QDateTime& minDate) { _minDate = minDate; }
 void CLPeriod::setMaxDate(const QDateTime& maxDate) { _maxDate = maxDate; }
+long CLPeriod::id() { return _id; }
+
 

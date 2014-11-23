@@ -71,8 +71,10 @@ protected:
     CLFlag* draggingFlag;
     float dragDateStep;
     void wheelEvent(QWheelEvent* event);
+    void mousePressEvent(QMouseEvent *event);
 signals:
     void flagDateChanged(long idFlag, const QDateTime& newDate);
+    void periodSelected(long idPeriod);
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();

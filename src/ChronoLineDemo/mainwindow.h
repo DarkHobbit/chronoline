@@ -43,6 +43,7 @@ private slots:
     void on_action_Add_Pair_Of_Flags_triggered();
 
 public slots:
+    void anyPeriodSelected(long idPeriod);
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
 private:
     void updateSettings();

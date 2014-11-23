@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include "chronoline.h"
 
+#include <iostream>
 #include <QLabel>
 extern QLabel* lbDebug;
 
@@ -339,6 +340,25 @@ void ChronoLine::wheelEvent(QWheelEvent* event)
     else
         zoomOut(centerRate);
     event->accept();
+}
+
+void ChronoLine::mousePressEvent(QMouseEvent *event)
+{
+    QGraphicsView::mousePressEvent(event);
+    // Search for all objects under cursor
+    QPointF sc = mapToScene(event->pos());
+    QDateTime mDate = timeLine->dateForX(sc.x());
+    if (sc.y()<0) {
+        for (int i=0; i<periods.count(); i++) {
+            if (!periods[i]) continue;
+            if ((periods[i]->minDate()<mDate)&&(periods[i]->maxDate()>mDate)) {
+                timeLine->selectedObject = periods[i];
+                emit periodSelected(periods[i]->id());
+                break;
+            }
+        }
+    }
+    update();
 }
 
 void ChronoLine::doUpdateAll()
