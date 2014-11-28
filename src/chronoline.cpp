@@ -1,9 +1,10 @@
 #include <iostream>
+#include <QtAlgorithms>
+#include <QLabel>
+#include <QList>
 #include <QMessageBox>
 #include "chronoline.h"
 
-#include <iostream>
-#include <QLabel>
 extern QLabel* lbDebug;
 
 ChronoLine::ChronoLine(QWidget *parent) :
@@ -348,15 +349,33 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
     // Search for all objects under cursor
     QPointF sc = mapToScene(event->pos());
     QDateTime mDate = timeLine->dateForX(sc.x());
+    QList<CLPeriod*> candToSel;
     if (sc.y()<0) {
+        // Build period list
         for (int i=0; i<periods.count(); i++) {
             if (!periods[i]) continue;
-            if ((periods[i]->minDate()<mDate)&&(periods[i]->maxDate()>mDate)) {
-                timeLine->selectedObject = periods[i];
-                emit periodSelected(periods[i]->id());
-                break;
-            }
+            if ((periods[i]->minDate()<mDate)&&(periods[i]->maxDate()>mDate))
+                candToSel.push_back(periods[i]);
         }
+        // Sort period list by visual level (lambda-based implementation)
+        qSort(candToSel.begin(), candToSel.end(), [](CLPeriod*& a, CLPeriod*& b) { return a->level() < b->level(); } );
+        // Select period
+        if (candToSel.count()>0) {
+            CLPeriod* p = 0;
+            for (int i=0; i<candToSel.count(); i++) {
+                if (candToSel[i]==timeLine->selectedObject) {
+                    if (i==candToSel.count()-1)
+                        p = candToSel[0];
+                    else
+                        p = candToSel[i+1];
+                    break;
+                }
+            }
+            if (!p) p = candToSel[0];
+            timeLine->selectedObject = p;
+            emit periodSelected(p->id());
+        }
+        // TODO: tab selection!
     }
     update();
 }

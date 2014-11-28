@@ -41,6 +41,12 @@ MainWindow::MainWindow(QWidget *parent) :
     if (idP) periods.push_back(idP);
     idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
     if (idP) periods.push_back(idP);
+    idP = chronoLine->addPeriod(
+        QDateTime::currentDateTime().addDays(5).addSecs(-2*3600), QDateTime::currentDateTime().addDays(6).addSecs(-2*3600), Qt::yellow);
+    if (idP) periods.push_back(idP);
+    idP = chronoLine->addPeriod(
+        QDateTime::currentDateTime().addDays(5).addSecs(2*3600), QDateTime::currentDateTime().addDays(6).addSecs(2*3600), Qt::blue);
+    if (idP) periods.push_back(idP);
     long idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3), Qt::red);
     if (idF) evFlags.push_back(idF);
     long idFP = chronoLine->addFlagPair(QDateTime::currentDateTime().addDays(3), QDateTime::currentDateTime().addDays(4), Qt::magenta);

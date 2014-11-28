@@ -20,13 +20,17 @@ CLPeriod::~CLPeriod()
         _timeLine->selectedObject = 0;
 }
 
+int CLPeriod::level()
+{
+    return _id-1; // TODO need optimize level (don't keep id wholes, one level for some non-crossing period, etc)
+}
+
 void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
     QRect v = p->viewport();
     int xBeg = _timeLine->xForDate(_minDate, v);
     int xEnd = _timeLine->xForDate(_maxDate, v);
-    int level = _id-1; // TODO need optimize level (don't keep id wholes, one level for some non-crossing period, etc)
-    int height = BASE_PERIOD_HEIGHT +level*PERIOD_HEIGHT_SHIFT;
+    int height = BASE_PERIOD_HEIGHT +level()*PERIOD_HEIGHT_SHIFT;
     QPen _pen;
     _pen.setColor(_color);
     if (_timeLine->selectedObject==this)

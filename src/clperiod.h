@@ -17,6 +17,7 @@ public:
     void setMinDate(const QDateTime& minDate);
     void setMaxDate(const QDateTime& maxDate);
     long id();
+    int level();
 protected:
     // Input data
     QDateTime      _minDate, _maxDate;
