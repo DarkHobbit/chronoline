@@ -37,7 +37,7 @@ enum ChronoLineFlagType {
 #define PERIOD_HEIGHT_SHIFT   5
 
 // Full height of flag view
-#define FLAG_HEIGHT 50
+#define FLAG_HEIGHT 60
 // Width of flag view
 #define FLAG_WIDTH 25
 // Height of upper flag view part

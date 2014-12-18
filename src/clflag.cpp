@@ -31,10 +31,8 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     // Direction of flag for painting and bounding (depend of its type)
     flagHeight = FLAG_HEIGHT;
     flagSubheight = FLAG_SUBHEIGHT;
-    if (_fType!=clftEvent) {
-        flagHeight = -flagHeight;
-        flagSubheight = -flagSubheight;
-    }
+    if (_fType!=clftEvent)
+        flagHeight /=  2;
     flagWidth = -FLAG_WIDTH;
     if (_fType==clftPairEnd) flagWidth = -flagWidth;
 }
@@ -62,10 +60,8 @@ QRectF CLFlag::boundingRect() const
 {
     int x0 = flagWidth+1;
     int y0 = 2;
-    if (_fType!=clftEvent) {
+    if (_fType!=clftEvent)
         if (_fType==clftPairEnd) x0 = 0;
-        y0 = -FLAG_HEIGHT;
-    }
     return QRectF(x0, y0, FLAG_WIDTH, FLAG_HEIGHT);
 }
 
