@@ -5,11 +5,11 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QObject>
-#include "cltimeline.h"
+#include "clselectableobject.h"
 
 enum FlagDragDirection {fdLeft, fdRight};
 
-class CLFlag : public QGraphicsObject
+class CLFlag : public QGraphicsObject, public CLSelectableObject
 {
     Q_OBJECT
 public:
@@ -23,13 +23,13 @@ public:
     virtual QRectF boundingRect() const;
     QDateTime date();
     long id();
+    virtual bool matchDate(const QDateTime& d);
 protected:
     // Input data
     QDateTime _date;
     ChronoLineFlagType _fType;
     QColor _color;
     CLFlag* _pairFlag;
-    CLTimeLine* _timeLine;
     long _id;
     // Recalc flag
     bool changed;

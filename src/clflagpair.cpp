@@ -4,7 +4,7 @@
 CLFlagPair::CLFlagPair
 (long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color,
  CLTimeLine* timeLine, QObject* eventReceiver):
-    _timeLine(timeLine),
+    CLSelectableObject(timeLine),
     _id(id)
 {
     begFlag = new CLFlag(id+1, minDate, clftPairBeg, color, timeLine, eventReceiver);
@@ -33,3 +33,9 @@ QDateTime CLFlagPair::minDate() { return begFlag->date(); }
 QDateTime CLFlagPair::maxDate() { return endFlag->date(); }
 void CLFlagPair::setMinDate(const QDateTime& minDate) { begFlag->setDate(minDate); }
 void CLFlagPair::setMaxDate(const QDateTime& maxDate) { endFlag->setDate(maxDate); }
+
+bool CLFlagPair::matchDate(const QDateTime& d)
+{
+    return (begFlag->matchDate(d)||endFlag->matchDate(d));
+}
+

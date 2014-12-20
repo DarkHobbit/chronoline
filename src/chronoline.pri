@@ -9,11 +9,13 @@ HEADERS += \
     $$PWD/cldefs.h \
     $$PWD/clperiod.h \
     $$PWD/clflag.h \
-    ../clflagpair.h
+    ../clflagpair.h \
+    ../clselectableobject.h
 
 SOURCES += \
     $$PWD/chronoline.cpp \
     $$PWD/cltimeline.cpp \
     $$PWD/clperiod.cpp \
     $$PWD/clflag.cpp \
-    ../clflagpair.cpp
+    ../clflagpair.cpp \
+    ../clselectableobject.cpp

@@ -5,7 +5,7 @@
 #include "clflag.h"
 #include "cltimeline.h"
 
-class CLFlagPair : public QGraphicsItemGroup
+class CLFlagPair : public QGraphicsItemGroup, public CLSelectableObject
 {
 public:
     CLFlagPair(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color,
@@ -16,10 +16,10 @@ public:
     QDateTime maxDate();
     void setMinDate(const QDateTime& minDate);
     void setMaxDate(const QDateTime& maxDate);
+    virtual bool matchDate(const QDateTime& d);
 protected:
     CLFlag *begFlag, *endFlag;
     long _id;
-    CLTimeLine* _timeLine;
 };
 
 #endif // CLFLAGPAIR_H

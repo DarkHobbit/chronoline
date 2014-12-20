@@ -5,10 +5,10 @@
 #include "clperiod.h"
 
 CLPeriod::CLPeriod(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color, CLTimeLine* timeLine):
+    CLSelectableObject(timeLine),
     _minDate(minDate),
     _maxDate(maxDate),
     _color(color),
-    _timeLine(timeLine),
     changed(false),
     _id(id)
 {
@@ -33,10 +33,7 @@ void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget 
     int height = BASE_PERIOD_HEIGHT +level()*PERIOD_HEIGHT_SHIFT;
     QPen _pen;
     _pen.setColor(_color);
-    if (_timeLine->selectedObject==this)
-        _pen.setWidth(2);
-    else
-        _pen.setWidth(1);
+    setPenWidth(_pen);
     p->setPen(_pen);
     p->drawLine(xBeg, 0, xBeg, -height);
     p->drawLine(xBeg, -height, xEnd, -height);
@@ -55,4 +52,8 @@ void CLPeriod::setMinDate(const QDateTime& minDate) { _minDate = minDate; }
 void CLPeriod::setMaxDate(const QDateTime& maxDate) { _maxDate = maxDate; }
 long CLPeriod::id() { return _id; }
 
+bool CLPeriod::matchDate(const QDateTime& d)
+{
+    return ((minDate()<d)&&(maxDate()>d));
+}
 

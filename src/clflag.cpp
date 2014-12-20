@@ -10,10 +10,10 @@ extern QLabel* lbDebug;
 
 CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
                CLTimeLine* timeLine, QObject* eventReceiver):
+    CLSelectableObject(timeLine),
     _date(date),
     _fType(fType),
     _color(color),
-    _timeLine(timeLine),
     _id(id),
     changed(false)
 {
@@ -132,3 +132,7 @@ long CLFlag::id()
     return _id;
 }
 
+bool CLFlag::matchDate(const QDateTime& d)
+{
+    return(d==_date); // TODO width!
+}

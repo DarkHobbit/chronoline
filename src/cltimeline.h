@@ -6,6 +6,8 @@
 #include <QObject>
 #include "cldefs.h"
 
+class CLSelectableObject;
+
 class CLTimeLine : public QGraphicsObject
 {
     Q_OBJECT
@@ -39,7 +41,7 @@ public:
     // D/t throw num units
     QDateTime addUnits(const QDateTime& baseDate, float num);
     // Object (flag, period) selection hadling
-    QGraphicsItem* selectedObject;
+    CLSelectableObject* selectedObject;
 protected:
     // Input data
     ChronoLineUnit _unit, _actualUnit;

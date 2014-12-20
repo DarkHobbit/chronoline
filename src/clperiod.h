@@ -3,9 +3,9 @@
 
 #include <QDateTime>
 #include <QGraphicsItem>
-#include "cltimeline.h"
+#include "clselectableobject.h"
 
-class CLPeriod : public QGraphicsItem
+class CLPeriod : public QGraphicsItem, public CLSelectableObject
 {
 public:
     CLPeriod(long id, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color, CLTimeLine* timeLine);
@@ -18,11 +18,11 @@ public:
     void setMaxDate(const QDateTime& maxDate);
     long id();
     int level();
+    virtual bool matchDate(const QDateTime& d);
 protected:
     // Input data
     QDateTime      _minDate, _maxDate;
     QColor _color;
-    CLTimeLine* _timeLine;
     // Recalc flag
     bool changed;
     long _id;
