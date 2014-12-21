@@ -151,7 +151,7 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     QRect r = childrenRect();
     timeLine->calcScale(r);
     long idFlag = ++idSequencer; // first ID is 1
-    evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine, this);
+    evFlags[idFlag] = new CLFlag(idFlag, date, clftEvent, color, timeLine, this, 0);
     evFlags[idFlag]->setParentItem(timeLine);
     evFlags[idFlag]->setPosByDate(r);
     if (!_lockAutoUpdate) updateAll();
@@ -352,24 +352,19 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
     QList<CLSelectableObject*> candToSel;
     // Candidates - periods
     if (sc.y()<0) {
-        for (int i=0; i<periods.count(); i++) {
-            if (!periods[i]) continue;
-            if (periods[i]->matchDate(mDate))
-                candToSel.push_back(periods[i]);
-        }
+        for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
+            if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
         // Sort period list by visual level (lambda-based implementation)
         qSort(candToSel.begin(), candToSel.end(), [](CLSelectableObject*& a, CLSelectableObject*& b)
             { return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();} );
     }
-    // Candidates - flags
+    // Candidates - flags and pairs
     else {
-/*        for (int i=0; i<evFlags.count(); i++) {
-            if (!evFlags[i]) continue;
-            if (evFlags[i]->matchDate(mDate))
-                candToSel.push_back(evFlags[i]);
-        } */
+        for (QMap<long, CLFlag*>::iterator i=evFlags.begin(); i!=evFlags.end(); i++)
+            if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
+        for (QMap<long, CLFlagPair*>::iterator i=flagPairs.begin(); i!=flagPairs.end(); i++)
+            if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
     };
-//std::cerr << candToSel.count() << std::endl;
     // Select period, flag or pair
     if (candToSel.count()>0) {
        CLSelectableObject* so = 0;
@@ -384,12 +379,25 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
         }
         if (!so) so = candToSel[0];
         timeLine->selectedObject = so;
+        // Send appropriate signal to application
         CLPeriod* p = dynamic_cast<CLPeriod*>(so);
         if (p)
             emit periodSelected(p->id());
         else {
-
+            CLFlag* f = dynamic_cast<CLFlag*>(so);
+            if (f)
+                emit eventFlagSelected(f->id());
+            else {
+                CLFlagPair* fp = dynamic_cast<CLFlagPair*>(so);
+                if (fp) {
+                    emit flagPairSelected(fp->id(), fp->matchedFlag(mDate));
+                }
+            }
         }
+    }
+    else {
+        timeLine->selectedObject = 0;
+        emit selectionRemoved();
     }
     // TODO: tab selection!
     update();

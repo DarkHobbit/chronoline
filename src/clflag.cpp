@@ -9,12 +9,13 @@
 extern QLabel* lbDebug;
 
 CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
-               CLTimeLine* timeLine, QObject* eventReceiver):
+               CLTimeLine* timeLine, QObject* eventReceiver, CLSelectableObject* pair):
     CLSelectableObject(timeLine),
     _date(date),
     _fType(fType),
     _color(color),
     _id(id),
+    _pair(pair),
     changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -50,7 +51,14 @@ void CLFlag::setPairFlag(CLFlag* pairFlag)
 
 void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
-    p->setPen(_color);
+    QPen _pen;
+    _pen.setColor(_color);
+    // Flag in pair?
+    if (_pair && (_timeLine->selectedObject==_pair))
+        _pair->setPenWidth(_pen);
+    else // no...
+        this->setPenWidth(_pen);
+    p->setPen(_pen);
     p->drawLine(0, -1, 0, flagHeight);
     p->drawLine(0, flagHeight, flagWidth, flagHeight-flagSubheight/2);
     p->drawLine(flagWidth, flagHeight-flagSubheight/2, 0, flagHeight-flagSubheight);
@@ -134,5 +142,8 @@ long CLFlag::id()
 
 bool CLFlag::matchDate(const QDateTime& d)
 {
-    return(d==_date); // TODO width!
+    if (_fType==clftPairEnd)
+        return ((d>=_date)&&(d<_timeLine->dateForX(pos().x()+FLAG_WIDTH)));
+    else
+        return ((d<=_date)&&(d>_timeLine->dateForX(pos().x()-FLAG_WIDTH)));
 }

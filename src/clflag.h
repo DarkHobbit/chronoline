@@ -14,7 +14,7 @@ class CLFlag : public QGraphicsObject, public CLSelectableObject
     Q_OBJECT
 public:
     CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
-          CLTimeLine* timeLine, QObject* eventReceiver);
+          CLTimeLine* timeLine, QObject* eventReceiver, CLSelectableObject* pair);
     virtual ~CLFlag();
     void setPairFlag(CLFlag* pairFlag);
     bool setDate(const QDateTime& date, bool checkForPairDate = true);
@@ -30,6 +30,7 @@ protected:
     ChronoLineFlagType _fType;
     QColor _color;
     CLFlag* _pairFlag;
+    CLSelectableObject* _pair;
     long _id;
     // Recalc flag
     bool changed;

@@ -7,8 +7,8 @@ CLFlagPair::CLFlagPair
     CLSelectableObject(timeLine),
     _id(id)
 {
-    begFlag = new CLFlag(id+1, minDate, clftPairBeg, color, timeLine, eventReceiver);
-    endFlag = new CLFlag(id+2, maxDate, clftPairEnd, color, timeLine, eventReceiver);
+    begFlag = new CLFlag(id+1, minDate, clftPairBeg, color, timeLine, eventReceiver, this);
+    endFlag = new CLFlag(id+2, maxDate, clftPairEnd, color, timeLine, eventReceiver, this);
     begFlag->setParentItem(timeLine);
     endFlag->setParentItem(timeLine);
     begFlag->setPairFlag(endFlag);
@@ -34,8 +34,19 @@ QDateTime CLFlagPair::maxDate() { return endFlag->date(); }
 void CLFlagPair::setMinDate(const QDateTime& minDate) { begFlag->setDate(minDate); }
 void CLFlagPair::setMaxDate(const QDateTime& maxDate) { endFlag->setDate(maxDate); }
 
+long CLFlagPair::id()
+{
+    return _id;
+}
+
 bool CLFlagPair::matchDate(const QDateTime& d)
 {
     return (begFlag->matchDate(d)||endFlag->matchDate(d));
 }
 
+ChronoLineFlagType CLFlagPair::matchedFlag(const QDateTime& d)
+{
+    if (begFlag->matchDate(d))
+        return clftPairBeg;
+    else return clftPairEnd;
+}

@@ -16,7 +16,9 @@ public:
     QDateTime maxDate();
     void setMinDate(const QDateTime& minDate);
     void setMaxDate(const QDateTime& maxDate);
+    long id();
     virtual bool matchDate(const QDateTime& d);
+    ChronoLineFlagType matchedFlag(const QDateTime& d);
 protected:
     CLFlag *begFlag, *endFlag;
     long _id;

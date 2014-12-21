@@ -20,10 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(chronoLine);
     ui->frmChrono->setLayout(layout);
-    connect(
-        chronoLine, SIGNAL(flagDateChanged(long, const QDateTime&)),
-                this, SLOT(anyFlagDateChanged(long, const QDateTime&)));
+    // Events from ChronoLine
+    connect(chronoLine,
+            SIGNAL(flagDateChanged(long, const QDateTime&)), this, SLOT(anyFlagDateChanged(long, const QDateTime&)));
     connect(chronoLine, SIGNAL(periodSelected(long)), this, SLOT(anyPeriodSelected(long)));
+    connect(chronoLine, SIGNAL(eventFlagSelected(long)), this, SLOT(anyEventFlagSelected(long)));
+    connect(chronoLine,
+            SIGNAL(flagPairSelected(long,ChronoLineFlagType)), this, SLOT(anyFlagPairSelected(long,ChronoLineFlagType)));
+    connect(chronoLine, SIGNAL(selectionRemoved()), this, SLOT(anySelectionRemoved()));
     // Initial data
     chronoLine->lockAutoUpdate();
     ui->edMinDate->setDateTime(QDateTime::currentDateTime());
@@ -156,6 +160,29 @@ void MainWindow::anyPeriodSelected(long idPeriod)
     QDateTime minDate, maxDate;
     chronoLine->readPeriod(idPeriod, minDate, maxDate);
     lbDebug->setText(QString("Period %1: %2/%3").arg(idPeriod).arg(minDate.toString()).arg(maxDate.toString()));
+    updateView();
+}
+
+void MainWindow::anyEventFlagSelected(long idFlag)
+{
+    QDateTime date;
+    chronoLine->readEventFlag(idFlag, date);
+    lbDebug->setText(QString("Flag %1: %2").arg(idFlag).arg(date.toString()));
+    updateView();
+}
+
+void MainWindow::anyFlagPairSelected(long idPair, ChronoLineFlagType fType)
+{
+    QDateTime minDate, maxDate;
+    chronoLine->readFlagPair(idPair, minDate, maxDate);
+    lbDebug->setText(QString("Pair %1: %2/%3").arg(idPair).arg(minDate.toString()).arg(maxDate.toString()));
+    updateView();
+}
+
+void MainWindow::anySelectionRemoved()
+{
+    lbDebug->setText("");
+    updateView();
 }
 
 void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)

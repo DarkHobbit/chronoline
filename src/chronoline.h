@@ -73,8 +73,13 @@ protected:
     void wheelEvent(QWheelEvent* event);
     void mousePressEvent(QMouseEvent *event);
 signals:
+    // Drag-n-drop signals
     void flagDateChanged(long idFlag, const QDateTime& newDate);
+    // Object selection signals
     void periodSelected(long idPeriod);
+    void eventFlagSelected(long idFlag);
+    void flagPairSelected(long idPair, ChronoLineFlagType fType);
+    void selectionRemoved();
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();
