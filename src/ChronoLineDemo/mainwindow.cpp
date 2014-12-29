@@ -41,19 +41,19 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->addWidget(sl3, 4);
     lbDebug = sl3;
     // Periods/flags debugging
-    long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2), Qt::magenta);
+    long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2));
     if (idP) periods.push_back(idP);
-    idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6), Qt::white);
-    if (idP) periods.push_back(idP);
-    idP = chronoLine->addPeriod(
-        QDateTime::currentDateTime().addDays(5).addSecs(-2*3600), QDateTime::currentDateTime().addDays(6).addSecs(-2*3600), Qt::yellow);
+    idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
     if (idP) periods.push_back(idP);
     idP = chronoLine->addPeriod(
-        QDateTime::currentDateTime().addDays(5).addSecs(2*3600), QDateTime::currentDateTime().addDays(6).addSecs(2*3600), Qt::blue);
+        QDateTime::currentDateTime().addDays(5).addSecs(-2*3600), QDateTime::currentDateTime().addDays(6).addSecs(-2*3600));
     if (idP) periods.push_back(idP);
-    long idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3), Qt::red);
+    idP = chronoLine->addPeriod(
+        QDateTime::currentDateTime().addDays(5).addSecs(2*3600), QDateTime::currentDateTime().addDays(6).addSecs(2*3600));
+    if (idP) periods.push_back(idP);
+    long idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3));
     if (idF) evFlags.push_back(idF);
-    long idFP = chronoLine->addFlagPair(QDateTime::currentDateTime().addDays(3), QDateTime::currentDateTime().addDays(4), Qt::magenta);
+    long idFP = chronoLine->addFlagPair(QDateTime::currentDateTime().addDays(3), QDateTime::currentDateTime().addDays(4));
     if (idFP) flagPairs.push_back(idFP);
     // Ready!
     chronoLine->unLockAutoUpdate();

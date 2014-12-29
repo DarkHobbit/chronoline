@@ -10,11 +10,17 @@ extern QLabel* lbDebug;
 ChronoLine::ChronoLine(QWidget *parent) :
     QGraphicsView(parent),
     _lockAutoUpdate(true),
-    idSequencer(0)
+    idSequencer(0),
+    periodColorSel(0),
+    flagColorSel(3)
 {
     scene = new QGraphicsScene;
     setScene(scene);
     setBackgroundColor(Qt::cyan);
+    periodColorSel.addReservedColor(Qt::black);
+    periodColorSel.addReservedColor(Qt::cyan);
+    flagColorSel.addReservedColor(Qt::black);
+    flagColorSel.addReservedColor(Qt::cyan);
     // Workaround for preventing scene drift while drag-n-drop (magic but works)
     scene->setSceneRect(-width()/2, -height()/2, width(), height());
     // Time Line
@@ -43,7 +49,11 @@ void ChronoLine::updateAll()
 
 void ChronoLine::setBackgroundColor(QColor c)
 {
+    periodColorSel.removeReservedColor(backgroundBrush().color());
+    flagColorSel.removeReservedColor(backgroundBrush().color());
     setBackgroundBrush(QBrush(c, Qt::SolidPattern));
+    periodColorSel.addReservedColor(c);
+    flagColorSel.addReservedColor(c);
     if (!_lockAutoUpdate) updateAll();
 }
 
@@ -118,6 +128,11 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate, c
     return idPeriod;
 }
 
+long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate)
+{
+    return addPeriod(minDate, maxDate, periodColorSel.nextColor());
+}
+
 bool ChronoLine::editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate)
 {
     if (minDate>=maxDate) return false;
@@ -158,6 +173,11 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
     return idFlag;
 }
 
+long ChronoLine::addEventFlag(const QDateTime& date)
+{
+    return addEventFlag(date, flagColorSel.nextColor());
+}
+
 bool ChronoLine::editEventFlag(long idFlag, const QDateTime& date)
 {
     CLFlag* f = evFlags[idFlag];
@@ -196,6 +216,11 @@ long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate,
     if (!_lockAutoUpdate) updateAll();
     return idPair;
 
+}
+
+long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate)
+{
+    return addFlagPair(minDate, maxDate, flagColorSel.nextColor());
 }
 
 bool ChronoLine::editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate)

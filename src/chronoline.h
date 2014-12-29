@@ -13,6 +13,7 @@
 #include "clflag.h"
 #include "clflagpair.h"
 #include "cltimeline.h"
+#include "colorautoselector.h"
 
 class ChronoLine : public QGraphicsView
 {
@@ -36,21 +37,21 @@ public:
     void zoomOut(float centerRate);
     // Periods management
     long addPeriod(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
-    /*long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);*/
+    long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);
     bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate);
     bool removePeriod(long idPeriod);
     inline int periodCount() { return periods.count(); }
     bool readPeriod(long idPeriod, QDateTime& minDate, QDateTime& maxDate);
     // Event flags management
     long addEventFlag(const QDateTime& date, const QColor& color);
-    /*long addEventFlag(const QDateTime& date);*/
+    long addEventFlag(const QDateTime& date);
     bool editEventFlag(long idFlag, const QDateTime& date);
     bool removeEventFlag(long idFlag);
     inline int eventFlagCount() { return evFlags.count(); }
     bool readEventFlag(long idFlag, QDateTime& date);
     // Flags pairs management
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
-    /*long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);*/
+    long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);
     bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
     bool removeFlagPair(long idPair);
     bool readFlagPair(long idFlagPair, QDateTime& minDate, QDateTime& maxDate);
@@ -65,6 +66,7 @@ protected:
     QMap<long, CLFlag*>   evFlags;
     QMap<long, CLFlagPair*>   flagPairs;
     long           idSequencer; // generator of ID for periods and flags
+    ColorAutoSelector periodColorSel, flagColorSel;
     virtual void resizeEvent(QResizeEvent* event);
     // Scale shift while some flag dragged outside scale
     QTimer tmDragger;

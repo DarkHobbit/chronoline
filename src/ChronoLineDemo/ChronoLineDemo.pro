@@ -1,3 +1,5 @@
+INCLUDEPATH += .
+
 include(../chronoline.pri)
 QT += core \
     gui
