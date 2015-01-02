@@ -191,8 +191,8 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         if (!chkSel(ui->twPeriods)) return;
         long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
-                QString::fromUtf8("Подтверждение"),
-                QString::fromUtf8("Вы действительно хотите удалить период?"),
+                trUtf8("Подтверждение"),
+                trUtf8("Вы действительно хотите удалить период?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removePeriod(idP);
@@ -204,8 +204,8 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         if (!chkSel(ui->twEvFlags)) return;
         long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
-                QString::fromUtf8("Подтверждение"),
-                QString::fromUtf8("Вы действительно хотите удалить флаг события?"),
+                trUtf8("Подтверждение"),
+                trUtf8("Вы действительно хотите удалить флаг события?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removeEventFlag(idF);
@@ -217,8 +217,8 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         if (!chkSel(ui->twFlagPairs)) return;
         long idP = ui->twFlagPairs->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
-                QString::fromUtf8("Подтверждение"),
-                QString::fromUtf8("Вы действительно хотите удалить пару флагов?"),
+                trUtf8("Подтверждение"),
+                trUtf8("Вы действительно хотите удалить пару флагов?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removeFlagPair(idP);

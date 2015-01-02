@@ -43,8 +43,8 @@ void ChronoLine::updateAll()
         resize(width()-1, height()-1);
     }
     else
-        QMessageBox::critical(0, QString::fromUtf8("Error"),
-            QString::fromUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
+        QMessageBox::critical(0, trUtf8("Error"),
+            trUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
 }
 
 void ChronoLine::setBackgroundColor(QColor c)
