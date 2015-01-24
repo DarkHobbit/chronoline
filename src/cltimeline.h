@@ -37,9 +37,13 @@ public:
     // Calculate range, step, etc.
     bool calcScale(const QRect& r);
     // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
-    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit);
-    // D/t throw num units
+    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate);
+    // D/t add num units to baseDate
     QDateTime addUnits(const QDateTime& baseDate, float num);
+    // D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
+    QDateTime truncToUnit(const QDateTime& baseDate);
+    // D/t round date to actual unit (to next, if >=0.5)
+    QDateTime roundToUnit(const QDateTime& baseDate);
     // Object (flag, period) selection hadling
     CLSelectableObject* selectedObject;
 protected:
@@ -58,7 +62,7 @@ protected:
     // Drag data
     int oldDragX;
     // draw date text
-    void drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit unit, bool forceDrawParent);
+    void drawDate(QPainter *p, const QDateTime& date, short level, ChronoLineUnit unit, bool forceDrawParent);
     // check if parent unit text draw needed
     bool parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit);
     // mouse handling
@@ -67,6 +71,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 signals:
     void needUpdateAll();
+    void actualUnitChanged(ChronoLineUnit unit);
+    void mouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
 };
 
 #endif // CLTIMELINE_H

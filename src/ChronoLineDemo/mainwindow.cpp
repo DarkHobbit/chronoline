@@ -28,10 +28,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(chronoLine,
             SIGNAL(flagPairSelected(long,ChronoLineFlagType)), this, SLOT(anyFlagPairSelected(long,ChronoLineFlagType)));
     connect(chronoLine, SIGNAL(selectionRemoved()), this, SLOT(anySelectionRemoved()));
+    connect(chronoLine, SIGNAL(actualUnitChanged(ChronoLineUnit)), this, SLOT(clUnitChanged(ChronoLineUnit)));
+    connect(chronoLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Initial data
     chronoLine->lockAutoUpdate();
-    ui->edMinDate->setDateTime(QDateTime::currentDateTime());
-    ui->edMaxDate->setDateTime(QDateTime::currentDateTime().addDays(7));
+    ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
+    ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(8)));
     // Status bar
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
@@ -97,8 +99,7 @@ void MainWindow::updateSettings()
 void MainWindow::updateView()
 {
     chronoLine->updateAll();
-    sl1->setText(QString("%1 periods").arg(chronoLine->periodCount()));
-    sl2->setText(QString("%1 event flags").arg(chronoLine->eventFlagCount()));
+    sl2->setText(tr("%1 periods, %1 event flags").arg(chronoLine->periodCount()).arg(chronoLine->eventFlagCount()));
 }
 
 void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime &dateTime)
@@ -159,7 +160,7 @@ void MainWindow::anyPeriodSelected(long idPeriod)
 {
     QDateTime minDate, maxDate;
     chronoLine->readPeriod(idPeriod, minDate, maxDate);
-    lbDebug->setText(QString("Period %1: %2/%3").arg(idPeriod).arg(minDate.toString()).arg(maxDate.toString()));
+    lbDebug->setText(tr("Period %1: %2/%3").arg(idPeriod).arg(minDate.toString()).arg(maxDate.toString()));
     updateView();
 }
 
@@ -167,7 +168,7 @@ void MainWindow::anyEventFlagSelected(long idFlag)
 {
     QDateTime date;
     chronoLine->readEventFlag(idFlag, date);
-    lbDebug->setText(QString("Flag %1: %2").arg(idFlag).arg(date.toString()));
+    lbDebug->setText(tr("Flag %1: %2").arg(idFlag).arg(date.toString()));
     updateView();
 }
 
@@ -175,7 +176,7 @@ void MainWindow::anyFlagPairSelected(long idPair, ChronoLineFlagType fType)
 {
     QDateTime minDate, maxDate;
     chronoLine->readFlagPair(idPair, minDate, maxDate);
-    lbDebug->setText(QString("Pair %1: %2/%3").arg(idPair).arg(minDate.toString()).arg(maxDate.toString()));
+    lbDebug->setText(tr("Pair %1: %2/%3").arg(idPair).arg(minDate.toString()).arg(maxDate.toString()));
     updateView();
 }
 
@@ -187,7 +188,7 @@ void MainWindow::anySelectionRemoved()
 
 void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)
 {
-    lbDebug->setText(QString("Flag %1 set to %2").arg(idFlag).arg(newDate.toString()));
+    lbDebug->setText(tr("Flag %1 set to %2").arg(idFlag).arg(newDate.toString()));
 }
 
 void MainWindow::on_action_Fit_objects_on_scene_triggered()
@@ -237,4 +238,14 @@ void MainWindow::on_action_Add_Pair_Of_Flags_triggered()
     delete dlg;
     updateView();
 
+}
+
+void MainWindow::clUnitChanged(ChronoLineUnit unit)
+{
+    sl1->setText(tr("Units: %1").arg(ui->cbUnit->itemText(unit)));
+}
+
+void MainWindow::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)
+{
+    lbDebug->setText(tr("Mouse on (%1,%2) ").arg(scenePos.x()).arg(scenePos.y())+sceneDate.toString("dd.MM.yyyy hh:mm:ss"));
 }

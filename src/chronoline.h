@@ -31,6 +31,7 @@ public:
     void setMinDate(const QDateTime date);
     void setMaxDate(const QDateTime date);
     ChronoLineUnit unit();
+    ChronoLineUnit actualUnit();
     QDateTime minDate();
     QDateTime maxDate();
     void zoomIn(float centerRate);
@@ -82,11 +83,15 @@ signals:
     void eventFlagSelected(long idFlag);
     void flagPairSelected(long idPair, ChronoLineFlagType fType);
     void selectionRemoved();
+    void actualUnitChanged(ChronoLineUnit unit);
+    void mouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();
     void oneDragShiftStep();
     void transferFlagDateChanged(long idFlag, const QDateTime& newDate);
+    void clUnitChanged(ChronoLineUnit unit);
+    void onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
     void doUpdateAll();
 };
 

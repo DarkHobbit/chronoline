@@ -40,6 +40,8 @@ public slots:
     void anyFlagPairSelected(long idPair, ChronoLineFlagType fType);
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
     void anySelectionRemoved();
+    void clUnitChanged(ChronoLineUnit unit);
+    void onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
 private:
     void updateSettings();
     void updateView();

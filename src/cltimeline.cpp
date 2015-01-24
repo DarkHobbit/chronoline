@@ -29,6 +29,8 @@ QString dateFormatString[cluNone+1] = {
     "" // n/a
 };
 
+#define ODATE(d) (d).toString().toLocal8Bit().data()
+QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
 
 CLTimeLine::CLTimeLine():
     _unit(cluDay),
@@ -55,13 +57,15 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
     p->setPen(linePen);
     int vh = v.height();
     p->drawLine(-vw/2+LEFT_DIV_MARGIN, -vh/2, -vw/2+LEFT_DIV_MARGIN, vh/2+9);
-    /*p->drawLine(0, -vh/2, 0, vh/2+9);*/
+    p->drawLine(0, -vh/2, 0, vh/2+9);
     p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);
     p->setPen(Qt::black);
     // Main scale divisions;
-    int xPix = xForDate(_leftScaleDate, v) - mainDivStep;
+    int xPix;
+    QDateTime xDate;
     for (int i=0; i<(mainDivCount+2); i++) {
-        QDateTime xDate = dateForX(xPix);
+        xDate = addUnits(_leftScaleDate, i-1);
+        xPix = xForDate(xDate, v);
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
         // aux divisions (calc each time because 28, 29,30,31 days in month)
@@ -85,16 +89,16 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidge
             p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
         }
         // Division text
-        drawDate(p, xPix, xDate, 1, _actualUnit, false);
+        drawDate(p, xDate, 1, _actualUnit, false);
         // To next division...
         xPix += mainDivStep;
     };
     // Left (full) division text
-    xPix = xForDate(_leftScaleDate, v) + mainDivStep;
-    drawDate(p, xPix, dateForX(xPix), 1, _actualUnit, true);
+    xDate = addUnits(_leftScaleDate, 1);
+    drawDate(p, xDate, 1, _actualUnit, true);
     // Right (full) division text
-    xPix += mainDivStep*(mainDivCount-2);
-    drawDate(p, xPix, dateForX(xPix), 1, _actualUnit, true);
+    xDate = addUnits(_leftScaleDate, mainDivCount-2);
+    drawDate(p, xDate, 1, _actualUnit, true);
 }
 
 QRectF CLTimeLine::boundingRect() const
@@ -102,12 +106,15 @@ QRectF CLTimeLine::boundingRect() const
     return QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
 }
 
-void CLTimeLine::drawDate(QPainter *p, int x, const QDateTime& date, short level, ChronoLineUnit nextUnit, bool forceDrawParent)
+void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, ChronoLineUnit nextUnit, bool forceDrawParent)
 {
-    p->drawText(x, level*TEXT_Y, date.toString(dateFormatString[nextUnit]));
+    QRect v = p->viewport();
+    int x = xForDate(date, v);
+    p->drawText(x, level*TEXT_Y, roundToUnit(date).toString(dateFormatString[nextUnit]));
     // Parent unit text
     if (parentTextNeeded(date, parentUnit[nextUnit])||(forceDrawParent&&(nextUnit<cluYear)))
-        drawDate(p, x, date, level+1, parentUnit[nextUnit], forceDrawParent);
+        drawDate(p, date, level+1, parentUnit[nextUnit], forceDrawParent);
+//    if (nextUnit==cluYear) p->drawText(x, (level+1)*TEXT_Y, date.toString("hh:mm")); // debug of precision output
 }
 
 // Timeline settings
@@ -133,23 +140,12 @@ void CLTimeLine::setMaxDate(const QDateTime date)
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    float unitsCount = unitsTo(_minDate, date, _actualUnit);
-//std::cout << " uC=" << unitsCount << " lsd=" << leftScaleDate.toString().toLocal8Bit().data() << " dt=" << date.toString().toLocal8Bit().data() << std::endl;
-    /*if (_actualUnit!=cluMonth)*/
-        return x0+mainDivStep*unitsCount;
-    /*else { // because 28, 29,30,31 days in month
-        x0+=mainDivStep*(int)unitsCount;
-        int dimCount = date.date().daysInMonth();
-        int auxDivStep = mainDivStep/dimCount;
-        float daysCount = (unitsCount-(int)unitsCount)*
-        // TODO
-        return x0+
-    };*/
+    return x0+(xN-x0)*unitsTo(_minDate, date)/unitsTo(_minDate, _maxDate);
 }
 
 QDateTime CLTimeLine::dateForX(int x)
 {
-    QDateTime d = addUnits(_minDate, ((float)x-x0)/mainDivStep);
+    QDateTime d = addUnits(_minDate, unitsTo(_minDate, _maxDate)*((float)x-x0)/((float)xN-x0));
     return d;
 }
 
@@ -162,6 +158,7 @@ int CLTimeLine::xMax() { return xN; }
 
 ChronoLineUnit CLTimeLine::actualUnit()
 {
+    ChronoLineUnit oldUnit = _actualUnit;
     if (_unit==cluAuto) {
         if (_minDate.daysTo(_maxDate)<3)
             _actualUnit = cluHour;
@@ -181,6 +178,7 @@ ChronoLineUnit CLTimeLine::actualUnit()
             _actualUnit = cluYear;
     }
     else _actualUnit = _unit;
+    if (_actualUnit!=oldUnit) emit actualUnitChanged(_actualUnit);
     return _actualUnit;
 }
 
@@ -191,55 +189,39 @@ bool CLTimeLine::calcScale(const QRect& r)
     rect = r;
     if (_minDate>=_maxDate) return false;
     actualUnit();
-    if (_actualUnit==cluHour) {
-        _leftScaleDate = QDateTime(_minDate.date(), QTime(_minDate.time().hour(), 0, 0));
-    } else
-    if (_actualUnit==cluDay) {
-        _leftScaleDate = QDateTime(_minDate.date());
-    } else
-    if (_actualUnit==cluWeek) {
-        _leftScaleDate = _minDate; // TODO adjust to nice scale
-    } else
-    if (_actualUnit==cluMonth) {
-        _leftScaleDate = QDateTime(QDate(_minDate.date().year(), _minDate.date().month(), 1));
-    } else
-    if (_actualUnit==cluQuarter) {
-        _leftScaleDate = _minDate; // TODO adjust to nice scale
-    } else {
-        _leftScaleDate = QDateTime(QDate(_minDate.date().year(), 1, 1));
-    };
-    mainDivCount = (int)unitsTo(_leftScaleDate, _maxDate, _actualUnit)+1;
-    if (mainDivCount<2) return false;
-    mainDivStep = (r.width()-LEFT_DIV_MARGIN-RIGHT_DIV_MARGIN) / (mainDivCount-1);
+    _leftScaleDate = truncToUnit(_minDate);
     x0 = -r.width()/2+LEFT_DIV_MARGIN;
     xN = r.width()/2-RIGHT_DIV_MARGIN;
     changed = false;
+    mainDivCount = (int)unitsTo(_leftScaleDate, _maxDate)+1;
+    if (mainDivCount<2) return false;
+    mainDivStep = xForDate(addUnits(_leftScaleDate, 1), r)-xForDate(_leftScaleDate, r);
     return true;
 }
 
 // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
-float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, const ChronoLineUnit unit)
+float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate)
 {
-    if (unit==cluHour)
+    if (_actualUnit==cluHour)
         return (float)baseDate.secsTo(newDate)/3600;
     else
-    if (unit==cluDay)
+    if (_actualUnit==cluDay)
         return (float)baseDate.secsTo(newDate)/3600/24;
     else
-    if (unit==cluWeek)
+    if (_actualUnit==cluWeek)
         return (float)baseDate.daysTo(newDate)/7;
     else
         // TODO: month and above - variable unit step
-    if (unit==cluMonth)
+    if (_actualUnit==cluMonth)
         return (float)baseDate.daysTo(newDate)/30;
     else
-    if (unit==cluQuarter)
+    if (_actualUnit==cluQuarter)
         return (float)baseDate.daysTo(newDate)/90;
     else  // cluYear
         return (float)baseDate.daysTo(newDate)/365;
 }
 
-// D/t throw num units
+// D/t add num units to baseDate
 QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num)
 {
     if (_actualUnit==cluHour)
@@ -256,18 +238,46 @@ QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num)
         return baseDate.addDays(num*365);
 }
 
-QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
+// D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
+QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate)
+{
+    if (_actualUnit==cluHour)
+        return QDateTime(baseDate.date(), QTime(baseDate.time().hour(), 0, 0));
+    else if (_actualUnit==cluDay)
+        return QDateTime(baseDate.date());
+    else if (_actualUnit==cluWeek)
+        return baseDate; // TODO adjust to nice scale
+    else if (_actualUnit==cluMonth)
+        return QDateTime(QDate(baseDate.date().year(), baseDate.date().month(), 1));
+    else if (_actualUnit==cluQuarter)
+        return baseDate; // TODO adjust to nice scale
+    else
+        return QDateTime(QDate(baseDate.date().year(), 1, 1));
+}
+
+// D/t round date to actual unit (to next, if >=0.5)
+QDateTime CLTimeLine::roundToUnit(const QDateTime& baseDate)
+{
+    QDateTime dFloor = truncToUnit(baseDate);
+    QDateTime dCeil = addUnits(dFloor, 1);
+    if (unitsTo(dFloor, baseDate)>=0.5*unitsTo(dFloor, dCeil))
+        return dCeil;
+    else
+        return dFloor;
+}
 
 void CLTimeLine::zoomIn(float centerRate)
 {
-    setMinDate(addUnits(minDate(), centerRate*ZOOM_STEP));
-    setMaxDate(addUnits(maxDate(), -(1-centerRate)*ZOOM_STEP));
+    int range = _minDate.secsTo(_maxDate);
+    setMinDate(_minDate.addSecs(centerRate*ZOOM_STEP*range));
+    setMaxDate(_maxDate.addSecs(-(1-centerRate)*ZOOM_STEP*range));
 }
 
 void CLTimeLine::zoomOut(float centerRate)
 {
-    setMinDate(addUnits(minDate(), -centerRate*ZOOM_STEP));
-    setMaxDate(addUnits(maxDate(), (1-centerRate)*ZOOM_STEP));
+    int range = _minDate.secsTo(_maxDate);
+    setMinDate(_minDate.addSecs(-centerRate*ZOOM_STEP*range));
+    setMaxDate(_maxDate.addSecs((1-centerRate)*ZOOM_STEP*range));
 }
 
 // check if parent unit text draw needed
@@ -289,6 +299,9 @@ void CLTimeLine::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
     oldDragX = event->scenePos().x();
     scene()->update();
+    QPointF scPos = event->scenePos();
+    QDateTime scDate = dateForX(scPos.x());
+    emit mouseMovedOnScene(scPos, scDate);
 }
 
 void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -301,6 +314,9 @@ void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     // preparing for next move
     oldDragX = newDragX;
     emit needUpdateAll();
+    QPointF scPos = event->scenePos();
+    QDateTime scDate = dateForX(scPos.x());
+    emit mouseMovedOnScene(scPos, scDate);
 }
 
 void CLTimeLine::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

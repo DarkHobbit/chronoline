@@ -28,6 +28,8 @@ ChronoLine::ChronoLine(QWidget *parent) :
     scene->addItem(timeLine);
     _lockAutoUpdate = false;
     connect(timeLine, SIGNAL(needUpdateAll()), this, SLOT(doUpdateAll()));
+    connect(timeLine, SIGNAL(actualUnitChanged(ChronoLineUnit)), this, SLOT(clUnitChanged(ChronoLineUnit)));
+    connect(timeLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Scale shift while some flag dragged outside scale
     tmDragger.setInterval(FLAGDRAG_DATE_SHIFT_PERIOD);
     connect(&tmDragger, SIGNAL(timeout()), this, SLOT(oneDragShiftStep()));
@@ -106,6 +108,11 @@ void ChronoLine::zoomOut(float centerRate)
 ChronoLineUnit ChronoLine::unit()
 {
     return timeLine->unit();
+}
+
+ChronoLineUnit ChronoLine::actualUnit()
+{
+    return timeLine->actualUnit();
 }
 
 QDateTime ChronoLine::minDate()
@@ -360,11 +367,11 @@ void ChronoLine::wheelEvent(QWheelEvent* event)
 {
     int centerX = event->pos().x();
     float centerRate = (float)centerX/width();
-//    std::cout << "wheel " << event->pos().x() << " " << width() << " " << event->delta() <<  std::endl;
     if (event->delta()>0)
         zoomIn(centerRate);
     else
         zoomOut(centerRate);
+    updateAll();
     event->accept();
 }
 
@@ -426,6 +433,16 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
     }
     // TODO: tab selection!
     update();
+}
+
+void ChronoLine::clUnitChanged(ChronoLineUnit unit)
+{
+    emit actualUnitChanged(unit);
+}
+
+void ChronoLine::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)
+{
+    emit mouseMovedOnScene(scenePos, sceneDate);
 }
 
 void ChronoLine::doUpdateAll()
