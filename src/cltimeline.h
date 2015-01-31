@@ -37,13 +37,13 @@ public:
     // Calculate range, step, etc.
     bool calcScale(const QRect& r);
     // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
-    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate);
+    float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, ChronoLineUnit unit = cluAuto);
     // D/t add num units to baseDate
-    QDateTime addUnits(const QDateTime& baseDate, float num);
+    QDateTime addUnits(const QDateTime& baseDate, float num, ChronoLineUnit unit = cluAuto);
     // D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
-    QDateTime truncToUnit(const QDateTime& baseDate);
+    QDateTime truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit = cluAuto);
     // D/t round date to actual unit (to next, if >=0.5)
-    QDateTime roundToUnit(const QDateTime& baseDate);
+    QDateTime roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit = cluAuto);
     // Object (flag, period) selection hadling
     CLSelectableObject* selectedObject;
 protected:

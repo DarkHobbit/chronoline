@@ -200,65 +200,69 @@ bool CLTimeLine::calcScale(const QRect& r)
 }
 
 // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
-float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate)
+float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, ChronoLineUnit unit)
 {
-    if (_actualUnit==cluHour)
+    if (unit==cluAuto) unit = _actualUnit;
+    if (unit==cluHour)
         return (float)baseDate.secsTo(newDate)/3600;
     else
-    if (_actualUnit==cluDay)
+    if (unit==cluDay)
         return (float)baseDate.secsTo(newDate)/3600/24;
     else
-    if (_actualUnit==cluWeek)
+    if (unit==cluWeek)
         return (float)baseDate.daysTo(newDate)/7;
     else
         // TODO: month and above - variable unit step
-    if (_actualUnit==cluMonth)
+    if (unit==cluMonth)
         return (float)baseDate.daysTo(newDate)/30;
     else
-    if (_actualUnit==cluQuarter)
+    if (unit==cluQuarter)
         return (float)baseDate.daysTo(newDate)/90;
     else  // cluYear
         return (float)baseDate.daysTo(newDate)/365;
 }
 
 // D/t add num units to baseDate
-QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num)
+QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num, ChronoLineUnit unit)
 {
-    if (_actualUnit==cluHour)
+    if (unit==cluAuto) unit = _actualUnit;
+    if (unit==cluHour)
         return baseDate.addSecs(num*3600);
-    else if (_actualUnit==cluDay)
+    else if (unit==cluDay)
         return baseDate.addSecs(num*3600*24);
-    else if (_actualUnit==cluWeek)
+    else if (unit==cluWeek)
         return baseDate.addDays(num*7);
-    else if (_actualUnit==cluMonth) // TODO: month and above - variable unit step
+    else if (unit==cluMonth) // TODO: month and above - variable unit step
         return baseDate.addDays(num*30);
-    else if (_actualUnit==cluQuarter)
+    else if (unit==cluQuarter)
         return baseDate.addDays(num*90);
     else
         return baseDate.addDays(num*365);
 }
 
 // D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
-QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate)
+QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
 {
-    if (_actualUnit==cluHour)
+    if (unit==cluAuto) unit = _actualUnit;
+    if (unit==cluHour)
         return QDateTime(baseDate.date(), QTime(baseDate.time().hour(), 0, 0));
-    else if (_actualUnit==cluDay)
+    else if (unit==cluDay)
         return QDateTime(baseDate.date());
-    else if (_actualUnit==cluWeek)
+    else if (unit==cluWeek)
         return baseDate; // TODO adjust to nice scale
-    else if (_actualUnit==cluMonth)
+    else if (unit==cluMonth)
         return QDateTime(QDate(baseDate.date().year(), baseDate.date().month(), 1));
-    else if (_actualUnit==cluQuarter)
+    else if (unit==cluQuarter)
         return baseDate; // TODO adjust to nice scale
     else
         return QDateTime(QDate(baseDate.date().year(), 1, 1));
 }
 
 // D/t round date to actual unit (to next, if >=0.5)
-QDateTime CLTimeLine::roundToUnit(const QDateTime& baseDate)
+QDateTime CLTimeLine::roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
 {
-    QDateTime dFloor = truncToUnit(baseDate);
+    if (unit==cluAuto) unit = _actualUnit;
+    QDateTime dFloor = truncToUnit(baseDate, unit);
     QDateTime dCeil = addUnits(dFloor, 1);
     if (unitsTo(dFloor, baseDate)>=0.5*unitsTo(dFloor, dCeil))
         return dCeil;
