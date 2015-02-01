@@ -32,9 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(chronoLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Initial data
     chronoLine->lockAutoUpdate();
+    // Status bar
     ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
     ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(8)));
-    // Status bar
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
     sl3 = new QLabel(0);
@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->addWidget(sl3, 4);
     lbDebug = sl3;
     // Periods/flags debugging
+    std::cerr << "kid max " << ODATE(chronoLine->maxDate()) << std::endl;
     long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2));
     if (idP) periods.push_back(idP);
     idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
@@ -98,7 +99,9 @@ void MainWindow::updateSettings()
 
 void MainWindow::updateView()
 {
-    chronoLine->updateAll();
+    if (!chronoLine->updateAll())
+        QMessageBox::critical(0, trUtf8("Ошибка"),
+            trUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
     sl2->setText(tr("%1 periods, %1 event flags").arg(chronoLine->periodCount()).arg(chronoLine->eventFlagCount()));
 }
 
@@ -242,7 +245,7 @@ void MainWindow::on_action_Add_Pair_Of_Flags_triggered()
 
 void MainWindow::clUnitChanged(ChronoLineUnit unit)
 {
-    sl1->setText(tr("Units: %1").arg(ui->cbUnit->itemText(unit)));
+    if (ui) sl1->setText(tr("Units: %1").arg(ui->cbUnit->itemText(unit)));
 }
 
 void MainWindow::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)

@@ -20,16 +20,17 @@ class ChronoLine : public QGraphicsView
     Q_OBJECT
 public:
     explicit ChronoLine(QWidget *parent = 0);
-    void updateAll();
+    bool updateAll();
     // Global settings
     void setBackgroundColor(QColor c);
     void lockAutoUpdate();
     void unLockAutoUpdate();
     bool isAutoUpdateLocked();
     // Timeline settings
-    void setUnit(const ChronoLineUnit& unit);
-    void setMinDate(const QDateTime date);
-    void setMaxDate(const QDateTime date);
+    bool setUnit(const ChronoLineUnit& unit);
+    bool setMinDate(const QDateTime& date);
+    bool setMaxDate(const QDateTime& date);
+    bool setRange(const QDateTime& minDate, const QDateTime& maxDate);
     ChronoLineUnit unit();
     ChronoLineUnit actualUnit();
     QDateTime minDate();

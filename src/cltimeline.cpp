@@ -29,7 +29,6 @@ QString dateFormatString[cluNone+1] = {
     "" // n/a
 };
 
-#define ODATE(d) (d).toString().toLocal8Bit().data()
 QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
 
 CLTimeLine::CLTimeLine():
@@ -118,22 +117,36 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
 }
 
 // Timeline settings
-void CLTimeLine::setUnit(const ChronoLineUnit& unit)
+bool CLTimeLine::setUnit(const ChronoLineUnit& unit)
 {
     changed = true;
     _unit = unit;
+    return true;
 }
 
-void CLTimeLine::setMinDate(const QDateTime date)
+bool CLTimeLine::setMinDate(const QDateTime& date, bool checkRange)
 {
+    if (checkRange && (unitsTo(date, _maxDate)<MIN_UNITS_NUM)) return false;
     changed = true;
     _minDate = date;
+    return true;
 }
 
-void CLTimeLine::setMaxDate(const QDateTime date)
+bool CLTimeLine::setMaxDate(const QDateTime& date, bool checkRange)
 {
+    if (checkRange && (unitsTo(_minDate, date)<MIN_UNITS_NUM)) return false;
     changed = true;
     _maxDate = date;
+    return true;
+}
+
+bool CLTimeLine::setRange(const QDateTime& minDate, const QDateTime& maxDate, bool checkRange)
+{
+    if (checkRange && (unitsTo(minDate, maxDate)<MIN_UNITS_NUM)) return false;
+    changed = true;
+    _minDate = minDate;
+    _maxDate = maxDate;
+    return true;
 }
 
 // Date/time coordinate (viewport x) for date
@@ -182,19 +195,19 @@ ChronoLineUnit CLTimeLine::actualUnit()
     return _actualUnit;
 }
 
-
 // Calculate range, step, etc.
 bool CLTimeLine::calcScale(const QRect& r)
 {
     rect = r;
-    if (_minDate>=_maxDate) return false;
     actualUnit();
+    if (_minDate>_maxDate) return false;
+    if (unitsTo(_minDate, _maxDate)<MIN_UNITS_NUM) return false;
     _leftScaleDate = truncToUnit(_minDate);
-    x0 = -r.width()/2+LEFT_DIV_MARGIN;
-    xN = r.width()/2-RIGHT_DIV_MARGIN;
     changed = false;
     mainDivCount = (int)unitsTo(_leftScaleDate, _maxDate)+1;
     if (mainDivCount<2) return false;
+    x0 = -r.width()/2+LEFT_DIV_MARGIN;
+    xN = r.width()/2-RIGHT_DIV_MARGIN;
     mainDivStep = xForDate(addUnits(_leftScaleDate, 1), r)-xForDate(_leftScaleDate, r);
     return true;
 }
@@ -273,15 +286,15 @@ QDateTime CLTimeLine::roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit
 void CLTimeLine::zoomIn(float centerRate)
 {
     int range = _minDate.secsTo(_maxDate);
-    setMinDate(_minDate.addSecs(centerRate*ZOOM_STEP*range));
-    setMaxDate(_maxDate.addSecs(-(1-centerRate)*ZOOM_STEP*range));
+    setRange(_minDate.addSecs(centerRate*ZOOM_STEP*range),
+             _maxDate.addSecs(-(1-centerRate)*ZOOM_STEP*range), true);
 }
 
 void CLTimeLine::zoomOut(float centerRate)
 {
     int range = _minDate.secsTo(_maxDate);
-    setMinDate(_minDate.addSecs(-centerRate*ZOOM_STEP*range));
-    setMaxDate(_maxDate.addSecs((1-centerRate)*ZOOM_STEP*range));
+    setRange(_minDate.addSecs(-centerRate*ZOOM_STEP*range),
+             _maxDate.addSecs((1-centerRate)*ZOOM_STEP*range), true);
 }
 
 // check if parent unit text draw needed
@@ -313,8 +326,8 @@ void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     // Set new position
     int newDragX = event->scenePos().x();
     // Recalc dates
-    setMinDate(addUnits(minDate(), (float)(oldDragX-newDragX)/mainDivStep));
-    setMaxDate(addUnits(maxDate(), (float)(oldDragX-newDragX)/mainDivStep));
+    setRange(addUnits(minDate(), (float)(oldDragX-newDragX)/mainDivStep),
+             addUnits(maxDate(), (float)(oldDragX-newDragX)/mainDivStep), true);
     // preparing for next move
     oldDragX = newDragX;
     emit needUpdateAll();
@@ -328,4 +341,3 @@ void CLTimeLine::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseReleaseEvent(event);
     update();
 }
-

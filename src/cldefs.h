@@ -30,6 +30,8 @@ enum ChronoLineFlagType {
 #define TEXT_Y               15
 // Step for scale zoom in and zoom out (relatively to full scale range)
 #define ZOOM_STEP 0.1
+// Minimum number of units per scale for valid view
+#define MIN_UNITS_NUM 2
 
 // Base height of period view
 #define BASE_PERIOD_HEIGHT   25
@@ -50,5 +52,7 @@ enum ChronoLineFlagType {
 #define MAX_FLAGDRAG_DATE_SHIFT 0.1
 // Shift period, msec
 #define FLAGDRAG_DATE_SHIFT_PERIOD 50
+
+#define ODATE(d) (d).toString().toLocal8Bit().data()
 
 #endif // CLDEFS_H

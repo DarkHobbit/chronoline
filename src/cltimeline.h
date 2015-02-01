@@ -16,9 +16,10 @@ public:
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
     // Timeline settings
-    void setUnit(const ChronoLineUnit& unit);
-    void setMinDate(const QDateTime date);
-    void setMaxDate(const QDateTime date);
+    bool setUnit(const ChronoLineUnit& unit);
+    bool setMinDate(const QDateTime& date, bool checkRange);
+    bool setMaxDate(const QDateTime& date, bool checkRange);
+    bool setRange(const QDateTime& minDate, const QDateTime& maxDate, bool checkRange);
     void zoomIn(float centerRate);
     void zoomOut(float centerRate);
     // Date/time coordinate (viewport x) for date

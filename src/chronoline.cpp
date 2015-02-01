@@ -37,16 +37,16 @@ ChronoLine::ChronoLine(QWidget *parent) :
     dragDateStep = 0;
 }
 
-void ChronoLine::updateAll()
+bool ChronoLine::updateAll()
 {
     if (timeLine->calcScale(childrenRect())) {
         scene->update();
         resize(width()+1, height()+1); // Magic pass for flags redraw
         resize(width()-1, height()-1);
+        return true;
     }
     else
-        QMessageBox::critical(0, trUtf8("Ошибка"),
-            trUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
+        return false;
 }
 
 void ChronoLine::setBackgroundColor(QColor c)
@@ -75,22 +75,32 @@ bool ChronoLine::isAutoUpdateLocked()
     return _lockAutoUpdate;
 }
 
-void ChronoLine::setUnit(const ChronoLineUnit& unit)
+bool ChronoLine::setUnit(const ChronoLineUnit& unit)
 {
-    timeLine->setUnit(unit);
-    if (!_lockAutoUpdate) updateAll();
+    bool res = timeLine->setUnit(unit);
+    if (res && !_lockAutoUpdate) updateAll();
+    return res;
 }
 
-void ChronoLine::setMinDate(const QDateTime date)
+bool ChronoLine::setMinDate(const QDateTime& date)
 {
-    timeLine->setMinDate(date);
-    if (!_lockAutoUpdate) updateAll();
+    bool res = timeLine->setMinDate(date, !_lockAutoUpdate);
+    if (res && !_lockAutoUpdate) updateAll();
+    return res;
 }
 
-void ChronoLine::setMaxDate(const QDateTime date)
+bool ChronoLine::setMaxDate(const QDateTime& date)
 {
-    timeLine->setMaxDate(date);
-    if (!_lockAutoUpdate) updateAll();
+    bool res = timeLine->setMaxDate(date, !_lockAutoUpdate);
+    if (res && !_lockAutoUpdate) updateAll();
+    return res;
+}
+
+bool ChronoLine::setRange(const QDateTime& minDate, const QDateTime& maxDate)
+{
+    bool res = timeLine->setRange(minDate, maxDate, !_lockAutoUpdate);
+    if (res && !_lockAutoUpdate) updateAll();
+    return res;
 }
 
 void ChronoLine::zoomIn(float centerRate)
@@ -437,7 +447,7 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
 
 void ChronoLine::clUnitChanged(ChronoLineUnit unit)
 {
-    emit actualUnitChanged(unit);
+    if (!_lockAutoUpdate) emit actualUnitChanged(unit);
 }
 
 void ChronoLine::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)
