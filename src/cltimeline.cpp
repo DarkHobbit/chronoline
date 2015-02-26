@@ -33,6 +33,7 @@ QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
 
 CLTimeLine::CLTimeLine():
     _unit(cluDay),
+    _actualUnit(cluDay),
     _minDate(QDateTime::currentDateTime()),
     _maxDate(QDateTime::currentDateTime().addDays(7)),
     changed(false),

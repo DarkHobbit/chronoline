@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     chronoLine->lockAutoUpdate();
     // Status bar
     ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
-    ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(8)));
+    ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(11)));
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
     sl3 = new QLabel(0);
@@ -43,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->addWidget(sl3, 4);
     lbDebug = sl3;
     // Periods/flags debugging
-    std::cerr << "kid max " << ODATE(chronoLine->maxDate()) << std::endl;
     long idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(1), QDateTime::currentDateTime().addDays(2));
     if (idP) periods.push_back(idP);
     idP = chronoLine->addPeriod(QDateTime::currentDateTime().addDays(5), QDateTime::currentDateTime().addDays(6));
@@ -54,10 +53,14 @@ MainWindow::MainWindow(QWidget *parent) :
     idP = chronoLine->addPeriod(
         QDateTime::currentDateTime().addDays(5).addSecs(2*3600), QDateTime::currentDateTime().addDays(6).addSecs(2*3600));
     if (idP) periods.push_back(idP);
-    long idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(3));
+    long idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(2).addSecs(12*3600));
     if (idF) evFlags.push_back(idF);
     long idFP = chronoLine->addFlagPair(QDateTime::currentDateTime().addDays(3), QDateTime::currentDateTime().addDays(4));
     if (idFP) flagPairs.push_back(idFP);
+    idFP = chronoLine->addFlagPair(QDateTime::currentDateTime().addDays(8), QDateTime::currentDateTime().addDays(9));
+    if (idFP) flagPairs.push_back(idFP);
+    idF = chronoLine->addEventFlag(QDateTime::currentDateTime().addDays(7));
+    if (idF) evFlags.push_back(idF);
     // Ready!
     chronoLine->unLockAutoUpdate();
     updateView();
@@ -102,7 +105,7 @@ void MainWindow::updateView()
     if (!chronoLine->updateAll())
         QMessageBox::critical(0, trUtf8("Ошибка"),
             trUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
-    sl2->setText(tr("%1 periods, %1 event flags").arg(chronoLine->periodCount()).arg(chronoLine->eventFlagCount()));
+    sl2->setText(tr("%1 periods, %2 event flags").arg(chronoLine->periodCount()).arg(chronoLine->eventFlagCount()));
 }
 
 void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime &dateTime)
@@ -189,8 +192,16 @@ void MainWindow::anySelectionRemoved()
     updateView();
 }
 
+static bool lockRoundRecursion = false;
 void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)
 {
+    if (!lockRoundRecursion) {
+        lockRoundRecursion = true;
+        QDateTime roundDate = chronoLine->roundToUnit(newDate, cluDay);
+//        chronoLine->editEventFlag(idFlag, roundDate);
+        updateView();
+        lockRoundRecursion = false;
+    }
     lbDebug->setText(tr("Flag %1 set to %2").arg(idFlag).arg(newDate.toString()));
 }
 

@@ -59,6 +59,10 @@ public:
     bool readFlagPair(long idFlagPair, QDateTime& minDate, QDateTime& maxDate);
     // Set range to fit all flags/periods on scene
     bool fitObjectsOnScene(bool shrinkIfNeeded);
+    // D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
+    QDateTime truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
+    // D/t round date to actual unit (to next, if >=0.5)
+    QDateTime roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
 protected:
     QGraphicsScene *scene;
     bool           _lockAutoUpdate;

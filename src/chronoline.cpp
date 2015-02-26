@@ -198,7 +198,9 @@ long ChronoLine::addEventFlag(const QDateTime& date)
 bool ChronoLine::editEventFlag(long idFlag, const QDateTime& date)
 {
     CLFlag* f = evFlags[idFlag];
-    if (!f) return false;
+    if (!f) {
+        return false;
+    }
     f->setDate(date);
     return true;
 }
@@ -312,6 +314,16 @@ bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
     setMinDate(minD);
     setMaxDate(maxD);
     return true;
+}
+
+QDateTime ChronoLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
+{
+    return timeLine->truncToUnit(baseDate, unit);
+}
+
+QDateTime ChronoLine::roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
+{
+    return timeLine->roundToUnit(baseDate, unit);
 }
 
 void ChronoLine::resizeEvent(QResizeEvent* event)
