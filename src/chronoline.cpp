@@ -198,7 +198,7 @@ long ChronoLine::addEventFlag(const QDateTime& date)
 
 bool ChronoLine::editEventFlag(long idFlag, const QDateTime& date)
 {
-    CLFlag* f = evFlags[idFlag];
+    CLFlag* f = evFlags.value(idFlag);
     if (!f) {
         return false;
     }
@@ -333,11 +333,11 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
     timeLine->calcScale(r);
     foreach (const long id, evFlags.keys()) {
         CLFlag* f = evFlags.value(id);
-        if (f) f->setPosByDate(r); else qDebug() << "invalid flag in set";
+        if (f) f->setPosByDate(r); else qDebug() << "RSZ: invalid flag in set";
     }
     foreach (const long id, flagPairs.keys()) {
         CLFlagPair* p = flagPairs.value(id);
-        if (p) p->setPosByDates(r); else qDebug() << "invalid pair in set";
+        if (p) p->setPosByDates(r); else qDebug() << "RSZ: invalid pair in set";
     }
     // TODO pairs
     QGraphicsView::resizeEvent(event);
@@ -415,11 +415,10 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
     }
     // Candidates - flags and pairs
     else {
-        //foreach (const long id, evFlags.keys()) {
-        for (QMap<long, CLFlag*>::iterator i=evFlags.begin(); i!=evFlags.end(); i++)
-            if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
-        for (QMap<long, CLFlagPair*>::iterator i=flagPairs.begin(); i!=flagPairs.end(); i++)
-            if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
+        foreach (CLFlag* f, evFlags.values())
+                if (f->matchDate(mDate)) candToSel.push_back(f);
+        foreach (CLFlagPair* p, flagPairs.values())
+                if (p->matchDate(mDate)) candToSel.push_back(p);
     };
     // Select period, flag or pair
     if (candToSel.count()>0) {
