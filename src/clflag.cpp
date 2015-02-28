@@ -16,6 +16,7 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
     _color(color),
     _id(id),
     _pair(pair),
+    _pairFlag(0),
     changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -127,7 +128,8 @@ bool CLFlag::setDate(const QDateTime& date, bool checkForPairDate)
 
 void CLFlag::setPosByDate(const QRect& r)
 {
-    setPos(_timeLine->xForDate(_date, r), 1);
+    int x = _timeLine->xForDate(_date, r);
+    setPos(x, 1);
 }
 
 QDateTime CLFlag::date()

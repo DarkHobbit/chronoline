@@ -198,7 +198,7 @@ void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)
     if (!lockRoundRecursion) {
         lockRoundRecursion = true;
         QDateTime roundDate = chronoLine->roundToUnit(newDate, cluDay);
-//        chronoLine->editEventFlag(idFlag, roundDate);
+        chronoLine->editEventFlag(idFlag, roundDate);
         updateView();
         lockRoundRecursion = false;
     }

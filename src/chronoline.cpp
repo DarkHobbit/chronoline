@@ -1,5 +1,6 @@
 #include <iostream>
 #include <QtAlgorithms>
+#include <QDebug>
 #include <QLabel>
 #include <QList>
 #include <QMessageBox>
@@ -331,12 +332,12 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
     QRect r = childrenRect();
     timeLine->calcScale(r);
     foreach (const long id, evFlags.keys()) {
-        CLFlag* p = evFlags.value(id);
-        p->setPosByDate(r);
+        CLFlag* f = evFlags.value(id);
+        if (f) f->setPosByDate(r); else qDebug() << "invalid flag in set";
     }
     foreach (const long id, flagPairs.keys()) {
         CLFlagPair* p = flagPairs.value(id);
-        p->setPosByDates(r);
+        if (p) p->setPosByDates(r); else qDebug() << "invalid pair in set";
     }
     // TODO pairs
     QGraphicsView::resizeEvent(event);
@@ -414,6 +415,7 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
     }
     // Candidates - flags and pairs
     else {
+        //foreach (const long id, evFlags.keys()) {
         for (QMap<long, CLFlag*>::iterator i=evFlags.begin(); i!=evFlags.end(); i++)
             if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
         for (QMap<long, CLFlagPair*>::iterator i=flagPairs.begin(); i!=flagPairs.end(); i++)
