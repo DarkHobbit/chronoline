@@ -373,16 +373,27 @@ void ChronoLine::oneDragShiftStep()
         setMaxDate(timeLine->addUnits(maxDate(), dragDateStep));
         QDateTime newDate = (dragDateStep<0) ? minDate() : maxDate();
         if (draggingFlag->setDate(newDate))
-            emit flagDateChanged(draggingFlag->id(), newDate);
+            transferFlagDateChanged(draggingFlag, newDate);
         else
             flagDragOutsideStop();
         updateAll();
     }
 }
 
-void ChronoLine::transferFlagDateChanged(long idFlag, const QDateTime& newDate)
+void ChronoLine::receiveFlagDateChanged(const QDateTime& newDate)
 {
-    emit flagDateChanged(idFlag, newDate);
+    transferFlagDateChanged(dynamic_cast<CLFlag*>(sender()), newDate);
+}
+
+void ChronoLine::transferFlagDateChanged(CLFlag* f, const QDateTime& newDate)
+{
+    if (f->fType()==clftEvent)
+        emit flagDateChanged(f->id(), newDate);
+    else {
+        CLFlagPair* p = dynamic_cast<CLFlagPair*>(f->pair());
+        if (p)
+            emit pairDatesChanged(p->id(), p->minDate(), p->maxDate());
+    }
 }
 
 // Scale range changing by mouse wheel

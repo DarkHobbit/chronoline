@@ -32,18 +32,18 @@ QString dateFormatString[cluNone+1] = {
 QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
 
 CLTimeLine::CLTimeLine():
+    selectedObject(0),
     _unit(cluDay),
     _actualUnit(cluDay),
     _minDate(QDateTime::currentDateTime()),
     _maxDate(QDateTime::currentDateTime().addDays(7)),
-    changed(false),
-    selectedObject(0)
+    changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
     setAcceptHoverEvents(true);
 }
 
-void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
+void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
 {
     QRect v = p->viewport();
     calcScale(v);

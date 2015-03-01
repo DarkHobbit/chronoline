@@ -13,7 +13,8 @@ QLabel* lbDebug = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    lockRoundRecursion(false)
 {
     ui->setupUi(this);
     chronoLine = new ChronoLine(ui->frmChrono);
@@ -23,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Events from ChronoLine
     connect(chronoLine,
             SIGNAL(flagDateChanged(long, const QDateTime&)), this, SLOT(anyFlagDateChanged(long, const QDateTime&)));
+    connect(chronoLine,
+            SIGNAL(pairDatesChanged(long, const QDateTime&, const QDateTime&)), this, SLOT(anyPairDatesChanged(long, const QDateTime&, const QDateTime&)));
     connect(chronoLine, SIGNAL(periodSelected(long)), this, SLOT(anyPeriodSelected(long)));
     connect(chronoLine, SIGNAL(eventFlagSelected(long)), this, SLOT(anyEventFlagSelected(long)));
     connect(chronoLine,
@@ -83,7 +86,7 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent* e)
+void MainWindow::resizeEvent(QResizeEvent*)
 {
     chronoLine->updateAll(); // TODO dup?
 }
@@ -108,17 +111,17 @@ void MainWindow::updateView()
     sl2->setText(tr("%1 periods, %2 event flags").arg(chronoLine->periodCount()).arg(chronoLine->eventFlagCount()));
 }
 
-void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime &dateTime)
+void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime&)
 {
      updateSettings();
 }
 
-void MainWindow::on_edMaxDate_dateTimeChanged(const QDateTime &dateTime)
+void MainWindow::on_edMaxDate_dateTimeChanged(const QDateTime&)
 {
      updateSettings();
 }
 
-void MainWindow::on_cbUnit_currentIndexChanged(const QString &arg1)
+void MainWindow::on_cbUnit_currentIndexChanged(const QString&)
 {
      updateSettings();
 }
@@ -178,7 +181,7 @@ void MainWindow::anyEventFlagSelected(long idFlag)
     updateView();
 }
 
-void MainWindow::anyFlagPairSelected(long idPair, ChronoLineFlagType fType)
+void MainWindow::anyFlagPairSelected(long idPair, ChronoLineFlagType)
 {
     QDateTime minDate, maxDate;
     chronoLine->readFlagPair(idPair, minDate, maxDate);
@@ -192,17 +195,29 @@ void MainWindow::anySelectionRemoved()
     updateView();
 }
 
-static bool lockRoundRecursion = false;
 void MainWindow::anyFlagDateChanged(long idFlag, const QDateTime& newDate)
 {
     if (!lockRoundRecursion) {
         lockRoundRecursion = true;
         QDateTime roundDate = chronoLine->roundToUnit(newDate, cluDay);
-//        chronoLine->editEventFlag(idFlag, roundDate);
+        chronoLine->editEventFlag(idFlag, roundDate);
         updateView();
         lockRoundRecursion = false;
     }
     lbDebug->setText(tr("Flag %1 set to %2").arg(idFlag).arg(newDate.toString()));
+}
+
+void MainWindow::anyPairDatesChanged(long idPair, const QDateTime& newMinDate, const QDateTime& newMaxDate)
+{
+    if (!lockRoundRecursion) {
+        lockRoundRecursion = true;
+        QDateTime roundMinDate = chronoLine->roundToUnit(newMinDate, cluDay);
+        QDateTime roundMaxDate = chronoLine->roundToUnit(newMaxDate, cluDay);
+        chronoLine->editFlagPair(idPair, roundMinDate, roundMaxDate);
+        updateView();
+        lockRoundRecursion = false;
+    }
+    lbDebug->setText(tr("Pair %1:  %2/%3").arg(idPair).arg(newMinDate.toString()).arg(newMaxDate.toString()));
 }
 
 void MainWindow::on_action_Fit_objects_on_scene_triggered()

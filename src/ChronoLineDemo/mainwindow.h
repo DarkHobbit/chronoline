@@ -39,6 +39,7 @@ public slots:
     void anyEventFlagSelected(long idFlag);
     void anyFlagPairSelected(long idPair, ChronoLineFlagType fType);
     void anyFlagDateChanged(long idFlag, const QDateTime& newDate);
+    void anyPairDatesChanged(long idPair, const QDateTime& newMinDate, const QDateTime& newMaxDate);
     void anySelectionRemoved();
     void clUnitChanged(ChronoLineUnit unit);
     void onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
@@ -51,6 +52,7 @@ private:
     QList<long> periods;
     QList<long> evFlags;
     QList<long> flagPairs;
+    bool lockRoundRecursion;
 };
 
 #endif // MAINWINDOW_H

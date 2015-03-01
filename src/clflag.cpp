@@ -11,12 +11,12 @@ extern QLabel* lbDebug;
 CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, const QColor& color,
                CLTimeLine* timeLine, QObject* eventReceiver, CLSelectableObject* pair):
     CLSelectableObject(timeLine),
+    _id(id),
     _date(date),
     _fType(fType),
     _color(color),
-    _id(id),
-    _pair(pair),
     _pairFlag(0),
+    _pair(pair),
     changed(false)
 {
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -28,8 +28,8 @@ CLFlag::CLFlag(long id, const QDateTime& date, const ChronoLineFlagType& fType, 
         eventReceiver, SLOT(flagDraggedOutside(FlagDragDirection, int)));
     connect(this, SIGNAL(dragOutsideStop()), eventReceiver, SLOT(flagDragOutsideStop()));
     connect(this,
-        SIGNAL(dateChanged(long, const QDateTime&)),
-        eventReceiver, SLOT(transferFlagDateChanged(long, const QDateTime&)));
+        SIGNAL(dateChanged(const QDateTime&)),
+        eventReceiver, SLOT(receiveFlagDateChanged(const QDateTime&)));
     // Direction of flag for painting and bounding (depend of its type)
     flagHeight = FLAG_HEIGHT;
     flagSubheight = FLAG_SUBHEIGHT;
@@ -50,7 +50,7 @@ void CLFlag::setPairFlag(CLFlag* pairFlag)
     _pairFlag = pairFlag;
 }
 
-void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
+void CLFlag::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
 {
     QPen _pen;
     _pen.setColor(_color);
@@ -103,7 +103,7 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         emit dragOutsideStop();
         _date = newDate;
         setPos(newX, 1);
-        emit dateChanged(_id, newDate);
+        emit dateChanged(newDate);
         scene()->update();
     }
     return;
@@ -140,6 +140,16 @@ QDateTime CLFlag::date()
 long CLFlag::id()
 {
     return _id;
+}
+
+ChronoLineFlagType CLFlag::fType()
+{
+    return _fType;
+}
+
+CLSelectableObject* CLFlag::pair()
+{
+    return _pair;
 }
 
 bool CLFlag::matchDate(const QDateTime& d)

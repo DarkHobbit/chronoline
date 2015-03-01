@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>Periods</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="layPeriods">
        <item>
         <widget class="QTableWidget" name="twPeriods">
          <column>
@@ -49,7 +49,7 @@
       <attribute name="title">
        <string>Event Flags</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="layEvFlags">
        <item>
         <widget class="QTableWidget" name="twEvFlags">
          <column>
@@ -70,7 +70,7 @@
       <attribute name="title">
        <string>FlagPairs</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="layFlagPairs">
        <item>
         <widget class="QTableWidget" name="twFlagPairs">
          <column>

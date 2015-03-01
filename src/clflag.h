@@ -19,19 +19,21 @@ public:
     void setPairFlag(CLFlag* pairFlag);
     bool setDate(const QDateTime& date, bool checkForPairDate = true);
     void setPosByDate(const QRect& r);
-    void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
+    void paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*);
     virtual QRectF boundingRect() const;
     QDateTime date();
     long id();
+    ChronoLineFlagType fType();
+    CLSelectableObject* pair();
     virtual bool matchDate(const QDateTime& d);
 protected:
     // Input data
+    long _id;
     QDateTime _date;
     ChronoLineFlagType _fType;
     QColor _color;
     CLFlag* _pairFlag;
     CLSelectableObject* _pair;
-    long _id;
     // Recalc flag
     bool changed;
     // Direction of flag for painting and bounding (depend of its type)
@@ -42,7 +44,7 @@ protected:
 signals:
     void draggedOutside(FlagDragDirection direction, int newX);
     void dragOutsideStop();
-    void dateChanged(long idFlag, const QDateTime& newDate);
+    void dateChanged(const QDateTime& newDate);
 };
 
 #endif // CLFLAG_H

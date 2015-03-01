@@ -83,6 +83,7 @@ protected:
 signals:
     // Drag-n-drop signals
     void flagDateChanged(long idFlag, const QDateTime& newDate);
+    void pairDatesChanged(long idPair, const QDateTime& newMinDate, const QDateTime& newMaxDate);
     // Object selection signals
     void periodSelected(long idPeriod);
     void eventFlagSelected(long idFlag);
@@ -94,7 +95,8 @@ public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();
     void oneDragShiftStep();
-    void transferFlagDateChanged(long idFlag, const QDateTime& newDate);
+    void receiveFlagDateChanged(const QDateTime& newDate);
+    void transferFlagDateChanged(CLFlag* f, const QDateTime& newDate);
     void clUnitChanged(ChronoLineUnit unit);
     void onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
     void doUpdateAll();

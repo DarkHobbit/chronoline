@@ -25,7 +25,7 @@ int CLPeriod::level()
     return _id-1; // TODO need optimize level (don't keep id wholes, one level for some non-crossing period, etc)
 }
 
-void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget)
+void CLPeriod::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
 {
     QRect v = p->viewport();
     int xBeg = _timeLine->xForDate(_minDate, v);
