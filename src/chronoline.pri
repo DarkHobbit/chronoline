@@ -1,4 +1,4 @@
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 
 INCLUDEPATH += \
     $$PWD
@@ -11,7 +11,7 @@ HEADERS += \
     $$PWD/clflag.h \
     $$PWD/clflagpair.h \
     $$PWD/clselectableobject.h \
-    $$PWD/colorautoselector.cpp
+    $$PWD/colorautoselector.h
 
 SOURCES += \
     $$PWD/chronoline.cpp \
