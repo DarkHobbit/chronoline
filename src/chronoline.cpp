@@ -409,6 +409,11 @@ void ChronoLine::wheelEvent(QWheelEvent* event)
     event->accept();
 }
 
+bool selObjLessThan(CLSelectableObject*& a, CLSelectableObject*& b)
+{
+    return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();
+}
+
 void ChronoLine::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
@@ -421,8 +426,10 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
         for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
             if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
         // Sort period list by visual level (lambda-based implementation)
-        qSort(candToSel.begin(), candToSel.end(), [](CLSelectableObject*& a, CLSelectableObject*& b)
-            { return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();} );
+        /*qSort(candToSel.begin(), candToSel.end(), [](CLSelectableObject*& a, CLSelectableObject*& b)
+            { return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();} );*/
+        // Sort period list by visual level (old-style implementation)
+        qSort(candToSel.begin(), candToSel.end(), selObjLessThan);
     }
     // Candidates - flags and pairs
     else {
