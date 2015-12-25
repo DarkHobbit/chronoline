@@ -11,3 +11,6 @@
 *.lai
 *.la
 *.a
+ChronoLineDemo.pro.user
+src/build-ChronoLineDemo-Desktop_Qt_5_5_1_clang_64bit-Release/.moc
+src/build-ChronoLineDemo-Desktop_Qt_5_5_1_clang_64bit-Release
