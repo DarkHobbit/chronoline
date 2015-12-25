@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
-=======
-# QMAKE_CXXFLAGS += -std=c++11
->>>>>>> DarkHobbit/master
 
 INCLUDEPATH += \
     $$PWD
@@ -25,4 +21,3 @@ SOURCES += \
     $$PWD/clflagpair.cpp \
     $$PWD/clselectableobject.cpp \
     $$PWD/colorautoselector.cpp
-
