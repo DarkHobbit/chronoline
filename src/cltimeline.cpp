@@ -110,11 +110,16 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
 {
     QRect v = p->viewport();
     int x = xForDate(date, v);
-    p->drawText(x, level*TEXT_Y, roundToUnit(date).toString(dateFormatString[nextUnit]));
+    p->drawText(x, level*TEXT_Y, roundToUnit(date, nextUnit).toString(dateFormatString[nextUnit]));
     // Parent unit text
     if (parentTextNeeded(date, parentUnit[nextUnit])||(forceDrawParent&&(nextUnit<cluYear)))
         drawDate(p, date, level+1, parentUnit[nextUnit], forceDrawParent);
-//    if (nextUnit==cluYear) p->drawText(x, (level+1)*TEXT_Y, date.toString("hh:mm")); // debug of precision output
+
+    if (nextUnit==cluYear) { //==> debug of precision output
+        p->drawText(x, (level+1)*TEXT_Y, date.toString("dd.MM.yyyy"));
+        p->drawText(x, (level+2)*TEXT_Y, date.toString("hh:mm::ss"));
+        p->drawText(x, (level+3)*TEXT_Y, date.toString("zzz"));
+    }
 }
 
 // Timeline settings
