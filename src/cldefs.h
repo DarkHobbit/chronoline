@@ -18,6 +18,9 @@ enum ChronoLineFlagType {
     clftPairEnd
 };
 
+// Months in quarter - really constant
+#define MONTHS_IN_QUARTER 3
+
 // Margin (in pixels) of left scale division
 #define LEFT_DIV_MARGIN      25
 // Margin (in pixels) of right scale division (minimal)

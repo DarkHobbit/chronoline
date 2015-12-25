@@ -115,11 +115,11 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
     if (parentTextNeeded(date, parentUnit[nextUnit])||(forceDrawParent&&(nextUnit<cluYear)))
         drawDate(p, date, level+1, parentUnit[nextUnit], forceDrawParent);
 
-    if (nextUnit==cluYear) { //==> debug of precision output
+    /*if (nextUnit==cluYear) { //==> debug of precision output
         p->drawText(x, (level+1)*TEXT_Y, date.toString("dd.MM.yyyy"));
         p->drawText(x, (level+2)*TEXT_Y, date.toString("hh:mm::ss"));
         p->drawText(x, (level+3)*TEXT_Y, date.toString("zzz"));
-    }
+    }*/
 }
 
 // Timeline settings
@@ -251,15 +251,23 @@ QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num, ChronoLineU
         return baseDate.addSecs(num*3600*24);
     else if (unit==cluWeek)
         return baseDate.addDays(num*7);
-    else if (unit==cluMonth) // TODO: month and above - variable unit step
-        return baseDate.addDays(num*30);
-    else if (unit==cluQuarter)
-        return baseDate.addDays(num*90);
-    else
-        return baseDate.addDays(num*365);
+    else { // Month, quarter and year - variable unit length
+        QDateTime d = baseDate;
+        for (int i=0; i<num; i++) {
+            if (unit==cluMonth)
+                d = d.addDays(baseDate.date().daysInMonth());
+            else if (unit==cluQuarter) {
+                for (int j=0; j<MONTHS_IN_QUARTER; j++)
+                    d = d.addDays(d.date().daysInMonth());
+            }
+            else
+                d = d.addDays(baseDate.date().daysInYear());
+        }
+        return d;
+    }
 }
 
-// D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
+// D/t truncate date to actual unit (drop minutes if unit is hour, day if unit is month, etc.)
 QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
 {
     if (unit==cluAuto) unit = _actualUnit;
@@ -267,12 +275,17 @@ QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit
         return QDateTime(baseDate.date(), QTime(baseDate.time().hour(), 0, 0));
     else if (unit==cluDay)
         return QDateTime(baseDate.date());
-    else if (unit==cluWeek)
-        return baseDate; // TODO adjust to nice scale
+    else if (unit==cluWeek) {
+        QDateTime d = baseDate;
+        while (d.date().dayOfWeek()!=1)
+            d = d.addDays(-1);
+        return d;
+    }
     else if (unit==cluMonth)
         return QDateTime(QDate(baseDate.date().year(), baseDate.date().month(), 1));
     else if (unit==cluQuarter)
-        return baseDate; // TODO adjust to nice scale
+        return QDateTime(QDate(baseDate.date().year(),
+            ((baseDate.date().month()-1)/MONTHS_IN_QUARTER)*MONTHS_IN_QUARTER+1, 1));
     else
         return QDateTime(QDate(baseDate.date().year(), 1, 1));
 }
@@ -282,8 +295,8 @@ QDateTime CLTimeLine::roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit
 {
     if (unit==cluAuto) unit = _actualUnit;
     QDateTime dFloor = truncToUnit(baseDate, unit);
-    QDateTime dCeil = addUnits(dFloor, 1);
-    if (unitsTo(dFloor, baseDate)>=0.5*unitsTo(dFloor, dCeil))
+    QDateTime dCeil = addUnits(dFloor, 1, unit);
+    if (unitsTo(dFloor, baseDate, unit)>=0.5*unitsTo(dFloor, dCeil, unit))
         return dCeil;
     else
         return dFloor;

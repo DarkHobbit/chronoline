@@ -1,4 +1,4 @@
-QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
+#QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++
 
 INCLUDEPATH += \
     $$PWD

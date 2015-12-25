@@ -39,10 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     chronoLine->lockAutoUpdate();
     // Status bar
     int year = QDate::currentDate().year();
-    QDate begin = QDate( year, 1, 1); // 01.01.year
+    ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
+    ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(11)));
+    /*QDate begin = QDate( year, 1, 1); // 01.01.year
     QDate end = begin.addMonths(11).addDays(30); // add 11 month and 30 days -> 31.12.year :)
     ui->edMinDate->setDateTime( QDateTime( begin ) );
-    ui->edMaxDate->setDateTime( QDateTime( end ) );
+    ui->edMaxDate->setDateTime( QDateTime( end ) );*/
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
     sl3 = new QLabel(0);
@@ -72,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // Ready!
     chronoLine->unLockAutoUpdate();
     updateView();
+    // StatusBar 2
+    clUnitChanged(chronoLine->actualUnit());
 }
 
 MainWindow::~MainWindow()
