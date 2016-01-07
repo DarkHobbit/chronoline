@@ -110,7 +110,7 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
 {
     QRect v = p->viewport();
     int x = xForDate(date, v);
-    p->drawText(x, level*TEXT_Y, roundToUnit(date, nextUnit).toString(dateFormatString[nextUnit]));
+    p->drawText(x, level*TEXT_Y, /*round*/truncToUnit(date, nextUnit).toString(dateFormatString[nextUnit]));
     // Parent unit text
     if (parentTextNeeded(date, parentUnit[nextUnit])||(forceDrawParent&&(nextUnit<cluYear)))
         drawDate(p, date, level+1, parentUnit[nextUnit], forceDrawParent);
