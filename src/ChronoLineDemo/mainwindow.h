@@ -42,6 +42,7 @@ public slots:
     void anyPairDatesChanged(long idPair, const QDateTime& newMinDate, const QDateTime& newMaxDate);
     void anySelectionRemoved();
     void clUnitChanged(ChronoLineUnit unit);
+    void clRangeChanged(const QDateTime& minD, const QDateTime& maxD);
     void onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
 private:
     void updateSettings();
@@ -53,6 +54,7 @@ private:
     QList<long> evFlags;
     QList<long> flagPairs;
     bool lockRoundRecursion;
+    bool lockUpdateSettings;
 };
 
 #endif // MAINWINDOW_H

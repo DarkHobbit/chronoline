@@ -30,6 +30,7 @@ ChronoLine::ChronoLine(QWidget *parent) :
     _lockAutoUpdate = false;
     connect(timeLine, SIGNAL(needUpdateAll()), this, SLOT(doUpdateAll()));
     connect(timeLine, SIGNAL(actualUnitChanged(ChronoLineUnit)), this, SLOT(clUnitChanged(ChronoLineUnit)));
+    connect(timeLine, SIGNAL(rangeChanged(QDateTime,QDateTime)), this, SLOT(clRangeChanged(QDateTime,QDateTime)));
     connect(timeLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Scale shift while some flag dragged outside scale
     tmDragger.setInterval(FLAGDRAG_DATE_SHIFT_PERIOD);
@@ -479,6 +480,11 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
 void ChronoLine::clUnitChanged(ChronoLineUnit unit)
 {
     if (!_lockAutoUpdate) emit actualUnitChanged(unit);
+}
+
+void ChronoLine::clRangeChanged(const QDateTime &minD, const QDateTime &maxD)
+{
+    if (!_lockAutoUpdate) emit rangeChanged(minD, maxD);
 }
 
 void ChronoLine::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)

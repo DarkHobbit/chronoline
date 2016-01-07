@@ -74,6 +74,7 @@ signals:
     void needUpdateAll();
     void actualUnitChanged(ChronoLineUnit unit);
     void mouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
+    void rangeChanged(const QDateTime&, const QDateTime&);
 };
 
 #endif // CLTIMELINE_H

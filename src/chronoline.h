@@ -91,6 +91,7 @@ signals:
     void selectionRemoved();
     void actualUnitChanged(ChronoLineUnit unit);
     void mouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
+    void rangeChanged(const QDateTime&, const QDateTime&);
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();
@@ -98,6 +99,7 @@ public slots:
     void receiveFlagDateChanged(const QDateTime& newDate);
     void transferFlagDateChanged(CLFlag* f, const QDateTime& newDate);
     void clUnitChanged(ChronoLineUnit unit);
+    void clRangeChanged(const QDateTime& minD, const QDateTime& maxD);
     void onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
     void doUpdateAll();
 };

@@ -135,6 +135,7 @@ bool CLTimeLine::setMinDate(const QDateTime& date, bool checkRange)
     if (checkRange && (unitsTo(date, _maxDate)<MIN_UNITS_NUM)) return false;
     changed = true;
     _minDate = date;
+    emit rangeChanged(_minDate, _maxDate);
     return true;
 }
 
@@ -143,6 +144,7 @@ bool CLTimeLine::setMaxDate(const QDateTime& date, bool checkRange)
     if (checkRange && (unitsTo(_minDate, date)<MIN_UNITS_NUM)) return false;
     changed = true;
     _maxDate = date;
+    emit rangeChanged(_minDate, _maxDate);
     return true;
 }
 
@@ -152,6 +154,7 @@ bool CLTimeLine::setRange(const QDateTime& minDate, const QDateTime& maxDate, bo
     changed = true;
     _minDate = minDate;
     _maxDate = maxDate;
+    emit rangeChanged(_minDate, _maxDate);
     return true;
 }
 
@@ -345,8 +348,8 @@ void CLTimeLine::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     // Set new position
     int newDragX = event->scenePos().x();
     // Recalc dates
-    setRange(addUnits(minDate(), (float)(oldDragX-newDragX)/mainDivStep),
-             addUnits(maxDate(), (float)(oldDragX-newDragX)/mainDivStep), true);
+    float delta = (float)(oldDragX-newDragX)/mainDivStep;
+    setRange(addUnits(minDate(), delta), addUnits(maxDate(), delta), true);
     // preparing for next move
     oldDragX = newDragX;
     emit needUpdateAll();

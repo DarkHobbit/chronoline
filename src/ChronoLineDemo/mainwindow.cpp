@@ -16,7 +16,8 @@ QLabel* lbDebug = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    lockRoundRecursion(false)
+    lockRoundRecursion(false),
+    lockUpdateSettings(false)
 {
     ui->setupUi(this);
     chronoLine = new ChronoLine(ui->frmChrono);
@@ -34,17 +35,20 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(flagPairSelected(long,ChronoLineFlagType)), this, SLOT(anyFlagPairSelected(long,ChronoLineFlagType)));
     connect(chronoLine, SIGNAL(selectionRemoved()), this, SLOT(anySelectionRemoved()));
     connect(chronoLine, SIGNAL(actualUnitChanged(ChronoLineUnit)), this, SLOT(clUnitChanged(ChronoLineUnit)));
+    connect(chronoLine, SIGNAL(rangeChanged(QDateTime,QDateTime)), this, SLOT(clRangeChanged(QDateTime,QDateTime)));
     connect(chronoLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Initial data
     chronoLine->lockAutoUpdate();
     // Status bar
-    int year = QDate::currentDate().year();
     ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
     ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(11)));
-    /*QDate begin = QDate( year, 1, 1); // 01.01.year
+    /*
+    int year = QDate::currentDate().year();
+    QDate begin = QDate( year, 1, 1); // 01.01.year
     QDate end = begin.addMonths(11).addDays(30); // add 11 month and 30 days -> 31.12.year :)
     ui->edMinDate->setDateTime( QDateTime( begin ) );
-    ui->edMaxDate->setDateTime( QDateTime( end ) );*/
+    ui->edMaxDate->setDateTime( QDateTime( end ) );
+    */
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
     sl3 = new QLabel(0);
@@ -122,17 +126,20 @@ void MainWindow::updateView()
 
 void MainWindow::on_edMinDate_dateTimeChanged(const QDateTime&)
 {
-     updateSettings();
+    if (!lockUpdateSettings)
+        updateSettings();
 }
 
 void MainWindow::on_edMaxDate_dateTimeChanged(const QDateTime&)
 {
-     updateSettings();
+    if (!lockUpdateSettings)
+        updateSettings();
 }
 
 void MainWindow::on_cbUnit_currentIndexChanged(const QString&)
 {
-     updateSettings();
+    if (!lockUpdateSettings)
+        updateSettings();
 }
 
 void MainWindow::on_action_Add_Period_triggered()
@@ -281,6 +288,14 @@ void MainWindow::on_action_Add_Pair_Of_Flags_triggered()
 void MainWindow::clUnitChanged(ChronoLineUnit unit)
 {
     if (ui) sl1->setText(tr("Units: %1").arg(ui->cbUnit->itemText(unit)));
+}
+
+void MainWindow::clRangeChanged(const QDateTime &minD, const QDateTime &maxD)
+{
+    lockUpdateSettings = true;
+    ui->edMaxDate->setDateTime(maxD);
+    ui->edMinDate->setDateTime(minD);
+    lockUpdateSettings = false;
 }
 
 void MainWindow::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)
