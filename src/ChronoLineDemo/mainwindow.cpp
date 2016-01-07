@@ -111,8 +111,7 @@ void MainWindow::on_actionE_xit_triggered()
 
 void MainWindow::updateSettings()
 {
-    chronoLine->setMinDate(ui->edMinDate->dateTime());
-    chronoLine->setMaxDate(ui->edMaxDate->dateTime());
+    chronoLine->setRange(ui->edMinDate->dateTime(), ui->edMaxDate->dateTime());
     chronoLine->setUnit((ChronoLineUnit)ui->cbUnit->currentIndex());
 }
 
@@ -293,8 +292,8 @@ void MainWindow::clUnitChanged(ChronoLineUnit unit)
 void MainWindow::clRangeChanged(const QDateTime &minD, const QDateTime &maxD)
 {
     lockUpdateSettings = true;
-    ui->edMaxDate->setDateTime(maxD);
     ui->edMinDate->setDateTime(minD);
+    ui->edMaxDate->setDateTime(maxD);
     lockUpdateSettings = false;
 }
 
