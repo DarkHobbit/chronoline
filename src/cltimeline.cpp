@@ -64,6 +64,8 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     // Main scale divisions;
     int xPix;
     QDateTime xDate;
+    bool lockAuxDiv = false;
+    for (int pass=1; pass<=2; pass++)
     for (int i=0; i<(mainDivCount+2); i++) {
         xDate = addUnits(_leftScaleDate, i-1);
         xPix = xForDate(xDate, v);
@@ -84,7 +86,14 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
         else
             auxDivCount = 12;
         // Children division marks
-        if (mainDivStep/auxDivCount>2) // prevent merging neighbor divisions
+        if (pass==1) {
+            if (mainDivStep/auxDivCount<4) {
+                lockAuxDiv = true;
+                break;
+            }
+        }
+        else
+        if (!lockAuxDiv) // prevent merging neighbor divisions
         for (int j=0; j<auxDivCount; j++) {
             int auxDivStep = j*mainDivStep/auxDivCount;
             p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
