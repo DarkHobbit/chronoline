@@ -37,6 +37,8 @@ public:
     QDateTime leftScaleDate();
     // Calculate range, step, etc.
     bool calcScale(const QRect& r);
+    // D/t length beetwen two dates in months
+    float mosTo(const QDateTime& baseDate, const QDateTime& newDate);
     // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
     float unitsTo(const QDateTime& baseDate, const QDateTime& newDate, ChronoLineUnit unit = cluAuto);
     // D/t add num units to baseDate

@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(chronoLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Initial data
     chronoLine->lockAutoUpdate();
-    // Status bar
+    /**/
     ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
     ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(11)));
     /*
@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->edMinDate->setDateTime( QDateTime( begin ) );
     ui->edMaxDate->setDateTime( QDateTime( end ) );
     */
+    // Status bar
     sl1 = new QLabel(0);
     sl2 = new QLabel(0);
     sl3 = new QLabel(0);

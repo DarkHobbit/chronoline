@@ -222,6 +222,11 @@ bool CLTimeLine::calcScale(const QRect& r)
     return true;
 }
 
+float CLTimeLine::mosTo(const QDateTime &baseDate, const QDateTime &newDate)
+{
+
+}
+
 // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
 float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, ChronoLineUnit unit)
 {
@@ -255,20 +260,12 @@ QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num, ChronoLineU
         return baseDate.addSecs(num*3600*24);
     else if (unit==cluWeek)
         return baseDate.addDays(num*7);
-    else { // Month, quarter and year - variable unit length
-        QDateTime d = baseDate;
-        for (int i=0; i<num; i++) {
-            if (unit==cluMonth)
-                d = d.addDays(baseDate.date().daysInMonth());
-            else if (unit==cluQuarter) {
-                for (int j=0; j<MONTHS_IN_QUARTER; j++)
-                    d = d.addDays(d.date().daysInMonth());
-            }
-            else
-                d = d.addDays(baseDate.date().daysInYear());
-        }
-        return d;
-    }
+    else if (unit==cluMonth)
+        return baseDate.addMonths(num);
+    else if (unit==cluQuarter)
+        return baseDate.addMonths(num*MONTHS_IN_QUARTER);
+    else
+        return baseDate.addMonths(num*12);
 }
 
 // D/t truncate date to actual unit (drop minutes if unit is hour, day if unit is month, etc.)
