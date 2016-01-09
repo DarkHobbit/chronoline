@@ -61,6 +61,8 @@ public:
     bool fitObjectsOnScene(bool shrinkIfNeeded);
     // D/t truncate date to actual unit (drop minutes if unit is hour, etc.)
     QDateTime truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
+    // D/t ceil date to actual unit
+    QDateTime ceilToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
     // D/t round date to actual unit (to next, if >=0.5)
     QDateTime roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
 protected:

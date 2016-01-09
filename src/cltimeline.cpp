@@ -1,3 +1,4 @@
+#include <math.h>
 #include <iostream>
 #include <QGraphicsScene>
 #include <QGraphicsSceneWheelEvent>
@@ -291,6 +292,16 @@ QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit
             ((baseDate.date().month()-1)/MONTHS_IN_QUARTER)*MONTHS_IN_QUARTER+1, 1));
     else
         return QDateTime(QDate(baseDate.date().year(), 1, 1));
+}
+
+// D/t ceil date to actual unit
+QDateTime CLTimeLine::ceilToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
+{
+    QDateTime dFloor = truncToUnit(baseDate, unit);
+    if (fabs(unitsTo(dFloor, baseDate, unit))>1e-6)
+        return addUnits(dFloor, 1, unit);
+    else
+        return dFloor;
 }
 
 // D/t round date to actual unit (to next, if >=0.5)

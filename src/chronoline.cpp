@@ -323,6 +323,11 @@ QDateTime ChronoLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit
     return timeLine->truncToUnit(baseDate, unit);
 }
 
+QDateTime ChronoLine::ceilToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
+{
+    return timeLine->ceilToUnit(baseDate, unit);
+}
+
 QDateTime ChronoLine::roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit)
 {
     return timeLine->roundToUnit(baseDate, unit);
