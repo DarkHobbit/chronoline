@@ -231,9 +231,29 @@ bool CLTimeLine::calcScale(const QRect& r)
     return true;
 }
 
-float CLTimeLine::mosTo(const QDateTime &baseDate, const QDateTime &newDate)
+// D/t same as QDate::addMonths, but with float argument
+QDateTime CLTimeLine::addMonths(const QDateTime& baseDate, float num)
 {
+    double numBase;
+    double numFrac = modf(num, &numBase);
+    QDateTime d = baseDate.addMonths(numBase);
+    d = d.addDays(numFrac*d.date().daysInMonth());
+    return d;
+}
 
+// D/t length beetwen two dates in months
+float CLTimeLine::monthsTo(const QDateTime &baseDate, const QDateTime &newDate)
+{
+    QDate baseD = baseDate.date();
+    if (baseD.month()==newDate.date().month())
+        return baseDate.daysTo(newDate)/baseD.daysInMonth();
+    else if (baseDate>newDate)
+        return -(this->monthsTo(newDate, baseDate));
+    else {
+        float res = (baseD.daysInMonth()-baseD.day())/baseD.daysInMonth();
+        // TODO
+        return (float)baseDate.daysTo(newDate)/30; //===>
+    }
 }
 
 // D/t length beetwen two dates in selected unit (daysTo() and secsTo()-like)
@@ -266,15 +286,15 @@ QDateTime CLTimeLine::addUnits(const QDateTime& baseDate, float num, ChronoLineU
     if (unit==cluHour)
         return baseDate.addSecs(num*3600);
     else if (unit==cluDay)
-        return baseDate.addSecs(num*3600*24);
+        return baseDate.addSecs(num*3600*24); // if use addDays here, mouse move is very discrete
     else if (unit==cluWeek)
-        return baseDate.addDays(num*7);
+        return baseDate.addSecs(num*3600*24*7); // see above
     else if (unit==cluMonth)
-        return baseDate.addMonths(num);
+        return this->addMonths(baseDate, num);
     else if (unit==cluQuarter)
-        return baseDate.addMonths(num*MONTHS_IN_QUARTER);
+        return this->addMonths(baseDate, num*MONTHS_IN_QUARTER);
     else
-        return baseDate.addMonths(num*12);
+        return this->addMonths(baseDate, num*12);
 }
 
 // D/t truncate date to actual unit (drop minutes if unit is hour, day if unit is month, etc.)
