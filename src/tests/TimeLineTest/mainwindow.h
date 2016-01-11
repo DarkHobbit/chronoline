@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QMainWindow>
+#include "../../cltimeline.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,9 +19,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    CLTimeLine* l;
 protected:
     virtual void showEvent(QShowEvent*);
     void testAllRounds(const QDateTime& d);
+    void testUnitsTo(const QDateTime& d1, const QDateTime& d2);
 };
 
 #endif // MAINWINDOW_H

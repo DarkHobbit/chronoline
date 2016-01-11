@@ -250,9 +250,14 @@ float CLTimeLine::monthsTo(const QDateTime &baseDate, const QDateTime &newDate)
     else if (baseDate>newDate)
         return -(this->monthsTo(newDate, baseDate));
     else {
-        float res = (baseD.daysInMonth()-baseD.day())/baseD.daysInMonth();
-        // TODO
-        return (float)baseDate.daysTo(newDate)/30; //===>
+        QDateTime d = baseDate;
+        float res = 0;
+        while (d.addDays(d.date().daysInMonth())<=newDate) {
+            res++;
+            d = d.addDays(d.date().daysInMonth());
+        }
+        res += (float)d.daysTo(newDate)/d.date().daysInMonth();
+        return res;
     }
 }
 
@@ -269,14 +274,17 @@ float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, C
     if (unit==cluWeek)
         return (float)baseDate.daysTo(newDate)/7;
     else
-        // TODO: month and above - variable unit step
+        // Month and above - variable unit step
     if (unit==cluMonth)
-        return (float)baseDate.daysTo(newDate)/30;
+        //return (float)baseDate.daysTo(newDate)/30;
+        return monthsTo(baseDate, newDate);
     else
     if (unit==cluQuarter)
-        return (float)baseDate.daysTo(newDate)/90;
+        //return (float)baseDate.daysTo(newDate)/90;
+        return monthsTo(baseDate, newDate)/MONTHS_IN_QUARTER;
     else  // cluYear
-        return (float)baseDate.daysTo(newDate)/365;
+        //return (float)baseDate.daysTo(newDate)/365;
+        return monthsTo(baseDate, newDate)/12;
 }
 
 // D/t add num units to baseDate
