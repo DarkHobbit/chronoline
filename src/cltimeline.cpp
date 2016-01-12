@@ -1,6 +1,5 @@
 #include <math.h>
 #include <iostream>
-#include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsWidget>
@@ -214,7 +213,7 @@ ChronoLineUnit CLTimeLine::actualUnit()
         if (_minDate.daysTo(_maxDate)<365)
             _actualUnit = cluMonth;
         else
-        if (_minDate.daysTo(_maxDate)<750)
+        if (_minDate.daysTo(_maxDate)<1050) // was 750, and it locked return from years to quarters
             _actualUnit = cluQuarter;
         else
             _actualUnit = cluYear;
@@ -357,7 +356,7 @@ void CLTimeLine::zoomIn(float centerRate)
 {
     int range = _minDate.secsTo(_maxDate);
     setRange(_minDate.addSecs(centerRate*ZOOM_STEP*range),
-             _maxDate.addSecs(-(1-centerRate)*ZOOM_STEP*range), true);
+         _maxDate.addSecs(-(1-centerRate)*ZOOM_STEP*range), true);
 }
 
 void CLTimeLine::zoomOut(float centerRate)

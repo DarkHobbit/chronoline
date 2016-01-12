@@ -7,6 +7,7 @@
 #include "cldefs.h"
 
 class CLSelectableObject;
+QString d2c(const QDateTime& d);
 
 class CLTimeLine : public QGraphicsObject
 {
