@@ -20,7 +20,8 @@ ChronoLineUnit parentUnit[cluNone] = {
 
 QString dateFormatString[cluNone+1] = {
     "", // n/a
-    "hh:mm", // hours
+    "hh", // hours
+/*    "hh:mm", // hours */
     "dd", // days
 /*    "dd.MM", // days */
     "dd.MM", // weeks
@@ -201,7 +202,7 @@ ChronoLineUnit CLTimeLine::actualUnit()
 {
     ChronoLineUnit oldUnit = _actualUnit;
     if (_unit==cluAuto) {
-        if (_minDate.daysTo(_maxDate)<2)
+        if (_minDate.secsTo(_maxDate)<60*60*60)
             _actualUnit = cluHour;
         else
         if (_minDate.daysTo(_maxDate)<28)
