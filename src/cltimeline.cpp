@@ -201,7 +201,7 @@ ChronoLineUnit CLTimeLine::actualUnit()
 {
     ChronoLineUnit oldUnit = _actualUnit;
     if (_unit==cluAuto) {
-        if (_minDate.daysTo(_maxDate)<3)
+        if (_minDate.daysTo(_maxDate)<2)
             _actualUnit = cluHour;
         else
         if (_minDate.daysTo(_maxDate)<28)
