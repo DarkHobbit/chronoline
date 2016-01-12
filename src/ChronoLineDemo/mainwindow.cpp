@@ -231,9 +231,9 @@ void MainWindow::anyPairDatesChanged(long idPair, const QDateTime& newMinDate, c
         QDateTime roundMaxDate = chronoLine->roundToUnit(newMaxDate, cluDay);
         chronoLine->editFlagPair(idPair, roundMinDate, roundMaxDate);
         updateView();
+        lbDebug->setText(tr("Pair %1:  %2/%3").arg(idPair).arg(roundMinDate.toString()).arg(roundMaxDate.toString()));
         lockRoundRecursion = false;
     }
-    lbDebug->setText(tr("Pair %1:  %2/%3").arg(idPair).arg(newMinDate.toString()).arg(newMaxDate.toString()));
 }
 
 void MainWindow::on_action_Fit_objects_on_scene_triggered()
