@@ -62,7 +62,7 @@ protected:
     QRect rect;
     // Scale division parameters (calculated by CalcStep)
     int            mainDivCount;
-    int            mainDivStep;
+    int            mainDivStep; // TODO move into paint() after mouseMoveEvent rewriting
     int            x0;
     int            xN;
     QDateTime      _leftScaleDate;

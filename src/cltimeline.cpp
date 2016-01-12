@@ -1,5 +1,6 @@
 #include <math.h>
 #include <iostream>
+#include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsWidget>
@@ -61,14 +62,15 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     p->drawLine(0, -vh/2, 0, vh/2+9);
     p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);
     p->setPen(Qt::black);
-    // Main scale divisions;
-    int xPix;
-    QDateTime xDate;
+
     bool lockAuxDiv = false;
     for (int pass=1; pass<=2; pass++)
     for (int i=0; i<(mainDivCount+2); i++) {
-        xDate = addUnits(_leftScaleDate, i-1);
-        xPix = xForDate(xDate, v);
+        QDateTime xDate = addUnits(_leftScaleDate, i-1);
+        int xPix = xForDate(xDate, v);
+        QDateTime xDateNext = addUnits(_leftScaleDate, i);
+        int xPixNext = xForDate(xDateNext, v);
+        mainDivStep = xPixNext-xPix;
         // Division mark
         p->drawLine(xPix, 0, xPix, -MAIN_DIV_HEIGHT);
         // aux divisions (calc each time because 28, 29,30,31 days in month)
@@ -100,11 +102,9 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
         }
         // Division text
         drawDate(p, xDate, 1, _actualUnit, false);
-        // To next division...
-        xPix += mainDivStep;
     };
     // Left (full) division text
-    xDate = addUnits(_leftScaleDate, 1);
+    QDateTime xDate = addUnits(_leftScaleDate, 1);
     drawDate(p, xDate, 1, _actualUnit, true);
     // Right (full) division text
     xDate = addUnits(_leftScaleDate, mainDivCount-2);
@@ -172,12 +172,19 @@ bool CLTimeLine::setRange(const QDateTime& minDate, const QDateTime& maxDate, bo
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    return x0+(xN-x0)*unitsTo(_minDate, date)/unitsTo(_minDate, _maxDate);
+    if (actualUnit()<cluMonth)
+        return x0+(xN-x0)*unitsTo(_minDate, date)/unitsTo(_minDate, _maxDate);
+    else
+        return x0+(xN-x0)*_minDate.daysTo(date)/_minDate.daysTo(_maxDate);
 }
 
 QDateTime CLTimeLine::dateForX(int x)
 {
-    QDateTime d = addUnits(_minDate, unitsTo(_minDate, _maxDate)*((float)x-x0)/((float)xN-x0));
+    QDateTime d;
+    if (actualUnit()<cluMonth)
+        d = addUnits(_minDate, unitsTo(_minDate, _maxDate)*((float)x-x0)/((float)xN-x0));
+    else // Constant DAY length for all big units
+        d = _minDate.addDays(_minDate.daysTo(_maxDate)*((float)x-x0)/((float)xN-x0));
     return d;
 }
 
@@ -267,23 +274,16 @@ float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, C
     if (unit==cluAuto) unit = _actualUnit;
     if (unit==cluHour)
         return (float)baseDate.secsTo(newDate)/3600;
-    else
-    if (unit==cluDay)
+    else if (unit==cluDay)
         return (float)baseDate.secsTo(newDate)/3600/24;
-    else
-    if (unit==cluWeek)
+    else if (unit==cluWeek)
         return (float)baseDate.daysTo(newDate)/7;
-    else
-        // Month and above - variable unit step
-    if (unit==cluMonth)
-        //return (float)baseDate.daysTo(newDate)/30;
+    // Month and above - variable unit step
+    else if (unit==cluMonth)
         return monthsTo(baseDate, newDate);
-    else
-    if (unit==cluQuarter)
-        //return (float)baseDate.daysTo(newDate)/90;
+    else if (unit==cluQuarter)
         return monthsTo(baseDate, newDate)/MONTHS_IN_QUARTER;
     else  // cluYear
-        //return (float)baseDate.daysTo(newDate)/365;
         return monthsTo(baseDate, newDate)/12;
 }
 
