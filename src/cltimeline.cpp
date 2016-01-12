@@ -62,8 +62,9 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     p->drawLine(0, -vh/2, 0, vh/2+9);
     p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);
     p->setPen(Qt::black);
-
     bool lockAuxDiv = false;
+    // At first pass, program detect if all auxiliary marks can be properly painted
+    // At second pass auxiliary marks are painting, if yes
     for (int pass=1; pass<=2; pass++)
     for (int i=0; i<(mainDivCount+2); i++) {
         QDateTime xDate = addUnits(_leftScaleDate, i-1);
@@ -175,7 +176,8 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
     if (actualUnit()<cluMonth)
         return x0+(xN-x0)*unitsTo(_minDate, date)/unitsTo(_minDate, _maxDate);
     else
-        return x0+(xN-x0)*_minDate.daysTo(date)/_minDate.daysTo(_maxDate);
+        return x0+(xN-x0)*unitsTo(_minDate, date, cluHour)/unitsTo(_minDate, _maxDate, cluHour);
+        //return x0+(xN-x0)*_minDate.daysTo(date)/_minDate.daysTo(_maxDate);
 }
 
 QDateTime CLTimeLine::dateForX(int x)
@@ -184,7 +186,8 @@ QDateTime CLTimeLine::dateForX(int x)
     if (actualUnit()<cluMonth)
         d = addUnits(_minDate, unitsTo(_minDate, _maxDate)*((float)x-x0)/((float)xN-x0));
     else // Constant DAY length for all big units
-        d = _minDate.addDays(_minDate.daysTo(_maxDate)*((float)x-x0)/((float)xN-x0));
+        d = addUnits(_minDate, unitsTo(_minDate, _maxDate, cluHour)*((float)x-x0)/((float)xN-x0), cluHour);
+        //d = _minDate.addDays(_minDate.daysTo(_maxDate)*((float)x-x0)/((float)xN-x0));
     return d;
 }
 
