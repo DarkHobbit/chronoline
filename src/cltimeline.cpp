@@ -61,6 +61,13 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     p->drawLine(-vw/2+LEFT_DIV_MARGIN, -vh/2, -vw/2+LEFT_DIV_MARGIN, vh/2+9);
     p->drawLine(0, -vh/2, 0, vh/2+9);
     p->drawLine(vw/2-RIGHT_DIV_MARGIN, -vh/2, vw/2-RIGHT_DIV_MARGIN, vh/2+9);
+    // Min, max, left date (debug only)
+    /*p->setPen(Qt::red);
+    p->drawLine(xForDate(_minDate, v), -vh/2, xForDate(_minDate, v), vh/2+9);
+    p->drawLine(xForDate(_maxDate, v), -vh/2, xForDate(_maxDate, v), vh/2+9);
+    p->setPen(Qt::yellow);
+    p->drawLine(xForDate(_leftScaleDate, v), -vh/2, xForDate(_leftScaleDate, v), vh/2+9);*/
+    // Division's marks and text
     p->setPen(Qt::black);
     bool lockAuxDiv = false;
     // At first pass, program detect if all auxiliary marks can be properly painted
@@ -173,6 +180,7 @@ bool CLTimeLine::setRange(const QDateTime& minDate, const QDateTime& maxDate, bo
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
+    //return x0+(xN-x0)*_minDate.secsTo(date)/_minDate.secsTo(_maxDate);
     if (actualUnit()<cluMonth)
         return x0+(xN-x0)*unitsTo(_minDate, date)/unitsTo(_minDate, _maxDate);
     else
@@ -183,6 +191,7 @@ int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 QDateTime CLTimeLine::dateForX(int x)
 {
     QDateTime d;
+    //d = _minDate.addSecs(_minDate.secsTo(_maxDate)*((float)x-x0)/((float)xN-x0));
     if (actualUnit()<cluMonth)
         d = addUnits(_minDate, unitsTo(_minDate, _maxDate)*((float)x-x0)/((float)xN-x0));
     else // Constant DAY length for all big units
@@ -280,7 +289,7 @@ float CLTimeLine::unitsTo(const QDateTime& baseDate, const QDateTime& newDate, C
     else if (unit==cluDay)
         return (float)baseDate.secsTo(newDate)/3600/24;
     else if (unit==cluWeek)
-        return (float)baseDate.daysTo(newDate)/7;
+        return (float)baseDate.secsTo(newDate)/3600/24/7;
     // Month and above - variable unit step
     else if (unit==cluMonth)
         return monthsTo(baseDate, newDate);
@@ -317,7 +326,7 @@ QDateTime CLTimeLine::truncToUnit(const QDateTime& baseDate, ChronoLineUnit unit
     else if (unit==cluDay)
         return QDateTime(baseDate.date());
     else if (unit==cluWeek) {
-        QDateTime d = baseDate;
+        QDateTime d(baseDate.date());
         while (d.date().dayOfWeek()!=1)
             d = d.addDays(-1);
         return d;

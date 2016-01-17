@@ -39,15 +39,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(chronoLine, SIGNAL(mouseMovedOnScene(QPointF&,QDateTime&)), this, SLOT(onMouseMovedOnScene(QPointF&,QDateTime&)));
     // Initial data
     chronoLine->lockAutoUpdate();
+    // Test 1. 11 days (best view for flags&periods set below)
     /**/
     ui->edMinDate->setDateTime(QDateTime(QDateTime::currentDateTime().date()));
     ui->edMaxDate->setDateTime(QDateTime(QDateTime::currentDateTime().date().addDays(11)));
+    /**/
+    // Test 2. Entire year
     /*
     int year = QDate::currentDate().year();
     QDate begin = QDate( year, 1, 1); // 01.01.year
     QDate end = begin.addMonths(11).addDays(30); // add 11 month and 30 days -> 31.12.year :)
     ui->edMinDate->setDateTime( QDateTime( begin ) );
     ui->edMaxDate->setDateTime( QDateTime( end ) );
+    */
+    // Test 3. Collapsing instead shift (issue #22)
+    /*
+    ui->edMinDate->setDateTime(QDateTime::fromString("04.01.2016 08:14", "dd.MM.yyyy hh:mm"));
+    ui->edMaxDate->setDateTime(QDateTime::fromString("04.02.2016 17:28", "dd.MM.yyyy hh:mm"));
     */
     // Status bar
     sl1 = new QLabel(0);
