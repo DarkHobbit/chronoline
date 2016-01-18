@@ -31,7 +31,10 @@ QString dateFormatString[cluNone+1] = {
     "" // n/a
 };
 
-QString d2c(const QDateTime& d) { return d.toString("dd.MM.yyyy hh:mm:ss"); }
+QString d2s(const QDateTime& d)
+    { return d.toString("dd.MM.yyyy hh:mm:ss"); }
+QDateTime s2d(const QString &s)
+    { return QDateTime::fromString(s, "dd.MM.yyyy hh:mm:ss"); }
 
 CLTimeLine::CLTimeLine():
     selectedObject(0),
@@ -180,23 +183,23 @@ bool CLTimeLine::setRange(const QDateTime& minDate, const QDateTime& maxDate, bo
 int  CLTimeLine::xForDate(const QDateTime date, const QRect& r)
 {
     if (changed) calcScale(r);
-    //return x0+(xN-x0)*_minDate.secsTo(date)/_minDate.secsTo(_maxDate);
-    if (actualUnit()<cluMonth)
+    return x0+(double)(xN-x0)*_minDate.secsTo(date)/_minDate.secsTo(_maxDate);
+    /*if (actualUnit()<cluMonth)
         return x0+(xN-x0)*unitsTo(_minDate, date)/unitsTo(_minDate, _maxDate);
     else
         return x0+(xN-x0)*unitsTo(_minDate, date, cluHour)/unitsTo(_minDate, _maxDate, cluHour);
-        //return x0+(xN-x0)*_minDate.daysTo(date)/_minDate.daysTo(_maxDate);
+        //return x0+(xN-x0)*_minDate.daysTo(date)/_minDate.daysTo(_maxDate);*/
 }
 
 QDateTime CLTimeLine::dateForX(int x)
 {
     QDateTime d;
-    //d = _minDate.addSecs(_minDate.secsTo(_maxDate)*((float)x-x0)/((float)xN-x0));
-    if (actualUnit()<cluMonth)
+    d = _minDate.addSecs((double)_minDate.secsTo(_maxDate)*((float)x-x0)/((float)xN-x0));
+    /*if (actualUnit()<cluMonth)
         d = addUnits(_minDate, unitsTo(_minDate, _maxDate)*((float)x-x0)/((float)xN-x0));
     else // Constant DAY length for all big units
         d = addUnits(_minDate, unitsTo(_minDate, _maxDate, cluHour)*((float)x-x0)/((float)xN-x0), cluHour);
-        //d = _minDate.addDays(_minDate.daysTo(_maxDate)*((float)x-x0)/((float)xN-x0));
+        //d = _minDate.addDays(_minDate.daysTo(_maxDate)*((float)x-x0)/((float)xN-x0));*/
     return d;
 }
 
@@ -217,7 +220,7 @@ ChronoLineUnit CLTimeLine::actualUnit()
         if (_minDate.daysTo(_maxDate)<28)
             _actualUnit = cluDay;
         else
-        if (_minDate.daysTo(_maxDate)<90)
+        if (_minDate.daysTo(_maxDate)<89)
             _actualUnit = cluWeek;
         else
         if (_minDate.daysTo(_maxDate)<365)
@@ -256,7 +259,7 @@ QDateTime CLTimeLine::addMonths(const QDateTime& baseDate, float num)
     double numBase;
     double numFrac = modf(num, &numBase);
     QDateTime d = baseDate.addMonths(numBase);
-    d = d.addDays(numFrac*d.date().daysInMonth());
+    d = d.addSecs(numFrac*d.date().daysInMonth()*24*3600);
     return d;
 }
 
@@ -420,3 +423,4 @@ void CLTimeLine::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mouseReleaseEvent(event);
     update();
 }
+

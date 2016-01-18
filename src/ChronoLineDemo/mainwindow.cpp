@@ -304,7 +304,7 @@ void MainWindow::clRangeChanged(const QDateTime &minD, const QDateTime &maxD)
     ui->edMinDate->setDateTime(minD);
     ui->edMaxDate->setDateTime(maxD);
     lockUpdateSettings = false;
-    if (ui) sl3->setText(tr("Range: %1 - %2").arg(d2c(minD)).arg(d2c(maxD)));
+    if (ui) sl3->setText(tr("Range: %1 - %2").arg(d2s(minD)).arg(d2s(maxD)));
 }
 
 void MainWindow::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)

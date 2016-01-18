@@ -24,6 +24,7 @@ protected:
     virtual void showEvent(QShowEvent*);
     void testAllRounds(const QDateTime& d);
     void testUnitsTo(const QDateTime& d1, const QDateTime& d2);
+    void testAddUnits(const QDateTime& d, float addition, ChronoLineUnit unit);
 };
 
 #endif // MAINWINDOW_H
