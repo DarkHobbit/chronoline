@@ -18,6 +18,9 @@ DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* per
     readPeriods();
     readEvFlags();
     readFlagPairs();
+    connect(ui->twEvFlags, SIGNAL(cellDoubleClicked (int, int)), this, SLOT(on_pbEditEvFlag_clicked()));
+    connect(ui->twFlagPairs, SIGNAL(cellDoubleClicked (int, int)), this, SLOT(on_pbEditEvFlag_clicked()));
+    connect(ui->twPeriods, SIGNAL(cellDoubleClicked (int, int)), this, SLOT(on_pbEditEvFlag_clicked()));
 }
 
 DialogManagePF::~DialogManagePF()
