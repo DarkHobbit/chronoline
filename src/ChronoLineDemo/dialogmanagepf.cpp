@@ -18,6 +18,9 @@ DialogManagePF::DialogManagePF(QWidget *parent, ChronoLine* cl, QList<long>* per
     readPeriods();
     readEvFlags();
     readFlagPairs();
+    connect(ui->twEvFlags, SIGNAL(cellDoubleClicked (int, int)), this, SLOT(on_pbEditEvFlag_clicked()));
+    connect(ui->twFlagPairs, SIGNAL(cellDoubleClicked (int, int)), this, SLOT(on_pbEditEvFlag_clicked()));
+    connect(ui->twPeriods, SIGNAL(cellDoubleClicked (int, int)), this, SLOT(on_pbEditEvFlag_clicked()));
 }
 
 DialogManagePF::~DialogManagePF()
@@ -192,7 +195,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         long idP = ui->twPeriods->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
                 trUtf8("Подтверждение"),
-                trUtf8("Вы действительно хотите удалить период?"),
+                trUtf8("Are you really want remove period?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removePeriod(idP);
@@ -205,7 +208,7 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         long idF = ui->twEvFlags->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
                 trUtf8("Подтверждение"),
-                trUtf8("Вы действительно хотите удалить флаг события?"),
+                trUtf8("Are you really want remove event flag?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removeEventFlag(idF);
@@ -217,8 +220,8 @@ void DialogManagePF::on_pbRemoveEvFlag_clicked()
         if (!chkSel(ui->twFlagPairs)) return;
         long idP = ui->twFlagPairs->selectedItems()[0]->text().toLong();
         if (QMessageBox::question(0,
-                trUtf8("Подтверждение"),
-                trUtf8("Вы действительно хотите удалить пару флагов?"),
+                trUtf8("Confirmation"),
+                trUtf8("Are you really want remove flag pair?"),
                 QMessageBox::Yes, QMessageBox::No)==QMessageBox::Yes)
         {
             _cl->removeFlagPair(idP);

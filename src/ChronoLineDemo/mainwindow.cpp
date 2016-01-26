@@ -127,8 +127,8 @@ void MainWindow::updateSettings()
 void MainWindow::updateView()
 {
     if (!chronoLine->updateAll())
-        QMessageBox::critical(0, trUtf8("Ошибка"),
-            trUtf8("Слишком большая единица измерения для выбранного периода либо неверная дата окончания"));
+        QMessageBox::critical(0, trUtf8("Error"),
+            trUtf8("Too big unit for range or invalid end date"));
     sl2->setText(tr("%1 periods, %2 event flags").arg(chronoLine->periodCount()).arg(chronoLine->eventFlagCount()));
 }
 

@@ -19,14 +19,14 @@
      <item row="0" column="0">
       <widget class="QLabel" name="lbMinDate">
        <property name="text">
-        <string>Начальная дата</string>
+        <string>Begin date</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
       <widget class="QLabel" name="lbMaxDate">
        <property name="text">
-        <string>Конечная дата</string>
+        <string>End date</string>
        </property>
       </widget>
      </item>

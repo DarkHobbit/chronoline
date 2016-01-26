@@ -19,7 +19,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="lbMinDate">
        <property name="text">
-        <string>Дата события</string>
+        <string>Event date</string>
        </property>
       </widget>
      </item>
