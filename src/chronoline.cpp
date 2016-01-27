@@ -272,6 +272,22 @@ bool ChronoLine::readFlagPair(long idPair, QDateTime& minDate, QDateTime& maxDat
     return true;
 }
 
+void ChronoLine::clearAll()
+{
+    foreach (CLPeriod* p, periods) {
+        delete p;
+        periods.remove(periods.key(p));
+    }
+    foreach (CLFlag* f, evFlags) {
+        delete f;
+        evFlags.remove(evFlags.key(f));
+    }
+    foreach (CLFlagPair* p, flagPairs) {
+        delete p;
+        flagPairs.remove(flagPairs.key(p));
+    }
+}
+
 bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
 {
     if (!evFlags.count() && !periods.count() && !flagPairs.count())

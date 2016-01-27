@@ -311,3 +311,8 @@ void MainWindow::onMouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate)
 {
     lbDebug->setText(tr("Mouse on (%1,%2) ").arg(scenePos.x()).arg(scenePos.y())+sceneDate.toString("dd.MM.yyyy hh:mm:ss"));
 }
+
+void MainWindow::on_action_Clear_all_triggered()
+{
+    chronoLine->clearAll();
+}

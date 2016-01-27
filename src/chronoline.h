@@ -58,6 +58,8 @@ public:
     bool removeFlagPair(long idPair);
     inline int flagPairCount() { return flagPairs.count(); }
     bool readFlagPair(long idFlagPair, QDateTime& minDate, QDateTime& maxDate);
+    // Clear all objects
+    void clearAll();
     // Set range to fit all flags/periods on scene
     bool fitObjectsOnScene(bool shrinkIfNeeded);
     // D/t truncate date to actual unit (drop minutes if unit is hour, etc.)

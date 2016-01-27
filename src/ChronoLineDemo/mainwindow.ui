@@ -144,8 +144,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>20</height>
+     <width>1000</width>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -163,6 +163,7 @@
     <addaction name="action_Add_Pair_Of_Flags"/>
     <addaction name="separator"/>
     <addaction name="action_Manage_Periods_Flags"/>
+    <addaction name="action_Clear_all"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
@@ -247,6 +248,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="action_Clear_all">
+   <property name="text">
+    <string>&amp;Clear all</string>
    </property>
   </action>
  </widget>

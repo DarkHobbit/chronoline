@@ -34,6 +34,8 @@ private slots:
     void on_action_Zoom_In_triggered();
     void on_actionZoom_Out_triggered();
     void on_action_Add_Pair_Of_Flags_triggered();
+    void on_action_Clear_all_triggered();
+
 public slots:
     void anyPeriodSelected(long idPeriod);
     void anyEventFlagSelected(long idFlag);
