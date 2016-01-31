@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QGraphicsObject>
 #include <QObject>
+#include <QPainter>
 #include "cldefs.h"
 
 class CLSelectableObject;
@@ -72,6 +73,7 @@ protected:
     int oldDragX;
     // draw date text
     void drawDate(QPainter *p, const QDateTime& date, short level, ChronoLineUnit unit, bool forceDrawParent);
+    int calcDivPerText(QPainter* p);
     // check if parent unit text draw needed
     bool parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit);
     // mouse handling

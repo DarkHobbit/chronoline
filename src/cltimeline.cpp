@@ -1,10 +1,10 @@
 #include <math.h>
 #include <iostream>
+#include <QFontMetrics>
 #include <QGraphicsScene>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsWidget>
 #include <QMessageBox>
-#include <QPainter>
 #include "cldefs.h"
 #include "cltimeline.h"
 
@@ -72,6 +72,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     p->drawLine(xForDate(_leftScaleDate, v), -vh/2, xForDate(_leftScaleDate, v), vh/2+9);*/
     // Division's marks and text
     p->setPen(Qt::black);
+    int divPerText = calcDivPerText(p);
     bool lockAuxDiv = false;
     // At first pass, program detect if all auxiliary marks can be properly painted
     // At second pass auxiliary marks are painting, if yes
@@ -112,7 +113,8 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
             p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
         }
         // Division text
-        drawDate(p, xDate, 1, _actualUnit, false);
+        if (i%divPerText==0)
+            drawDate(p, xDate, 1, _actualUnit, false);
     };
     // Left (full) division text
     QDateTime xDate = addUnits(_leftScaleDate, 1);
@@ -141,6 +143,13 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
         p->drawText(x, (level+2)*TEXT_Y, date.toString("hh:mm::ss"));
         p->drawText(x, (level+3)*TEXT_Y, date.toString("zzz"));
     }*/
+}
+
+int CLTimeLine::calcDivPerText(QPainter *p)
+{
+    QFontMetrics* fm = new QFontMetrics(p->font());
+    int tWidth = fm->width(_minDate.toString(dateFormatString[_actualUnit]));
+    return tWidth/mainDivStep+1;
 }
 
 // Timeline settings
