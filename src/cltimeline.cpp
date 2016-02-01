@@ -38,7 +38,7 @@ QDateTime s2d(const QString &s)
 
 CLTimeLine::CLTimeLine():
     selectedObject(0),
-    _unit(cluDay),
+    _unit(cluAuto),
     _actualUnit(cluDay),
     _minDate(QDateTime::currentDateTime()),
     _maxDate(QDateTime::currentDateTime().addDays(7)),
