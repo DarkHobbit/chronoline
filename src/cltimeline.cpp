@@ -162,7 +162,7 @@ bool CLTimeLine::setUnit(const ChronoLineUnit& unit)
 
 bool CLTimeLine::setMinDate(const QDateTime& date, bool checkRange)
 {
-    if (checkRange && (unitsTo(date, _maxDate)<MIN_UNITS_NUM)) return false;
+    if (checkRange && !checkDateRange(date, _maxDate)) return false;
     changed = true;
     _minDate = date;
     emit rangeChanged(_minDate, _maxDate);
@@ -171,7 +171,7 @@ bool CLTimeLine::setMinDate(const QDateTime& date, bool checkRange)
 
 bool CLTimeLine::setMaxDate(const QDateTime& date, bool checkRange)
 {
-    if (checkRange && (unitsTo(_minDate, date)<MIN_UNITS_NUM)) return false;
+    if (checkRange && !checkDateRange(_minDate, date)) return false;
     changed = true;
     _maxDate = date;
     emit rangeChanged(_minDate, _maxDate);
@@ -180,7 +180,7 @@ bool CLTimeLine::setMaxDate(const QDateTime& date, bool checkRange)
 
 bool CLTimeLine::setRange(const QDateTime& minDate, const QDateTime& maxDate, bool checkRange)
 {
-    if (checkRange && (unitsTo(minDate, maxDate)<MIN_UNITS_NUM)) return false;
+    if (checkRange && !checkDateRange(minDate, maxDate)) return false;
     changed = true;
     _minDate = minDate;
     _maxDate = maxDate;
@@ -251,7 +251,7 @@ bool CLTimeLine::calcScale(const QRect& r)
     rect = r;
     actualUnit();
     if (_minDate>_maxDate) return false;
-    if (unitsTo(_minDate, _maxDate)<MIN_UNITS_NUM) return false;
+    if (!checkDateRange(_minDate, _maxDate)) return false;
     _leftScaleDate = truncToUnit(_minDate);
     changed = false;
     mainDivCount = (int)unitsTo(_leftScaleDate, _maxDate)+1;
@@ -400,6 +400,14 @@ bool CLTimeLine::parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit)
     else if (nextUnit==cluYear)
         return d.date().month()==1;
     else return false;
+}
+
+// check if date range is correct
+bool CLTimeLine::checkDateRange(const QDateTime &minDate, const QDateTime &maxDate)
+{
+    if (unitsTo(minDate, maxDate)<MIN_UNITS_NUM) return false;
+    if (minDate.daysTo(maxDate)>MAX_YEARS_NUM*366) return false;
+    return true;
 }
 
 void CLTimeLine::mousePressEvent(QGraphicsSceneMouseEvent *event)

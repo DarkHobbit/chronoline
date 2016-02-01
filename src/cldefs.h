@@ -35,6 +35,8 @@ enum ChronoLineFlagType {
 #define ZOOM_STEP 0.1
 // Minimum number of units per scale for valid view
 #define MIN_UNITS_NUM 2
+// Maximum number of years per scale
+#define MAX_YEARS_NUM 4
 
 // Base height of period view
 #define BASE_PERIOD_HEIGHT   25

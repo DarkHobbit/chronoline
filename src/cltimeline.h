@@ -76,6 +76,8 @@ protected:
     int calcDivPerText(QPainter* p);
     // check if parent unit text draw needed
     bool parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit);
+    // check if date range is correct
+    bool checkDateRange(const QDateTime& minDate, const QDateTime& maxDate);
     // mouse handling
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
