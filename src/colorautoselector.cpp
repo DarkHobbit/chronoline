@@ -13,9 +13,15 @@ const QColor baseColors[COLOR_COUNT] =
 
 ColorAutoSelector::ColorAutoSelector(int initialShift) :
     index(initialShift-1),
+    _initialShift(initialShift),
     reservedColors()
 {
     incIndex();
+}
+
+void ColorAutoSelector::reset()
+{
+    index = _initialShift-1;
 }
 
 bool ColorAutoSelector::addReservedColor(const QColor& color)

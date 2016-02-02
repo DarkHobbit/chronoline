@@ -287,6 +287,8 @@ void ChronoLine::clearAll()
         flagPairs.remove(flagPairs.key(p));
     }
     idSequencer = 0;
+    periodColorSel.reset();
+    flagColorSel.reset();
 }
 
 bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
