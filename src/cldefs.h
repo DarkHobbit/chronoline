@@ -39,7 +39,7 @@ enum ChronoLineFlagType {
 #define MAX_YEARS_NUM 4
 
 // Base height of period view
-#define BASE_PERIOD_HEIGHT   25
+#define BASE_PERIOD_HEIGHT   20
 // Shift of height for each next period
 #define PERIOD_HEIGHT_SHIFT   5
 

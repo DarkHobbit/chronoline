@@ -286,6 +286,7 @@ void ChronoLine::clearAll()
         delete p;
         flagPairs.remove(flagPairs.key(p));
     }
+    idSequencer = 0;
 }
 
 bool ChronoLine::fitObjectsOnScene(bool shrinkIfNeeded)
