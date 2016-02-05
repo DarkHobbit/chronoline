@@ -479,12 +479,14 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
         timeLine->selectedObject = so;
         // Send appropriate signal to application
         CLPeriod* p = dynamic_cast<CLPeriod*>(so);
-        if (p)
+        if (p) {
             emit periodSelected(p->id());
+        }
         else {
             CLFlag* f = dynamic_cast<CLFlag*>(so);
-            if (f)
+            if (f) {
                 emit eventFlagSelected(f->id());
+            }
             else {
                 CLFlagPair* fp = dynamic_cast<CLFlagPair*>(so);
                 if (fp) {

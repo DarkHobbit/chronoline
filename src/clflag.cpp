@@ -82,6 +82,19 @@ void CLFlag::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    // Check if flag is selected
+    if (_timeLine->selectedObject)
+        if ((_timeLine->selectedObject!=this)&&((_pair==0)||((_pair!=0) && (_timeLine->selectedObject!=_pair)))) {
+        // Redirect event
+        CLFlag* recvFlag = dynamic_cast<CLFlag*>(_timeLine->selectedObject);
+        if (recvFlag) {
+            recvFlag->mouseMoveEvent(event);
+        }
+        else {
+            // TODO
+        }
+        return;
+    }
     // Set new position
     int newX = event->scenePos().x(); // dragBase + pos().x() works wrong
     QDateTime newDate = _timeLine->dateForX(newX);
@@ -111,6 +124,18 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    // Check if flag is selected
+    if ((_timeLine->selectedObject!=this)&&((_pair==0)||((_pair!=0) && (_timeLine->selectedObject!=_pair)))) {
+        // Redirect event
+        CLFlag* recvFlag = dynamic_cast<CLFlag*>(_timeLine->selectedObject);
+        if (recvFlag) {
+            recvFlag->mouseReleaseEvent(event);
+        }
+        else {
+            // TODO
+        }
+        return;
+    }
     QGraphicsItem::mouseReleaseEvent(event);
     emit dragOutsideStop();
 }

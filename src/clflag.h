@@ -39,6 +39,7 @@ protected:
     // Direction of flag for painting and bounding (depend of its type)
     int flagHeight, flagSubheight, flagWidth;
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+public: // need because manuall call from other flag
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 signals:
