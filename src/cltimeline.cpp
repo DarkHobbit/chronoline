@@ -118,7 +118,9 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
             drawDate(p, xDate, 1, _actualUnit, false);
     };
     // Left (full) division text
-    QDateTime xDate = addUnits(_leftScaleDate, 1);
+    QDateTime xDate = _leftScaleDate;
+    if (xForDate(xDate, v)<-vw/2)
+        xDate = addUnits(_leftScaleDate, 1);
     drawDate(p, xDate, 1, _actualUnit, true);
     // Right (full) division text
     xDate = addUnits(_leftScaleDate, mainDivCount-1);
@@ -141,9 +143,10 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
 {
     QRect v = p->viewport();
     int x = xForDate(date, v);
-    p->drawText(x, level*TEXT_Y, /*round*/truncToUnit(date, nextUnit).toString(dateFormatString[nextUnit]));
+    p->drawText(x, level*TEXT_Y, truncToUnit(date, nextUnit).toString(dateFormatString[nextUnit]));
     // Parent unit text
-    if (parentTextNeeded(date, parentUnit[nextUnit])||(forceDrawParent&&(nextUnit<cluYear)))
+    if ((parentTextNeeded(date, parentUnit[nextUnit])&&(x>=-v.width()/2))
+            ||(forceDrawParent&&(nextUnit<cluYear)))
         drawDate(p, date, level+1, parentUnit[nextUnit], forceDrawParent);
 
     /*if (nextUnit==cluYear) { //==> debug of precision output
