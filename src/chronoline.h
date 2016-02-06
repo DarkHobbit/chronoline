@@ -26,6 +26,7 @@ public:
     void lockAutoUpdate();
     void unLockAutoUpdate();
     bool isAutoUpdateLocked();
+    void setMinUnit(const ChronoLineUnit& unit);
     // Timeline settings
     bool setUnit(const ChronoLineUnit& unit);
     bool setMinDate(const QDateTime& date);

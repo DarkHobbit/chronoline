@@ -77,6 +77,11 @@ bool ChronoLine::isAutoUpdateLocked()
     return _lockAutoUpdate;
 }
 
+void ChronoLine::setMinUnit(const ChronoLineUnit &unit)
+{
+    timeLine->setMinUnit(unit);
+}
+
 bool ChronoLine::setUnit(const ChronoLineUnit& unit)
 {
     bool res = timeLine->setUnit(unit);

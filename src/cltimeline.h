@@ -18,6 +18,7 @@ public:
     CLTimeLine();
     void paint(QPainter *p, const QStyleOptionGraphicsItem *item, QWidget *widget);
     virtual QRectF boundingRect() const;
+    void setMinUnit(const ChronoLineUnit& unit);
     // Timeline settings
     bool setUnit(const ChronoLineUnit& unit);
     bool setMinDate(const QDateTime& date, bool checkRange);
@@ -58,7 +59,7 @@ public:
     CLSelectableObject* selectedObject;
 protected:
     // Input data
-    ChronoLineUnit _unit, _actualUnit;
+    ChronoLineUnit _unit, _actualUnit, _minUnit;
     QDateTime      _minDate, _maxDate;
     // Recalc flag
     bool changed;

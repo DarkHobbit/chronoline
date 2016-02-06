@@ -40,6 +40,7 @@ CLTimeLine::CLTimeLine():
     selectedObject(0),
     _unit(cluAuto),
     _actualUnit(cluDay),
+    _minUnit(cluHour),
     _minDate(QDateTime::currentDateTime()),
     _maxDate(QDateTime::currentDateTime().addDays(7)),
     changed(false)
@@ -129,6 +130,11 @@ QRectF CLTimeLine::boundingRect() const
     return QRectF(-rect.width()/2, -rect.height()/2, rect.width(), rect.height());
 }
 
+void CLTimeLine::setMinUnit(const ChronoLineUnit &unit)
+{
+    _minUnit = unit;
+}
+
 void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, ChronoLineUnit nextUnit, bool forceDrawParent)
 {
     QRect v = p->viewport();
@@ -155,6 +161,8 @@ int CLTimeLine::calcDivPerText(QPainter *p)
 // Timeline settings
 bool CLTimeLine::setUnit(const ChronoLineUnit& unit)
 {
+    if (unit<_minUnit)
+        return false;
     changed = true;
     _unit = unit;
     return true;
@@ -241,7 +249,10 @@ ChronoLineUnit CLTimeLine::actualUnit()
             _actualUnit = cluYear;
     }
     else _actualUnit = _unit;
-    if (_actualUnit!=oldUnit) emit actualUnitChanged(_actualUnit);
+    if (_actualUnit<_minUnit)
+        _actualUnit = _minUnit;
+    if (_actualUnit!=oldUnit)
+        emit actualUnitChanged(_actualUnit);
     return _actualUnit;
 }
 
