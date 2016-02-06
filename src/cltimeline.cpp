@@ -121,7 +121,9 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     QDateTime xDate = addUnits(_leftScaleDate, 1);
     drawDate(p, xDate, 1, _actualUnit, true);
     // Right (full) division text
-    xDate = addUnits(_leftScaleDate, mainDivCount-2);
+    xDate = addUnits(_leftScaleDate, mainDivCount-1);
+    if (xForDate(xDate, v)+calcDateWidth(p, cluMonth)>vw/2)
+        xDate = addUnits(_leftScaleDate, mainDivCount-2);
     drawDate(p, xDate, 1, _actualUnit, true);
 }
 
@@ -153,9 +155,13 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
 
 int CLTimeLine::calcDivPerText(QPainter *p)
 {
+    return calcDateWidth(p, _actualUnit)/mainDivStep+1;
+}
+
+int CLTimeLine::calcDateWidth(QPainter *p, ChronoLineUnit unit)
+{
     QFontMetrics* fm = new QFontMetrics(p->font());
-    int tWidth = fm->width(_minDate.toString(dateFormatString[_actualUnit]));
-    return tWidth/mainDivStep+1;
+    return fm->width(_minDate.toString(dateFormatString[unit]));
 }
 
 // Timeline settings
