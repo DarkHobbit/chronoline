@@ -73,7 +73,7 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     p->drawLine(xForDate(_leftScaleDate, v), -vh/2, xForDate(_leftScaleDate, v), vh/2+9);*/
     // Division's marks and text
     p->setPen(Qt::black);
-    int divPerText = calcDivPerText(p);
+    int divPerText = calcDivPerText(p, _actualUnit);
     bool lockAuxDiv = false;
     // At first pass, program detect if all auxiliary marks can be properly painted
     // At second pass auxiliary marks are painting, if yes
@@ -121,6 +121,8 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     QDateTime xDate = _leftScaleDate;
     if (xForDate(xDate, v)<-vw/2)
         xDate = addUnits(_leftScaleDate, 1);
+    if ((xDate.date().day()==xDate.date().daysInMonth())&&calcDivPerText(p, cluMonth)>=2)
+        xDate = addUnits(xDate, 1);
     drawDate(p, xDate, 1, _actualUnit, true);
     // Right (full) division text
     xDate = addUnits(_leftScaleDate, mainDivCount-1);
@@ -156,9 +158,9 @@ void CLTimeLine::drawDate(QPainter *p, const QDateTime& date, short level, Chron
     }*/
 }
 
-int CLTimeLine::calcDivPerText(QPainter *p)
+int CLTimeLine::calcDivPerText(QPainter *p, ChronoLineUnit unit)
 {
-    return calcDateWidth(p, _actualUnit)/mainDivStep+1;
+    return calcDateWidth(p, unit)/mainDivStep+1;
 }
 
 int CLTimeLine::calcDateWidth(QPainter *p, ChronoLineUnit unit)

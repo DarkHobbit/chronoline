@@ -74,7 +74,7 @@ protected:
     int oldDragX;
     // draw date text
     void drawDate(QPainter *p, const QDateTime& date, short level, ChronoLineUnit unit, bool forceDrawParent);
-    int calcDivPerText(QPainter* p);
+    int calcDivPerText(QPainter* p, ChronoLineUnit unit);
     int calcDateWidth(QPainter* p, ChronoLineUnit unit);
     // check if parent unit text draw needed
     bool parentTextNeeded(const QDateTime& d, ChronoLineUnit nextUnit);
