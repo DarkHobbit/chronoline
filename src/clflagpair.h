@@ -19,9 +19,13 @@ public:
     long id();
     virtual bool matchDate(const QDateTime& d);
     ChronoLineFlagType matchedFlag(const QDateTime& d);
+public: // need because manuall call from other flag
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 protected:
     CLFlag *begFlag, *endFlag;
     long _id;
+    bool begFlagPossiblySelected; // defined only if flag pair selected
 };
 
 #endif // CLFLAGPAIR_H

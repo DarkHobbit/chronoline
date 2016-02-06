@@ -41,6 +41,7 @@ long CLFlagPair::id()
 
 bool CLFlagPair::matchDate(const QDateTime& d)
 {
+    begFlagPossiblySelected = begFlag->matchDate(d);
     return (begFlag->matchDate(d)||endFlag->matchDate(d));
 }
 
@@ -49,4 +50,20 @@ ChronoLineFlagType CLFlagPair::matchedFlag(const QDateTime& d)
     if (begFlag->matchDate(d))
         return clftPairBeg;
     else return clftPairEnd;
+}
+
+void CLFlagPair::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (begFlagPossiblySelected)
+        begFlag->mouseMoveEvent(event);
+    else
+        endFlag->mouseMoveEvent(event);
+}
+
+void CLFlagPair::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (begFlagPossiblySelected)
+        begFlag->mouseReleaseEvent(event);
+    else
+        endFlag->mouseReleaseEvent(event);
 }

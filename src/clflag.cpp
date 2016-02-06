@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include "cldefs.h"
 #include "clflag.h"
+#include "clflagpair.h"
 
 #include <QLabel>
 extern QLabel* lbDebug;
@@ -91,7 +92,8 @@ void CLFlag::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             recvFlag->mouseMoveEvent(event);
         }
         else {
-            // TODO
+            CLFlagPair* recvPair = dynamic_cast<CLFlagPair*>(_timeLine->selectedObject);
+            recvPair->mouseMoveEvent(event);
         }
         return;
     }
@@ -132,7 +134,8 @@ void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             recvFlag->mouseReleaseEvent(event);
         }
         else {
-            // TODO
+            CLFlagPair* recvPair = dynamic_cast<CLFlagPair*>(_timeLine->selectedObject);
+            recvPair->mouseReleaseEvent(event);
         }
         return;
     }
