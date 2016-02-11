@@ -394,11 +394,12 @@ bool ChronoLine::event(QEvent *event)
             foreach (CLFlagPair* p, flagPairs.values())
                 candToSel.push_back(p);
             selectNextObject(candToSel, QDateTime());
-            return true;
         }
+        return true;
     }
     else
-        return QWidget::event(event);
+        QWidget::event(event);
+    return false;
 }
 
 void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
