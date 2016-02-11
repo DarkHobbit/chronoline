@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QEvent>
 #include <QMap>
 #include <QTimer>
 #include <QWheelEvent>
@@ -84,8 +85,10 @@ protected:
     QTimer tmDragger;
     CLFlag* draggingFlag;
     float dragDateStep;
+    bool event(QEvent *event);
     void wheelEvent(QWheelEvent* event);
     void mousePressEvent(QMouseEvent *event);
+    void selectNextObject(const CLSelectableList& candToSel, const QDateTime& date);
 signals:
     // Drag-n-drop signals
     void flagDateChanged(long idFlag, const QDateTime& newDate);

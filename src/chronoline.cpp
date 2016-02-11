@@ -369,8 +369,36 @@ void ChronoLine::resizeEvent(QResizeEvent* event)
         CLFlagPair* p = flagPairs.value(id);
         if (p) p->setPosByDates(r); else qDebug() << "RSZ: invalid pair in set";
     }
-    // TODO pairs
     QGraphicsView::resizeEvent(event);
+}
+
+bool selObjLessThan(CLSelectableObject*& a, CLSelectableObject*& b)
+{
+    return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();
+}
+
+bool ChronoLine::event(QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+        if (ke->key() == Qt::Key_Tab) {
+            CLSelectableList candToSel;
+            // Candidates - periods
+            for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
+                candToSel.push_back(i.value());
+            // Sort period list by visual level (old-style implementation)
+            qSort(candToSel.begin(), candToSel.end(), selObjLessThan);
+            // Candidates - flags and pairs
+            foreach (CLFlag* f, evFlags.values())
+                candToSel.push_back(f);
+            foreach (CLFlagPair* p, flagPairs.values())
+                candToSel.push_back(p);
+            selectNextObject(candToSel, QDateTime());
+            return true;
+        }
+    }
+    else
+        return QWidget::event(event);
 }
 
 void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
@@ -439,18 +467,13 @@ void ChronoLine::wheelEvent(QWheelEvent* event)
     event->accept();
 }
 
-bool selObjLessThan(CLSelectableObject*& a, CLSelectableObject*& b)
-{
-    return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();
-}
-
 void ChronoLine::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
     // Search for all objects under cursor
     QPointF sc = mapToScene(event->pos());
     QDateTime mDate = timeLine->dateForX(sc.x());
-    QList<CLSelectableObject*> candToSel;
+    CLSelectableList candToSel;
     // Candidates - periods
     if (sc.y()<0) {
         for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
@@ -468,6 +491,11 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
         foreach (CLFlagPair* p, flagPairs.values())
                 if (p->matchDate(mDate)) candToSel.push_back(p);
     };
+    selectNextObject(candToSel, mDate);
+}
+
+void ChronoLine::selectNextObject(const CLSelectableList &candToSel, const QDateTime& date)
+{
     // Select period, flag or pair
     if (candToSel.count()>0) {
        CLSelectableObject* so = 0;
@@ -495,7 +523,11 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
             else {
                 CLFlagPair* fp = dynamic_cast<CLFlagPair*>(so);
                 if (fp) {
-                    emit flagPairSelected(fp->id(), fp->matchedFlag(mDate));
+                    if (date.isValid())
+                        emit flagPairSelected(fp->id(), fp->matchedFlag(date));
+                    else
+                        emit flagPairSelected(fp->id(), clftPairBeg);
+
                 }
             }
         }
@@ -504,7 +536,6 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
         timeLine->selectedObject = 0;
         emit selectionRemoved();
     }
-    // TODO: tab selection!
     update();
 }
 

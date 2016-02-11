@@ -13,4 +13,7 @@ protected:
     CLTimeLine* _timeLine;
 };
 
+class CLSelectableList: public QList<CLSelectableObject*>
+{};
+
 #endif // CLSELECTABLEOBJECT_H
