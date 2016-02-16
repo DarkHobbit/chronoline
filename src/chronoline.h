@@ -109,6 +109,11 @@ signals:
     void periodEditRequest(long idPeriod);
     void eventFlagEditRequest(long idFlag);
     void flagPairEditRequest(long idPair);
+    // Object popup menu signals
+    void scenePopupMenuRequest(const QDateTime& date);
+    void periodPopupMenuRequest(long idPeriod);
+    void eventFlagPopupMenuRequest(long idFlag);
+    void flagPairPopupMenuRequest(long idPair);
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();

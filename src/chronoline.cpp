@@ -476,28 +476,55 @@ void ChronoLine::wheelEvent(QWheelEvent* event)
 void ChronoLine::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
-    // Search for all objects under cursor
     QPointF sc = mapToScene(event->pos());
     QDateTime mDate = timeLine->dateForX(sc.x());
-    CLSelectableList candToSel;
-    // Candidates - periods
-    if (sc.y()<0) {
-        for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
-            if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
-        // Sort period list by visual level (lambda-based implementation)
-        /*qSort(candToSel.begin(), candToSel.end(), [](CLSelectableObject*& a, CLSelectableObject*& b)
-            { return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();} );*/
-        // Sort period list by visual level (old-style implementation)
-        qSort(candToSel.begin(), candToSel.end(), selObjLessThan);
+    if (event->button()==Qt::RightButton) {
+        // Menu request
+        CLSelectableObject* so = timeLine->selectedObject;
+        if (!so) {
+            emit scenePopupMenuRequest(mDate);
+        }
+        else {
+            CLPeriod* p = dynamic_cast<CLPeriod*>(so);
+            if (p) {
+                emit periodPopupMenuRequest(p->id());
+            }
+            else {
+                CLFlag* f = dynamic_cast<CLFlag*>(so);
+                if (f) {
+                    emit eventFlagPopupMenuRequest(f->id());
+                }
+                else {
+                    CLFlagPair* fp = dynamic_cast<CLFlagPair*>(so);
+                    if (fp)
+                        emit flagPairPopupMenuRequest(fp->id());
+                }
+            }
+        }
     }
-    // Candidates - flags and pairs
     else {
-        foreach (CLFlag* f, evFlags.values())
+        // Selection
+        // Search for all objects under cursor
+        CLSelectableList candToSel;
+        // Candidates - periods
+        if (sc.y()<0) {
+            for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
+                if (i.value()->matchDate(mDate)) candToSel.push_back(i.value());
+            // Sort period list by visual level (lambda-based implementation)
+            /*qSort(candToSel.begin(), candToSel.end(), [](CLSelectableObject*& a, CLSelectableObject*& b)
+            { return ((CLPeriod*)a)->level() < ((CLPeriod*)b)->level();} );*/
+            // Sort period list by visual level (old-style implementation)
+            qSort(candToSel.begin(), candToSel.end(), selObjLessThan);
+        }
+        // Candidates - flags and pairs
+        else {
+            foreach (CLFlag* f, evFlags.values())
                 if (f->matchDate(mDate)) candToSel.push_back(f);
-        foreach (CLFlagPair* p, flagPairs.values())
+            foreach (CLFlagPair* p, flagPairs.values())
                 if (p->matchDate(mDate)) candToSel.push_back(p);
-    };
-    selectNextObject(candToSel, mDate);
+        };
+        selectNextObject(candToSel, mDate);
+    }
 }
 
 void ChronoLine::mouseDoubleClickEvent(QMouseEvent *event)
@@ -554,7 +581,6 @@ void ChronoLine::selectNextObject(const CLSelectableList &candToSel, const QDate
 void ChronoLine::requestEditSelectedObject()
 {
     CLSelectableObject* so = timeLine->selectedObject;
-    qDebug() << (so!=0);
     if (!so) return;
     CLPeriod* p = dynamic_cast<CLPeriod*>(so);
     if (p) {
