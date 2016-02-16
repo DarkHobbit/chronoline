@@ -380,8 +380,9 @@ bool selObjLessThan(CLSelectableObject*& a, CLSelectableObject*& b)
 bool ChronoLine::event(QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-        if (ke->key() == Qt::Key_Tab) {
+        int k = static_cast<QKeyEvent *>(event)->key();
+        switch (k) {
+        case Qt::Key_Tab: {
             CLSelectableList candToSel;
             // Candidates - periods
             for (QMap<long, CLPeriod*>::iterator i=periods.begin(); i!=periods.end(); i++)
@@ -396,9 +397,14 @@ bool ChronoLine::event(QEvent *event)
             selectNextObject(candToSel, QDateTime());
             return true;
         }
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            requestEditSelectedObject();
+            return true;
+        default: {}
+        }
     }
-    else
-        return QWidget::event(event);
+    return QWidget::event(event);
 }
 
 void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
@@ -537,6 +543,28 @@ void ChronoLine::selectNextObject(const CLSelectableList &candToSel, const QDate
         emit selectionRemoved();
     }
     update();
+}
+
+void ChronoLine::requestEditSelectedObject()
+{
+    CLSelectableObject* so = timeLine->selectedObject;
+    if (!so) return;
+    CLPeriod* p = dynamic_cast<CLPeriod*>(so);
+    if (p) {
+        emit periodEditRequest(p->id());
+    }
+    else {
+        CLFlag* f = dynamic_cast<CLFlag*>(so);
+        if (f) {
+            emit eventFlagEditRequest(f->id());
+        }
+        else {
+            CLFlagPair* fp = dynamic_cast<CLFlagPair*>(so);
+            if (fp)
+                emit flagPairEditRequest(fp->id());
+        }
+    }
+    // TODO попробовать то же сделать по даблклику
 }
 
 void ChronoLine::clUnitChanged(ChronoLineUnit unit)

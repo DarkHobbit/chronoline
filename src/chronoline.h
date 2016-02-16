@@ -88,8 +88,14 @@ protected:
     bool event(QEvent *event);
     void wheelEvent(QWheelEvent* event);
     void mousePressEvent(QMouseEvent *event);
+private:
     void selectNextObject(const CLSelectableList& candToSel, const QDateTime& date);
+    void requestEditSelectedObject();
 signals:
+    // Global signals
+    void actualUnitChanged(ChronoLineUnit unit);
+    void mouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
+    void rangeChanged(const QDateTime&, const QDateTime&);
     // Drag-n-drop signals
     void flagDateChanged(long idFlag, const QDateTime& newDate);
     void pairDatesChanged(long idPair, const QDateTime& newMinDate, const QDateTime& newMaxDate);
@@ -98,9 +104,10 @@ signals:
     void eventFlagSelected(long idFlag);
     void flagPairSelected(long idPair, ChronoLineFlagType fType);
     void selectionRemoved();
-    void actualUnitChanged(ChronoLineUnit unit);
-    void mouseMovedOnScene(QPointF& scenePos, QDateTime& sceneDate);
-    void rangeChanged(const QDateTime&, const QDateTime&);
+    // Object editing signals
+    void periodEditRequest(long idPeriod);
+    void eventFlagEditRequest(long idFlag);
+    void flagPairEditRequest(long idPair);
 public slots:
     void flagDraggedOutside(FlagDragDirection direction, int newX);
     void flagDragOutsideStop();
