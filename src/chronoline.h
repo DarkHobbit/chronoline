@@ -87,7 +87,8 @@ protected:
     float dragDateStep;
     bool event(QEvent *event);
     void wheelEvent(QWheelEvent* event);
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent*event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
 private:
     void selectNextObject(const CLSelectableList& candToSel, const QDateTime& date);
     void requestEditSelectedObject();

@@ -500,6 +500,12 @@ void ChronoLine::mousePressEvent(QMouseEvent *event)
     selectNextObject(candToSel, mDate);
 }
 
+void ChronoLine::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    /*mousePressEvent(event);
+    requestEditSelectedObject();*/
+}
+
 void ChronoLine::selectNextObject(const CLSelectableList &candToSel, const QDateTime& date)
 {
     // Select period, flag or pair
@@ -548,6 +554,7 @@ void ChronoLine::selectNextObject(const CLSelectableList &candToSel, const QDate
 void ChronoLine::requestEditSelectedObject()
 {
     CLSelectableObject* so = timeLine->selectedObject;
+    qDebug() << (so!=0);
     if (!so) return;
     CLPeriod* p = dynamic_cast<CLPeriod*>(so);
     if (p) {
@@ -564,7 +571,6 @@ void ChronoLine::requestEditSelectedObject()
                 emit flagPairEditRequest(fp->id());
         }
     }
-    // TODO попробовать то же сделать по даблклику
 }
 
 void ChronoLine::clUnitChanged(ChronoLineUnit unit)
