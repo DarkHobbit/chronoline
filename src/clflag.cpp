@@ -135,7 +135,8 @@ void CLFlag::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         }
         else {
             CLFlagPair* recvPair = dynamic_cast<CLFlagPair*>(_timeLine->selectedObject);
-            recvPair->mouseReleaseEvent(event);
+            if (recvPair)
+                recvPair->mouseReleaseEvent(event);
         }
         return;
     }
