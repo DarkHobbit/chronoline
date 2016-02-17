@@ -404,7 +404,7 @@ bool ChronoLine::event(QEvent *event)
         default: {}
         }
     }
-    return QWidget::event(event);
+    return QGraphicsView::event(event);
 }
 
 void ChronoLine::flagDraggedOutside(FlagDragDirection direction, int newX)
