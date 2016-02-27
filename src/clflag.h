@@ -1,6 +1,7 @@
 #ifndef CLFLAG_H
 #define CLFLAG_H
 
+#include <QColor>
 #include <QDateTime>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
@@ -18,6 +19,7 @@ public:
     virtual ~CLFlag();
     void setPairFlag(CLFlag* pairFlag);
     bool setDate(const QDateTime& date, bool checkForPairDate = true);
+    void setColor(const QColor& color);
     void setPosByDate(const QRect& r);
     void paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*);
     virtual QRectF boundingRect() const;

@@ -42,6 +42,7 @@ public:
     // Periods management
     long addPeriod(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     long addPeriod(const QDateTime& minDate, const QDateTime& maxDate);
+    bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     bool editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate);
     bool removePeriod(long idPeriod);
     inline int periodCount() { return periods.count(); }
@@ -49,6 +50,7 @@ public:
     // Event flags management
     long addEventFlag(const QDateTime& date, const QColor& color);
     long addEventFlag(const QDateTime& date);
+    bool editEventFlag(long idFlag, const QDateTime& date, const QColor& color);
     bool editEventFlag(long idFlag, const QDateTime& date);
     bool removeEventFlag(long idFlag);
     inline int eventFlagCount() { return evFlags.count(); }
@@ -56,6 +58,7 @@ public:
     // Flags pairs management
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     long addFlagPair(const QDateTime& minDate, const QDateTime& maxDate);
+    bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate, const QColor& color);
     bool editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate);
     bool removeFlagPair(long idPair);
     inline int flagPairCount() { return flagPairs.count(); }

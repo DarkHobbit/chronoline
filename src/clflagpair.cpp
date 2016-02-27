@@ -34,6 +34,12 @@ QDateTime CLFlagPair::maxDate() { return endFlag->date(); }
 void CLFlagPair::setMinDate(const QDateTime& minDate) { begFlag->setDate(minDate); }
 void CLFlagPair::setMaxDate(const QDateTime& maxDate) { endFlag->setDate(maxDate); }
 
+void CLFlagPair::setColor(const QColor &color)
+{
+    begFlag->setColor(color);
+    endFlag->setColor(color);
+}
+
 long CLFlagPair::id()
 {
     return _id;

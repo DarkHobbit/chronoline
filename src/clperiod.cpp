@@ -50,6 +50,12 @@ QDateTime CLPeriod::minDate() { return _minDate; }
 QDateTime CLPeriod::maxDate() { return _maxDate; }
 void CLPeriod::setMinDate(const QDateTime& minDate) { _minDate = minDate; }
 void CLPeriod::setMaxDate(const QDateTime& maxDate) { _maxDate = maxDate; }
+
+void CLPeriod::setColor(const QColor &color)
+{
+    _color = color;
+}
+
 long CLPeriod::id() { return _id; }
 
 bool CLPeriod::matchDate(const QDateTime& d)

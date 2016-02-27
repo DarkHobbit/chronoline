@@ -1,6 +1,7 @@
 #ifndef CLFLAGPAIR_H
 #define CLFLAGPAIR_H
 
+#include <QColor>
 #include <QGraphicsItemGroup>
 #include "clflag.h"
 #include "cltimeline.h"
@@ -16,6 +17,7 @@ public:
     QDateTime maxDate();
     void setMinDate(const QDateTime& minDate);
     void setMaxDate(const QDateTime& maxDate);
+    void setColor(const QColor& color);
     long id();
     virtual bool matchDate(const QDateTime& d);
     ChronoLineFlagType matchedFlag(const QDateTime& d);

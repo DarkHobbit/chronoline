@@ -1,6 +1,7 @@
 #ifndef CLPERIOD_H
 #define CLPERIOD_H
 
+#include <QColor>
 #include <QDateTime>
 #include <QGraphicsItem>
 #include "clselectableobject.h"
@@ -16,6 +17,7 @@ public:
     QDateTime maxDate();
     void setMinDate(const QDateTime& minDate);
     void setMaxDate(const QDateTime& maxDate);
+    void setColor(const QColor& color);
     long id();
     int level();
     virtual bool matchDate(const QDateTime& d);

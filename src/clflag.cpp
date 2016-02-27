@@ -155,6 +155,11 @@ bool CLFlag::setDate(const QDateTime& date, bool checkForPairDate)
     return true;
 }
 
+void CLFlag::setColor(const QColor &color)
+{
+    _color = color;
+}
+
 void CLFlag::setPosByDate(const QRect& r)
 {
     int x = _timeLine->xForDate(_date, r);

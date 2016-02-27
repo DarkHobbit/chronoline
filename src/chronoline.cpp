@@ -157,6 +157,12 @@ long ChronoLine::addPeriod(const QDateTime& minDate, const QDateTime& maxDate)
     return addPeriod(minDate, maxDate, periodColorSel.nextColor());
 }
 
+bool ChronoLine::editPeriod(long idPeriod, const QDateTime &minDate, const QDateTime &maxDate, const QColor &color)
+{
+    periods[idPeriod]->setColor(color);
+    return editPeriod(idPeriod, minDate, maxDate);
+}
+
 bool ChronoLine::editPeriod(long idPeriod, const QDateTime& minDate, const QDateTime& maxDate)
 {
     if (minDate>=maxDate) return false;
@@ -200,6 +206,12 @@ long ChronoLine::addEventFlag(const QDateTime& date, const QColor& color)
 long ChronoLine::addEventFlag(const QDateTime& date)
 {
     return addEventFlag(date, flagColorSel.nextColor());
+}
+
+bool ChronoLine::editEventFlag(long idFlag, const QDateTime &date, const QColor &color)
+{
+    evFlags[idFlag]->setColor(color);
+    return editEventFlag(idFlag, date);
 }
 
 bool ChronoLine::editEventFlag(long idFlag, const QDateTime& date)
@@ -247,6 +259,12 @@ long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate,
 long ChronoLine::addFlagPair(const QDateTime& minDate, const QDateTime& maxDate)
 {
     return addFlagPair(minDate, maxDate, flagColorSel.nextColor());
+}
+
+bool ChronoLine::editFlagPair(long idPair, const QDateTime &minDate, const QDateTime &maxDate, const QColor &color)
+{
+    flagPairs[idPair]->setColor(color);
+    return editFlagPair(idPair, minDate, maxDate);
 }
 
 bool ChronoLine::editFlagPair(long idPair, const QDateTime& minDate, const QDateTime& maxDate)
