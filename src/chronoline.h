@@ -73,6 +73,7 @@ public:
     QDateTime ceilToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
     // D/t round date to actual unit (to next, if >=0.5)
     QDateTime roundToUnit(const QDateTime& baseDate, ChronoLineUnit unit);
+    ColorAutoSelector periodColorSel, flagColorSel;
 protected:
     QGraphicsScene *scene;
     bool           _lockAutoUpdate;
@@ -82,7 +83,6 @@ protected:
     QMap<long, CLFlag*>   evFlags;
     QMap<long, CLFlagPair*>   flagPairs;
     long           idSequencer; // generator of ID for periods and flags
-    ColorAutoSelector periodColorSel, flagColorSel;
     virtual void resizeEvent(QResizeEvent* event);
     // Scale shift while some flag dragged outside scale
     QTimer tmDragger;
