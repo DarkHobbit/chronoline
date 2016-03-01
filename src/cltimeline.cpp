@@ -127,7 +127,12 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
     // Right (full) division text
     xDate = addUnits(_leftScaleDate, mainDivCount-1);
     if (xForDate(xDate, v)+calcDateWidth(p, cluMonth)>vw/2)
-        xDate = addUnits(_leftScaleDate, mainDivCount-2);
+        xDate = addUnits(xDate, -2);
+    if ((xDate.date().day()==xDate.date().daysInMonth())&&calcDivPerText(p, cluMonth)>=2)
+        xDate = addUnits(xDate, 1);
+    if ((xDate.date().day()==2)&&calcDivPerText(p, cluMonth)>=2)
+        xDate = addUnits(xDate, -1);
+        // xDate = addUnits(_leftScaleDate, mainDivCount-2);
     drawDate(p, xDate, 1, _actualUnit, true);
 }
 
