@@ -18,6 +18,16 @@ ChronoLineUnit parentUnit[cluNone] = {
     cluNone  // from years
 };
 
+ChronoLineUnit childUnit[cluNone] = {
+    cluNone, // n/a
+    cluNone,  // from hours
+    cluHour,// from days
+    cluDay,// from weeks
+    cluDay, // from months
+    cluMonth, // from quarters
+    cluMonth  // from years
+};
+
 QString dateFormatString[cluNone+1] = {
     "", // n/a
     "hh", // hours
@@ -109,9 +119,15 @@ void CLTimeLine::paint(QPainter *p, const QStyleOptionGraphicsItem*, QWidget*)
         }
         else
         if (!lockAuxDiv) // prevent merging neighbor divisions
-        for (int j=0; j<auxDivCount; j++) {
+        for (int j=1; j<auxDivCount; j++) {
+            /*
+            // Fast x calculation, may cause round error by X
             int auxDivStep = j*mainDivStep/auxDivCount;
-            p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);
+            p->drawLine(xPix+auxDivStep, 0, xPix+auxDivStep, -AUX_DIV_HEIGHT);*/
+            // Precision x calculation, may be slow on old device
+            QDateTime auxDate = addUnits(xDate, j, childUnit[_actualUnit]);
+            int xAux = xForDate(auxDate, v);
+            p->drawLine(xAux, 0, xAux, -AUX_DIV_HEIGHT);
         }
         // Division text
         if (i%divPerText==0)
